@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ material.name }}{% endblock %}
+
+{% block body %}
+<style>
+    .material-view {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+    
+    .back-link {
+        display: inline-block;
+        color: #6366F1;
+        text-decoration: none;
+        margin-bottom: 20px;
+        font-family: Georgia, serif;
+    }
+    
+    .back-link:hover {
+        text-decoration: underline;
+    }
+    
+    .material-header {
+        background: #FAF7F0;
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid #D4CFC4;
+        margin-bottom: 30px;
+    }
+    
+    .material-title {
+        font-size: 28px;
+        color: #4A5D3A;
+        margin-bottom: 15px;
+        font-family: Georgia, serif;
+    }
+    
+    .material-meta {
+        color: #6B6B5E;
+        font-family: Georgia, serif;
+    }
+    
+    .material-content {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        border: 1px solid #D4CFC4;
+        font-family: Georgia, serif;
+        font-size: 16px;
+        line-height: 1.8;
+        color: #2C2C2C;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    
+    .download-link {
+        display: inline-block;
+        background: #4A5D3A;
+        color: #FAF7F0;
+        padding: 12px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-family: Georgia, serif;
+        margin-top: 20px;
+    }
+    
+    .download-link:hover {
+        background: #3A4A2D;
+    }
+</style>
+
+<div class="material-view">
+    <a href="{{ path('app_exams') }}" class="back-link">← Назад к экзаменам</a>
+    
+    <div class="material-header">
+        <h1 class="material-title">{{ material.name }}</h1>
+        <div class="material-meta">
+            {% if material.fileType == 'manual' %}
+                📝 Ручной ввод • {{ material.uploadedAt|date('d.m.Y H:i') }}
+            {% else %}
+                📄 {{ material.fileType|upper }} файл • {{ material.uploadedAt|date('d.m.Y H:i') }}
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if material.fileType == 'manual' %}
+        <div class="material-content">
+            {{ material.content }}
+        </div>
+    {% else %}
+        <div class="material-content" style="text-align: center; padding: 60px 40px;">
+            <p style="font-size: 18px; margin-bottom: 20px;">📄 Это файл {{ material.fileType|upper }}</p>
+            <p style="color: #6B6B5E; margin-bottom: 30px;">Нажмите кнопку ниже чтобы скачать или открыть файл</p>
+            <a href="{{ path('app_materials_view', {id: material.id}) }}" class="download-link" download>
+                ⬇️ Скачать файл
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

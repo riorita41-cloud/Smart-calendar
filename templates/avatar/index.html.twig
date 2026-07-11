@@ -1,0 +1,392 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Мой аватар{% endblock %}
+
+{% block body %}
+<style>
+    .avatar-page {
+        font-family: Georgia, serif;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .avatar-title {
+        color: #4A5D3A;
+        font-size: 32px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    
+    .avatar-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+    
+    .avatar-preview {
+        background: #FAF7F0;
+        border-radius: 16px;
+        padding: 40px;
+        text-align: center;
+        border: 1px solid #D4CFC4;
+    }
+    
+    .avatar-dicebear {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: #FAF7F0;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(74, 93, 58, 0.15);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    .avatar-dicebear svg {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .avatar-form {
+        background: #FAF7F0;
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid #D4CFC4;
+    }
+    
+    .form-section {
+        margin-bottom: 25px;
+    }
+    
+    .form-section h3 {
+        color: #4A5D3A;
+        font-size: 18px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #D4CFC4;
+        padding-bottom: 8px;
+    }
+    
+    .option-group {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .option-item input[type="radio"] {
+        display: none;
+    }
+    
+    .option-item label {
+        display: block;
+        padding: 12px;
+        background: #F5F1E8;
+        border: 2px solid #D4CFC4;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+        font-family: Georgia, serif;
+    }
+    
+    .option-item input[type="radio"]:checked + label {
+        background: #4A5D3A;
+        color: #FAF7F0;
+        border-color: #4A5D3A;
+    }
+    
+    .color-picker {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .color-option input[type="radio"] {
+        display: none;
+    }
+    
+    .color-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: block;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+    }
+    
+    .color-circle:hover {
+        transform: scale(1.1);
+    }
+    
+    .color-option input[type="radio"]:checked + .color-circle {
+        border-color: #4A5D3A;
+        transform: scale(1.1);
+    }
+    
+    .btn-random {
+        width: 100%;
+        background: #4A5D3A;
+        color: #FAF7F0;
+        border: none;
+        padding: 16px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        font-family: Georgia, serif;
+        margin-bottom: 20px;
+    }
+    
+    .btn-random:hover {
+        background: #3A4A2D;
+    }
+    
+    .btn-save {
+        width: 100%;
+        background: #4A5D3A;
+        color: #FAF7F0;
+        border: none;
+        padding: 16px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        font-family: Georgia, serif;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="avatar-page">
+    <h1 class="avatar-title">Настройка аватара</h1>
+    
+    <div class="avatar-container">
+        <div class="avatar-preview">
+            <div id="avatar-img" class="avatar-dicebear">Загрузка...</div>
+            <p style="color: #6B6B5E; margin-top: 15px;">DiceBear Adventurer</p>
+        </div>
+        
+        <div class="avatar-form">
+            <form method="post" action="{{ path('app_avatar_save') }}">
+                <input type="hidden" name="seed" id="current-seed" value="{{ avatar.seed ?: app.user.email }}">
+                <button type="button" class="btn-random" onclick="generateRandomAvatar()">
+                     Сгенерировать случайный аватар
+                </button>
+                
+                <div class="form-section">
+                    <h3>Цвет кожи</h3>
+                    <div class="color-picker">
+                        <label class="color-option">
+                            <input type="radio" name="skinColor" value="ffdbb4" class="avatar-option" {% if avatar.skinColor == 'ffdbb4' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #FFDBB4;"></span>
+                        </label>
+                        <label class="color-option">
+                            <input type="radio" name="skinColor" value="edb98a" class="avatar-option" {% if avatar.skinColor == 'edb98a' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #EDB98A;"></span>
+                        </label>
+                        <label class="color-option">
+                            <input type="radio" name="skinColor" value="d08b5b" class="avatar-option" {% if avatar.skinColor == 'd08b5b' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #D08B5B;"></span>
+                        </label>
+                        <label class="color-option">
+                            <input type="radio" name="skinColor" value="ae5d29" class="avatar-option" {% if avatar.skinColor == 'ae5d29' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #AE5D29;"></span>
+                        </label>
+                        <label class="color-option">
+                            <input type="radio" name="skinColor" value="7c3c16" class="avatar-option" {% if avatar.skinColor == '7c3c16' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #7C3C16;"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Причёска</h3>
+                    <div class="option-group">
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h1" value="short01" class="avatar-option" {% if avatar.hairStyle == 'short01' %}checked{% endif %}>
+                            <label for="h1">Короткая 1</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h2" value="short02" class="avatar-option" {% if avatar.hairStyle == 'short02' %}checked{% endif %}>
+                            <label for="h2">Короткая 2</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h3" value="short03" class="avatar-option" {% if avatar.hairStyle == 'short03' %}checked{% endif %}>
+                            <label for="h3">Короткая 3</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h4" value="short04" class="avatar-option" {% if avatar.hairStyle == 'short04' %}checked{% endif %}>
+                            <label for="h4">Короткая 4</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h5" value="short05" class="avatar-option" {% if avatar.hairStyle == 'short05' %}checked{% endif %}>
+                            <label for="h5">Короткая 5</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h6" value="long01" class="avatar-option" {% if avatar.hairStyle == 'long01' %}checked{% endif %}>
+                            <label for="h6">Длинная 1</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h7" value="long02" class="avatar-option" {% if avatar.hairStyle == 'long02' %}checked{% endif %}>
+                            <label for="h7">Длинная 2</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h8" value="long03" class="avatar-option" {% if avatar.hairStyle == 'long03' %}checked{% endif %}>
+                            <label for="h8">Длинная 3</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h9" value="long04" class="avatar-option" {% if avatar.hairStyle == 'long04' %}checked{% endif %}>
+                            <label for="h9">Длинная 4</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h10" value="long05" class="avatar-option" {% if avatar.hairStyle == 'long05' %}checked{% endif %}>
+                            <label for="h10">Длинная 5</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h11" value="long06" class="avatar-option" {% if avatar.hairStyle == 'long06' %}checked{% endif %}>
+                            <label for="h11">Длинная 6</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h12" value="long07" class="avatar-option" {% if avatar.hairStyle == 'long07' %}checked{% endif %}>
+                            <label for="h12">Длинная 7</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h13" value="long08" class="avatar-option" {% if avatar.hairStyle == 'long08' %}checked{% endif %}>
+                            <label for="h13">Длинная 8</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h14" value="long09" class="avatar-option" {% if avatar.hairStyle == 'long09' %}checked{% endif %}>
+                            <label for="h14">Длинная 9</label>
+                        </div>
+                        <div class="option-item">
+                            <input type="radio" name="hair" id="h15" value="long10" class="avatar-option" {% if avatar.hairStyle == 'long10' %}checked{% endif %}>
+                            <label for="h15">Длинная 10</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Цвет волос</h3>
+                    <div class="color-picker">
+                        <label class="color-option">
+                            <input type="radio" name="hairColor" value="000000" class="avatar-option" {% if avatar.hairColor == '000000' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #000000;"></span>
+                        </label>
+                        <label class="color-option">
+                            <input type="radio" name="hairColor" value="2c1b18" class="avatar-option" {% if avatar.hairColor == '2c1b18' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #2C1B18;"></span>
+                        </label>
+                        <label class="color-option">
+                            <input type="radio" name="hairColor" value="724133" class="avatar-option" {% if avatar.hairColor == '724133' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #724133;"></span>
+                        </label>
+                        <label class="color-option">
+                            <input type="radio" name="hairColor" value="b58143" class="avatar-option" {% if avatar.hairColor == 'b58143' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #B58143;"></span>
+                        </label>
+                        <label class="color-option">
+                            <input type="radio" name="hairColor" value="d9532f" class="avatar-option" {% if avatar.hairColor == 'd9532f' %}checked{% endif %}>
+                            <span class="color-circle" style="background: #D9532F;"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-save">Сохранить аватар</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { createAvatar } from 'https://esm.sh/@dicebear/core@9';
+import * as styles from 'https://esm.sh/@dicebear/collection@9';
+
+function getSelectedValue(name) {
+    var selected = document.querySelector('input[name="' + name + '"]:checked');
+    return selected ? selected.value : null;
+}
+
+function generateRandomAvatar() {
+    var skinColors = ['ffdbb4', 'edb98a', 'd08b5b', 'ae5d29', '7c3c16'];
+    var hairColors = ['000000', '2c1b18', '724133', 'b58143', 'd9532f'];
+    var hairs = ['short01', 'short02', 'short03', 'short04', 'short05', 'long01', 'long02', 'long03', 'long04', 'long05', 'long06', 'long07', 'long08', 'long09', 'long10'];
+    
+    var randomSkin = skinColors[Math.floor(Math.random() * skinColors.length)];
+    var randomHairColor = hairColors[Math.floor(Math.random() * hairColors.length)];
+    var randomHair = hairs[Math.floor(Math.random() * hairs.length)];
+    var randomSeed = "user_" + Math.random().toString(36).substr(2, 9);
+    
+    // Обновляем seed в скрытом поле
+    document.getElementById('current-seed').value = randomSeed;
+    
+    var options = {
+        seed: randomSeed,
+        backgroundColor: ["b6e3f4"],
+        skinColor: [randomSkin],
+        hairColor: [randomHairColor],
+        hair: [randomHair]
+    };
+    
+    console.log("Generating random avatar:", options);
+    
+    try {
+        const avatar = createAvatar(styles.adventurer, options);
+        const svg = avatar.toString();
+        
+        var container = document.getElementById("avatar-img");
+        if (container) {
+            container.innerHTML = svg;
+            console.log("Random avatar generated!");
+        }
+    } catch (error) {
+        console.error("Error generating avatar:", error);
+    }
+}
+
+function updateAvatar() {
+    var skinColor = getSelectedValue('skinColor');
+    var hairColor = getSelectedValue('hairColor');
+    var hair = getSelectedValue('hair');
+    
+    var options = {
+        seed: "{{ avatar.seed ?: app.user.email }}",
+        backgroundColor: ["b6e3f4"],
+        skinColor: [skinColor],
+        hairColor: [hairColor],
+        hair: [hair]
+    };
+    
+    console.log("Updating avatar with:", JSON.stringify(options, null, 2));
+    
+    try {
+        const avatar = createAvatar(styles.adventurer, options);
+        const svg = avatar.toString();
+        
+        var container = document.getElementById("avatar-img");
+        if (container) {
+            container.innerHTML = svg;
+            console.log("Avatar updated successfully!");
+        }
+    } catch (error) {
+        console.error("Error creating avatar:", error);
+    }
+}
+
+window.updateAvatar = updateAvatar;
+window.generateRandomAvatar = generateRandomAvatar;
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Page loaded, creating avatar...");
+    updateAvatar();
+    
+    var radios = document.querySelectorAll('.avatar-option');
+    radios.forEach(function(radio) {
+        radio.addEventListener('change', updateAvatar);
+    });
+});
+</script>
+{% endblock %}

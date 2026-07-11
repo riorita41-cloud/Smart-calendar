@@ -1,0 +1,177 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Календарь подготовки{% endblock %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/calendar.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="calendar-page">
+    <h1 class="calendar-title">Расписание подготовки</h1>
+    
+    <div class="calendar-container">
+        <div class="calendar-main">
+            <div class="calendar-card">
+                <div class="month-header">
+                    <a href="{{ path('app_calendar', {year: prevMonth.format('Y'), month: prevMonth.format('n')}) }}" class="month-nav">&lt;</a>
+                    
+                    <div class="month-year-selector">
+                        <div style="position: relative;">
+                            <button class="selector-btn" onclick="toggleDropdown('monthDropdown')">{{ monthTitle|split(' ')[0] }}</button>
+                            <div id="monthDropdown" class="dropdown-menu">
+                                {% for m in 1..12 %}
+                                    <a href="{{ path('app_calendar', {year: currentYear, month: m}) }}" class="dropdown-item {% if m == month %}active{% endif %}">
+                                        {{ ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'][m-1] }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div style="position: relative;">
+                            <button class="selector-btn" onclick="toggleDropdown('yearDropdown')">{{ currentYear }}</button>
+                            <div id="yearDropdown" class="dropdown-menu">
+                                {% for y in (currentYear - 5)..(currentYear + 5) %}
+                                    <a href="{{ path('app_calendar', {year: y, month: month}) }}" class="dropdown-item {% if y == currentYear %}active{% endif %}">
+                                        {{ y }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="{{ path('app_calendar', {year: nextMonth.format('Y'), month: nextMonth.format('n')}) }}" class="month-nav">&gt;</a>
+                </div>
+                
+                <div class="weekdays">
+                    <div class="weekday">Пн</div>
+                    <div class="weekday">Вт</div>
+                    <div class="weekday">Ср</div>
+                    <div class="weekday">Чт</div>
+                    <div class="weekday">Пт</div>
+                    <div class="weekday">Сб</div>
+                    <div class="weekday">Вс</div>
+                </div>
+                
+                <div class="days-grid">
+                    {% for i in 1..(firstDayOfWeek - 1) %}
+                        <div class="day-cell empty"></div>
+                    {% endfor %}
+                    
+                    {% for day in 1..daysInMonth %}
+                        {% set dateStr = currentYear ~ '-' ~ (month < 10 ? '0' ~ month : month) ~ '-' ~ (day < 10 ? '0' ~ day : day) %}
+                        {% set dayTasks = tasksByDay[dateStr] ?? [] %}
+                        {% set isToday = today.format('Y-m-d') == dateStr %}
+                        
+                        {% set isExamDay = false %}
+                        {% set examName = '' %}
+                        {% for exam in exams %}
+                            {% if exam.examDate.format('Y-m-d') == dateStr %}
+                                {% set isExamDay = true %}
+                                {% set examName = exam.name %}
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% set allDone = dayTasks|length > 0 and (dayTasks|filter(t => t.isCompleted)|length == dayTasks|length) %}
+                        {% set hasTasks = dayTasks|length > 0 %}
+                        
+                        <div class="day-cell 
+                            {% if isToday %}today{% endif %}
+                            {% if isExamDay %}exam-day{% endif %}
+                            {% if hasTasks and not isExamDay %}has-tasks{% endif %}
+                            {% if allDone %}all-done{% endif %}
+                        ">
+                            {{ day }}
+                            
+                            {% if hasTasks or isExamDay %}
+                                <div class="task-dot"></div>
+                            {% endif %}
+                            
+                            {% if hasTasks or isExamDay %}
+                                <div class="tooltip">
+                                    {% if isExamDay %}
+                                        <div class="exam-label">{{ examName }}</div>
+                                    {% endif %}
+                                    {% for task in dayTasks %}
+                                        <div class="task-item">
+                                            <span class="{% if task.isCompleted %}check{% else %}uncheck{% endif %}">
+                                                {% if task.isCompleted %}+{% else %}o{% endif %}
+                                            </span>
+                                            <span>{{ task.title }}</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <a href="{{ path('app_exam_new') }}" class="btn-adjust">Добавить экзамен</a>
+            </div>
+        </div>
+        
+        <div class="calendar-sidebar">
+            <div class="calendar-card">
+                <h2 class="sidebar-title">План на сегодня</h2>
+                
+                {% if todayTasks|length > 0 %}
+                    {% for task in todayTasks %}
+                        <div class="today-task">
+                            <input type="checkbox" 
+                                   class="task-checkbox" 
+                                   {% if task.isCompleted %}checked{% endif %}
+                                   data-task-id="{{ task.id }}">
+                            <div class="task-info">
+                                <div class="task-name {% if task.isCompleted %}done{% endif %}">
+                                    {{ task.title }}
+                                </div>
+                                {% if task.description %}
+                                    <div class="task-time">{{ task.description|slice(0, 50) }}{% if task.description|length > 50 %}...{% endif %}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div class="icon"></div>
+                        <div>На сегодня задач нет!</div>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="calendar-card">
+                <h2 class="sidebar-title">Общий прогресс</h2>
+                
+                <div class="progress-circle-container">
+                    <div class="progress-circle">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="fill" cx="60" cy="60" r="50" 
+                                    stroke-dasharray="{{ 2 * 3.14159 * 50 }}"
+                                    stroke-dashoffset="{{ 2 * 3.14159 * 50 * (1 - progress / 100) }}">
+                            </circle>
+                        </svg>
+                        <div class="progress-text">{{ progress }}%</div>
+                    </div>
+                    
+                    <div>
+                        {% for subject, percent in progressBySubject %}
+                            <div class="subject-progress">
+                                <span class="star"></span>
+                                <span class="name">{{ subject }}</span>
+                                <span class="percent">{{ percent }}%</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/calendar.js') }}"></script>
+{% endblock %}

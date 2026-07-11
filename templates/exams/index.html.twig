@@ -1,0 +1,224 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Экзамены{% endblock %}
+
+{% block body %}
+<style>
+    .exams-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .page-title {
+        font-size: 32px;
+        color: #4A5D3A;
+        margin-bottom: 30px;
+        text-align: center;
+        font-family: Georgia, serif;
+    }
+    
+    .section {
+        background: #FAF7F0;
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid #D4CFC4;
+        margin-bottom: 30px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+        color: #4A5D3A;
+        margin-bottom: 20px;
+        font-family: Georgia, serif;
+        border-bottom: 2px solid #D4CFC4;
+        padding-bottom: 10px;
+    }
+    
+    .exam-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #D4CFC4;
+        margin-bottom: 15px;
+    }
+    
+    .exam-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: #4A5D3A;
+        font-family: Georgia, serif;
+        margin-bottom: 10px;
+    }
+    
+    .exam-date {
+        color: #6B6B5E;
+        font-family: Georgia, serif;
+    }
+    
+    .materials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 15px;
+    }
+    
+    .material-card {
+        background: white;
+        border-radius: 8px;
+        padding: 15px;
+        border: 1px solid #D4CFC4;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: block;
+    }
+    
+    .material-card:hover {
+        box-shadow: 0 4px 12px rgba(74, 93, 58, 0.15);
+        transform: translateY(-2px);
+        border-color: #6366F1;
+    }
+    
+    .material-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 10px;
+    }
+    
+    .material-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        flex-shrink: 0;
+    }
+    
+    .material-icon.pdf {
+        background: #FFE5E5;
+    }
+    
+    .material-icon.txt {
+        background: #E5F3FF;
+    }
+    
+    .material-icon.docx {
+        background: #E5FFE5;
+    }
+    
+    .material-icon.manual {
+        background: #FFF3E5;
+    }
+    
+    .material-name {
+        font-weight: bold;
+        color: #4A5D3A;
+        font-family: Georgia, serif;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .material-meta {
+        font-size: 12px;
+        color: #94A3B8;
+        font-family: Georgia, serif;
+        padding-left: 65px;
+    }
+    
+    .no-data {
+        text-align: center;
+        color: #94A3B8;
+        padding: 40px;
+        font-family: Georgia, serif;
+        font-size: 16px;
+    }
+    
+    .btn-add {
+        display: inline-block;
+        background: #6366F1;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-family: Georgia, serif;
+        margin-top: 20px;
+        transition: background 0.2s;
+    }
+    
+    .btn-add:hover {
+        background: #4F46E5;
+    }
+</style>
+
+<div class="exams-container">
+    <h1 class="page-title">Экзамены</h1>
+    
+    <!-- Секция экзаменов -->
+    <div class="section">
+        <h2 class="section-title"> Мои экзамены</h2>
+        
+        {% if exams|length > 0 %}
+            {% for exam in exams %}
+                <div class="exam-card">
+                    <div class="exam-name">{{ exam.name }}</div>
+                    {% if exam.examDate %}
+                        <div class="exam-date">📅 {{ exam.examDate|date('d.m.Y') }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data">
+                <p>У вас пока нет добавленных экзаменов</p>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Секция материалов -->
+    <div class="section">
+        <h2 class="section-title"> Материалы для подготовки</h2>
+        
+        {% if materials|length > 0 %}
+            <div class="materials-grid">
+                {% for material in materials %}
+                    <a href="{{ path('app_materials_view', {id: material.id}) }}" class="material-card">
+                        <div class="material-header">
+                            <div class="material-icon {{ material.fileType }}">
+                                {% if material.fileType == 'pdf' %}
+                                    📄
+                                {% elseif material.fileType == 'txt' %}
+                                    
+                                {% elseif material.fileType == 'docx' %}
+                                    📄
+                                {% else %}
+                                    ✍️
+                                {% endif %}
+                            </div>
+                            <div class="material-name">{{ material.name }}</div>
+                        </div>
+                        <div class="material-meta">
+                            {% if material.fileType == 'manual' %}
+                                Ручной ввод • {{ material.uploadedAt|date('d.m.Y H:i') }}
+                            {% else %}
+                                {{ material.fileType|upper }} • {{ material.uploadedAt|date('d.m.Y') }}
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data">
+                <p>У вас пока нет загруженных материалов</p>
+                <p>Загрузите билеты, лекции или введите вопросы вручную</p>
+                <a href="{{ path('app_materials') }}" class="btn-add">
+                     Добавить материалы
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
