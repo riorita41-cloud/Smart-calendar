@@ -144,7 +144,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-<a href="{{ path('app_materials') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_materials' %}active{% endif %}">                    </a>
+                    <a href="{{ path('app_materials') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_materials' %}active{% endif %}">
+                        <span class="nav-icon"></span>
+                        Материалы
+                    </a>
                 </li>
                                 <li class="nav-item">
                     <a href="{{ path('app_avatar') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_avatar' %}active{% endif %}">
