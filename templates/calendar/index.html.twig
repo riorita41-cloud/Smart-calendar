@@ -2,13 +2,12 @@
 
 {% block title %}Календарь подготовки{% endblock %}
 
-
 {% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/calendar.css') }}">
 {% endblock %}
 
 {% block body %}
-
 <div class="calendar-page">
     <h1 class="calendar-title">Расписание подготовки</h1>
     
@@ -77,12 +76,8 @@
                         {% set allDone = dayTasks|length > 0 and (dayTasks|filter(t => t.isCompleted)|length == dayTasks|length) %}
                         {% set hasTasks = dayTasks|length > 0 %}
                         
-                        <div class="day-cell 
-                            {% if isToday %}today{% endif %}
-                            {% if isExamDay %}exam-day{% endif %}
-                            {% if hasTasks and not isExamDay %}has-tasks{% endif %}
-                            {% if allDone %}all-done{% endif %}
-                        ">
+                        <div class="day-cell {% if isToday %}today{% endif %} {% if isExamDay %}exam-day{% endif %} {% if hasTasks and not isExamDay %}has-tasks{% endif %} {% if allDone %}all-done{% endif %}" 
+                             onclick="openTaskModal('{{ dateStr }}')">
                             {{ day }}
                             
                             {% if hasTasks or isExamDay %}
@@ -115,18 +110,12 @@
         <div class="calendar-sidebar">
             <div class="calendar-card">
                 <h2 class="sidebar-title">План на сегодня</h2>
-                
                 {% if todayTasks|length > 0 %}
                     {% for task in todayTasks %}
                         <div class="today-task">
-                            <input type="checkbox" 
-                                   class="task-checkbox" 
-                                   {% if task.isCompleted %}checked{% endif %}
-                                   data-task-id="{{ task.id }}">
+                            <input type="checkbox" class="task-checkbox" {% if task.isCompleted %}checked{% endif %} data-task-id="{{ task.id }}">
                             <div class="task-info">
-                                <div class="task-name {% if task.isCompleted %}done{% endif %}">
-                                    {{ task.title }}
-                                </div>
+                                <div class="task-name {% if task.isCompleted %}done{% endif %}">{{ task.title }}</div>
                                 {% if task.description %}
                                     <div class="task-time">{{ task.description|slice(0, 50) }}{% if task.description|length > 50 %}...{% endif %}</div>
                                 {% endif %}
@@ -143,19 +132,14 @@
             
             <div class="calendar-card">
                 <h2 class="sidebar-title">Общий прогресс</h2>
-                
                 <div class="progress-circle-container">
                     <div class="progress-circle">
                         <svg width="120" height="120">
                             <circle class="bg" cx="60" cy="60" r="50"></circle>
-                            <circle class="fill" cx="60" cy="60" r="50" 
-                                    stroke-dasharray="{{ 2 * 3.14159 * 50 }}"
-                                    stroke-dashoffset="{{ 2 * 3.14159 * 50 * (1 - progress / 100) }}">
-                            </circle>
+                            <circle class="fill" cx="60" cy="60" r="50" stroke-dasharray="{{ 2 * 3.14159 * 50 }}" stroke-dashoffset="{{ 2 * 3.14159 * 50 * (1 - progress / 100) }}"></circle>
                         </svg>
                         <div class="progress-text">{{ progress }}%</div>
                     </div>
-                    
                     <div>
                         {% for subject, percent in progressBySubject %}
                             <div class="subject-progress">
@@ -170,8 +154,22 @@
         </div>
     </div>
 </div>
+
+<div id="taskModal" class="modal">
+    <h3>Новая задача</h3>
+    <input type="text" id="taskTitle" placeholder="Название задачи">
+    <input type="hidden" id="taskDate">
+    <select id="examSelect">
+    {% for exam in app.user.exams %}
+        <option value="{{ exam.id }}">{{ exam.name }} ({{ exam.subject }})</option>
+    {% endfor %}
+    </select>
+    <button id="saveTaskBtn">Сохранить</button>
+    <button onclick="document.getElementById('taskModal').style.display='none'">Отмена</button>
+</div>
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script src="{{ asset('js/calendar.js') }}"></script>
 {% endblock %}

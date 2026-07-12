@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TaskController extends AbstractController
 {
@@ -75,4 +76,27 @@ class TaskController extends AbstractController
         $this->addFlash('success', 'Задача удалена');
         return $this->redirectToRoute('app_tasks');
     }
+
+    #[Route('/api/task/quick-add', name: 'app_task_quick_add', methods: ['POST'])]
+public function quickAdd(Request $request, EntityManagerInterface $entityManager): JsonResponse
+{
+    $data = json_decode($request->getContent(), true);
+
+    $exam = $entityManager->getRepository(\App\Entity\Exam::class)->find($data['examId']);
+
+    if (!$exam || $exam->getUser() !== $this->getUser()) {
+        return new JsonResponse(['status' => 'error', 'message' => 'Экзамен не найден!'], 400);
+    }
+
+    $task = new \App\Entity\StudyTask();
+    $task->setUser($this->getUser());
+    $task->setTitle($data['title']);
+    $task->setScheduledDate(new \DateTimeImmutable($data['date']));
+    $task->setExam($exam);
+
+    $entityManager->persist($task);
+    $entityManager->flush();
+
+    return new JsonResponse(['status' => 'success']);
+}
 }

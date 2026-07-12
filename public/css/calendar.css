@@ -414,3 +414,55 @@
         font-size: 48px;
         margin-bottom: 15px;
     }
+
+    /* Модальное окно */
+.modal {
+    display: none; 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    background: #FAF7F0;
+    padding: 30px;
+    border-radius: 12px;
+    border: 2px solid #4A5D3A;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 2000;
+    width: 300px;
+    font-family: Georgia, serif;
+}
+
+.modal h3 {
+    color: #4A5D3A;
+    margin-top: 0;
+    text-align: center;
+}
+
+.modal input, .modal select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #D4CFC4;
+    border-radius: 6px;
+    background: #E8E4D8;
+    box-sizing: border-box; /* Чтобы padding не ломал размер */
+}
+
+.modal button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+#saveTaskBtn {
+    background: #4A5D3A;
+    color: #FAF7F0;
+}
+
+#saveTaskBtn:hover {
+    background: #3A4A2D;
+}
