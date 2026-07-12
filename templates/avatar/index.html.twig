@@ -11,6 +11,10 @@
 
 <div class="avatar-page">
     <h1 class="avatar-title">Настройка аватара</h1>
+        <div id="avatar-data" 
+     data-seed="{{ avatar.seed ?: app.user.email }}" 
+     style="display:none;">
+</div>
     
     <div class="avatar-container">
         <div class="avatar-preview">
@@ -149,92 +153,9 @@
     </div>
 </div>
 
-<script type="module">
-import { createAvatar } from 'https://esm.sh/@dicebear/core@9';
-import * as styles from 'https://esm.sh/@dicebear/collection@9';
+{% endblock %}
 
-function getSelectedValue(name) {
-    var selected = document.querySelector('input[name="' + name + '"]:checked');
-    return selected ? selected.value : null;
-}
-
-function generateRandomAvatar() {
-    var skinColors = ['ffdbb4', 'edb98a', 'd08b5b', 'ae5d29', '7c3c16'];
-    var hairColors = ['000000', '2c1b18', '724133', 'b58143', 'd9532f'];
-    var hairs = ['short01', 'short02', 'short03', 'short04', 'short05', 'long01', 'long02', 'long03', 'long04', 'long05', 'long06', 'long07', 'long08', 'long09', 'long10'];
-    
-    var randomSkin = skinColors[Math.floor(Math.random() * skinColors.length)];
-    var randomHairColor = hairColors[Math.floor(Math.random() * hairColors.length)];
-    var randomHair = hairs[Math.floor(Math.random() * hairs.length)];
-    var randomSeed = "user_" + Math.random().toString(36).substr(2, 9);
-    
-    // Обновляем seed в скрытом поле
-    document.getElementById('current-seed').value = randomSeed;
-    
-    var options = {
-        seed: randomSeed,
-        backgroundColor: ["b6e3f4"],
-        skinColor: [randomSkin],
-        hairColor: [randomHairColor],
-        hair: [randomHair]
-    };
-    
-    console.log("Generating random avatar:", options);
-    
-    try {
-        const avatar = createAvatar(styles.adventurer, options);
-        const svg = avatar.toString();
-        
-        var container = document.getElementById("avatar-img");
-        if (container) {
-            container.innerHTML = svg;
-            console.log("Random avatar generated!");
-        }
-    } catch (error) {
-        console.error("Error generating avatar:", error);
-    }
-}
-
-function updateAvatar() {
-    var skinColor = getSelectedValue('skinColor');
-    var hairColor = getSelectedValue('hairColor');
-    var hair = getSelectedValue('hair');
-    
-    var options = {
-        seed: "{{ avatar.seed ?: app.user.email }}",
-        backgroundColor: ["b6e3f4"],
-        skinColor: [skinColor],
-        hairColor: [hairColor],
-        hair: [hair]
-    };
-    
-    console.log("Updating avatar with:", JSON.stringify(options, null, 2));
-    
-    try {
-        const avatar = createAvatar(styles.adventurer, options);
-        const svg = avatar.toString();
-        
-        var container = document.getElementById("avatar-img");
-        if (container) {
-            container.innerHTML = svg;
-            console.log("Avatar updated successfully!");
-        }
-    } catch (error) {
-        console.error("Error creating avatar:", error);
-    }
-}
-
-window.updateAvatar = updateAvatar;
-window.generateRandomAvatar = generateRandomAvatar;
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("Page loaded, creating avatar...");
-    updateAvatar();
-    
-    var radios = document.querySelectorAll('.avatar-option');
-    radios.forEach(function(radio) {
-        radio.addEventListener('change', updateAvatar);
-    });
-});
-</script>
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module" src="{{ asset('js/avatar-editor.js') }}"></script>
 {% endblock %}
