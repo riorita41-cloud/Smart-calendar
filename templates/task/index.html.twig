@@ -3,144 +3,6 @@
 {% block title %}Мои задачи{% endblock %}
 
 {% block body %}
-<style>
-    .tasks-page {
-        font-family: Georgia, 'Times New Roman', serif;
-        background: #F5F1E8;
-        min-height: 100vh;
-        padding: 40px 20px;
-    }
-    
-    .tasks-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        max-width: 800px;
-        margin: 0 auto 30px;
-    }
-    
-    .tasks-title {
-        color: #4A5D3A;
-        font-size: 32px;
-        margin: 0;
-        font-family: Georgia, serif;
-    }
-    
-    .btn-add {
-        background: #4A5D3A;
-        color: #FAF7F0;
-        padding: 12px 24px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: background 0.2s;
-        font-family: Georgia, serif;
-    }
-    
-    .btn-add:hover {
-        background: #3A4A2D;
-    }
-    
-    .task-card {
-        background: #FAF7F0;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 2px 8px rgba(74, 93, 58, 0.1);
-        margin-bottom: 15px;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        border: 1px solid #D4CFC4;
-    }
-    
-    .task-checkbox {
-        width: 24px;
-        height: 24px;
-        cursor: pointer;
-        accent-color: #4A5D3A;
-    }
-    
-    .task-info {
-        flex: 1;
-    }
-    
-    .task-title {
-        color: #2C2C2C;
-        font-size: 18px;
-        margin: 0 0 5px;
-        font-family: Georgia, serif;
-    }
-    
-    .task-title.done {
-        text-decoration: line-through;
-        color: #94A3B8;
-    }
-    
-    .task-meta {
-        color: #6B6B5E;
-        font-size: 14px;
-        margin-bottom: 3px;
-        font-family: Georgia, serif;
-    }
-    
-    .task-actions {
-        display: flex;
-        gap: 10px;
-    }
-    
-    .btn-delete {
-        background: #8B4513;
-        color: #FAF7F0;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 14px;
-        font-family: Georgia, serif;
-    }
-    
-    .btn-delete:hover {
-        background: #6B3410;
-    }
-    
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        background: #FAF7F0;
-        border-radius: 12px;
-        max-width: 800px;
-        margin: 0 auto;
-        border: 1px solid #D4CFC4;
-    }
-    
-    .empty-state .icon {
-        font-size: 64px;
-        margin-bottom: 20px;
-    }
-    
-    .empty-state p {
-        color: #6B6B5E;
-        font-size: 18px;
-        margin-bottom: 20px;
-        font-family: Georgia, serif;
-    }
-    
-    .flash-success {
-        background: #4A5D3A;
-        color: #FAF7F0;
-        padding: 15px 20px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        border-left: 4px solid #C9A961;
-    }
-</style>
-
 <div class="tasks-page">
     <div class="tasks-header">
         <h1 class="tasks-title">Мои задачи</h1>
@@ -155,34 +17,18 @@
         {% for task in tasks %}
             <div class="task-card">
                 <form method="post" action="{{ path('app_task_toggle', {id: task.id}) }}" style="margin: 0;">
-                    <input type="checkbox" 
-                           class="task-checkbox" 
-                           {% if task.isCompleted %}checked{% endif %}
-                           onchange="this.form.submit()">
+                    <input type="checkbox" class="task-checkbox" {% if task.isCompleted %}checked{% endif %} onchange="this.form.submit()">
                 </form>
                 
                 <div class="task-info">
-                    <div class="task-title {% if task.isCompleted %}done{% endif %}">
-                        {{ task.title }}
-                    </div>
-                    <div class="task-meta">
-                        {{ task.scheduledDate|date('d.m.Y') }}
-                    </div>
-                    {% if task.exam %}
-                        <div class="task-meta">
-                            {{ task.exam.name }} ({{ task.exam.subject }})
-                        </div>
-                    {% endif %}
-                    {% if task.description %}
-                        <div class="task-meta">
-                            {{ task.description|slice(0, 80) }}{% if task.description|length > 80 %}...{% endif %}
-                        </div>
-                    {% endif %}
+                    <div class="task-title {% if task.isCompleted %}done{% endif %}">{{ task.title }}</div>
+                    <div class="task-meta">{{ task.scheduledDate|date('d.m.Y') }}</div>
+                    {% if task.exam %}<div class="task-meta">{{ task.exam.name }} ({{ task.exam.subject }})</div>{% endif %}
+                    {% if task.description %}<div class="task-meta">{{ task.description|slice(0, 80) }}{% if task.description|length > 80 %}...{% endif %}</div>{% endif %}
                 </div>
                 
                 <div class="task-actions">
-                    <form method="post" action="{{ path('app_task_delete', {id: task.id}) }}" 
-                          onsubmit="return confirm('Удалить задачу?');">
+                    <form method="post" action="{{ path('app_task_delete', {id: task.id}) }}" onsubmit="return confirm('Удалить задачу?');">
                         <button type="submit" class="btn-delete">Удалить</button>
                     </form>
                 </div>
@@ -190,7 +36,6 @@
         {% endfor %}
     {% else %}
         <div class="empty-state">
-            <div class="icon"></div>
             <p>У вас пока нет задач</p>
             <a href="{{ path('app_task_new') }}" class="btn-add">Добавить первую задачу</a>
         </div>
