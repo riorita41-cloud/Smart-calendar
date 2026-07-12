@@ -16,15 +16,13 @@ function generateRandomAvatar() {
     var randomHair = hairs[Math.floor(Math.random() * hairs.length)];
     var randomSeed = "user_" + Math.random().toString(36).substr(2, 9);
     
-    // Обновляем seed в скрытом поле, если оно есть
     var seedInput = document.getElementById('current-seed');
     if (seedInput) seedInput.value = randomSeed;
     
-    // Также обновляем data-атрибут, чтобы updateAvatar видел новый seed
     var seedElement = document.getElementById('avatar-data');
     if (seedElement) seedElement.setAttribute('data-seed', randomSeed);
     
-    updateAvatar(); // Перерисовываем с новыми данными
+    updateAvatar(); 
 }
 
 function updateAvatar() {
@@ -58,18 +56,15 @@ function updateAvatar() {
     }
 }
 
-// Привязка событий после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Page loaded, initializing avatar...");
     updateAvatar();
     
-    // Привязываем кнопку рандома
     var randomBtn = document.querySelector('.btn-random');
     if (randomBtn) {
         randomBtn.addEventListener('click', generateRandomAvatar);
     }
     
-    // Привязываем все радио-кнопки
     var radios = document.querySelectorAll('.avatar-option');
     radios.forEach(function(radio) {
         radio.addEventListener('change', updateAvatar);
