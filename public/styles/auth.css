@@ -1,0 +1,118 @@
+ * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background: #F5F1E8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .register-container {
+            background: #FAF7F0;
+            border-radius: 16px;
+            padding: 50px 40px;
+            box-shadow: 0 4px 20px rgba(74, 93, 58, 0.15);
+            border: 1px solid #D4CFC4;
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .register-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .register-title {
+            color: #4A5D3A;
+            font-size: 32px;
+            font-weight: bold;
+            font-family: Georgia, serif;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #6B6B5E;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-family: Georgia, serif;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #D4CFC4;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: Georgia, serif;
+            background: #F5F1E8;
+            color: #2C2C2C;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #4A5D3A;
+        }
+        
+        .btn-register {
+            width: 100%;
+            background: #4A5D3A;
+            color: #FAF7F0;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            transition: background 0.2s;
+        }
+        
+        .btn-register:hover {
+            background: #3A4A2D;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #6B6B5E;
+            font-size: 15px;
+            font-family: Georgia, serif;
+        }
+        
+        .login-link a {
+            color: #4A5D3A;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .alert-error {
+            background: #8B4513;
+            color: #FAF7F0;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #C9A961;
+            font-family: Georgia, serif;
+        }

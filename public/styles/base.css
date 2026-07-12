@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, serif;
+    background: #F5F1E8;
+    min-height: 100vh;
+    color: #2C2C2C;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: #FAF7F0;
+    border-right: 2px solid #D4CFC4;
+    padding: 30px 20px;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #4A5D3A;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #4A5D3A;
+    padding-bottom: 15px;
+}
+
+.nav-menu {
+    list-style: none;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #6B6B5E;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.nav-link.active {
+    background: #4A5D3A;
+    color: #FAF7F0;
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #C9A961;
+    flex-shrink: 0;
+}
+
+.main-content {
+    margin-left: 250px;
+    flex: 1;
+    padding: 40px;
+}
+
+.login-container,
+.register-container {
+    background: #FAF7F0;
+    border-radius: 16px;
+    padding: 50px 40px;
+    box-shadow: 0 4px 20px rgba(74, 93, 58, 0.15);
+    border: 1px solid #D4CFC4;
+    width: 100%;
+    max-width: 450px;
+}
+
+.login-header,
+.register-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    color: #6B6B5E;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #D4CFC4;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #F5F1E8;
+}
+
+.btn-login,
+.btn-register {
+    width: 100%;
+    background: #4A5D3A;
+    color: #FAF7F0;
+    border: none;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.full-width-layout .sidebar {
+    display: none;
+}
+
+.full-width-layout .main-content {
+    margin-left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}

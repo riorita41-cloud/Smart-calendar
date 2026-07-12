@@ -5,166 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Умный Календарь{% endblock %}</title>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: Georgia, 'Times New Roman', serif;
-            background: #F5F1E8;
-            min-height: 100vh;
-            color: #2C2C2C;
-        }
-        
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
-        
-        .sidebar {
-            width: 250px;
-            background: #FAF7F0;
-            border-right: 2px solid #D4CFC4;
-            padding: 30px 20px;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar-title {
-            font-size: 26px;
-            font-weight: bold;
-            color: #4A5D3A;
-            margin-bottom: 30px;
-            line-height: 1.2;
-            font-family: Georgia, serif;
-            border-bottom: 2px solid #4A5D3A;
-            padding-bottom: 15px;
-        }
-        
-        .nav-menu {
-            list-style: none;
-        }
-        
-        .nav-item {
-            margin-bottom: 8px;
-        }
-        
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: #6B6B5E;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.2s;
-            font-size: 16px;
-            font-family: Georgia, serif;
-        }
-        
-        .nav-link:hover {
-            background: #E8E4D8;
-            color: #4A5D3A;
-        }
-        
-        .nav-link.active {
-            background: #4A5D3A;
-            color: #FAF7F0;
-        }
-        
-        .nav-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #C9A961;
-            flex-shrink: 0;
-        }
-        
-        .nav-link.active .nav-icon {
-            background: #FAF7F0;
-        }
-        
-        .main-content {
-            margin-left: 250px;
-            flex: 1;
-            padding: 40px;
-        }
-        
-        .flash-success {
-            background: #4A5D3A;
-            color: #FAF7F0;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #C9A961;
-        }
-        
-        .flash-error {
-            background: #8B4513;
-            color: #FAF7F0;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-    </style>
+    
+    {# Подключаем вынесенный CSS файл #}
+    <link rel="stylesheet" href="{{ asset('styles/base.css') }}">
+    
     {% block stylesheets %}{% endblock %}
 </head>
-<body>
+
+{# Добавляем динамический класс к body для управления стилями страниц #}
+<body class="{% block body_class %}{% endblock %}">
+    
     <div class="layout">
+        {# Блок сайдбара, который можно переопределить как пустой в других шаблонах #}
+        {% block sidebar %}
         <aside class="sidebar">
             <div class="sidebar-title">Умный<br>Календарь</div>
             
             <ul class="nav-menu">
                 <li class="nav-item">
                     <a href="{{ path('app_home') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}">
-                        <span class="nav-icon"></span>
-                        Главная
+                        <span class="nav-icon"></span> Главная
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('app_calendar') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_calendar' %}active{% endif %}">
-                        <span class="nav-icon"></span>
-                        Календарь
+                        <span class="nav-icon"></span> Календарь
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('app_tasks') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_tasks' %}active{% endif %}">
-                        <span class="nav-icon"></span>
-                        Задачи
+                        <span class="nav-icon"></span> Задачи
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('app_exams') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_exams' %}active{% endif %}">
-                        <span class="nav-icon"></span>
-                        Экзамены
+                        <span class="nav-icon"></span> Экзамены
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('app_materials') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_materials' %}active{% endif %}">
-                        <span class="nav-icon"></span>
-                        Материалы
+                        <span class="nav-icon"></span> Материалы
                     </a>
                 </li>
-                                <li class="nav-item">
+                <li class="nav-item">
                     <a href="{{ path('app_avatar') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_avatar' %}active{% endif %}">
-                        <span class="nav-icon"></span>
-                        Аватар
+                        <span class="nav-icon"></span> Аватар
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ path('app_logout') }}" class="nav-link">
-                        <span class="nav-icon"></span>
-                        Выйти
+                        <span class="nav-icon"></span> Выйти
                     </a>
                 </li>
             </ul>
         </aside>
+        {% endblock %}
         
         <main class="main-content">
+            {# Flash-сообщения доступны на всех страницах #}
             {% for message in app.flashes('success') %}
                 <div class="flash-success">{{ message }}</div>
             {% endfor %}
@@ -176,6 +74,7 @@
             {% block body %}{% endblock %}
         </main>
     </div>
-  {% block javascripts %}{% endblock %}
+
+    {% block javascripts %}{% endblock %}
 </body>
 </html>

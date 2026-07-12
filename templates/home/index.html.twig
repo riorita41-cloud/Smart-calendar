@@ -2,283 +2,44 @@
 
 {% block title %}Главная - Умный Календарь{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/dashboard.css') }}">
+{% endblock %}
+
 {% block body %}
-<style>
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: 1fr 300px;
-        grid-template-rows: auto auto;
-        gap: 25px;
-        max-width: 1200px;
-    }
-    
-    .card {
-        background: #FAF7F0;
-        border-radius: 16px;
-        padding: 30px;
-        box-shadow: 0 2px 8px rgba(74, 93, 58, 0.1);
-        border: 1px solid #D4CFC4;
-    }
-    
-    .task-of-day {
-        grid-column: 1;
-        grid-row: 1;
-    }
-    
-    .task-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #4A5D3A;
-        margin-bottom: 20px;
-        text-align: center;
-        font-family: Georgia, serif;
-    }
-    
-    .task-description {
-        font-size: 18px;
-        color: #6B6B5E;
-        margin-bottom: 20px;
-        text-align: center;
-        font-family: Georgia, serif;
-    }
-    
-    .progress-container {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-top: 20px;
-    }
-    
-    .progress-bar {
-        flex: 1;
-        height: 12px;
-        background: #E8E4D8;
-        border-radius: 6px;
-        overflow: hidden;
-    }
-    
-    .progress-fill {
-        height: 100%;
-        background: #4A5D3A;
-        transition: width 0.5s;
-    }
-    
-    .progress-text {
-        color: #6B6B5E;
-        font-size: 14px;
-        min-width: 100px;
-        font-family: Georgia, serif;
-    }
-    
-    .stats-row {
-        grid-column: 1;
-        grid-row: 2;
-        display: flex;
-        gap: 25px;
-    }
-    
-    .timer-card, .days-card {
-        flex: 1;
-        text-align: center;
-    }
-    
-    .timer-title, .days-title {
-        font-size: 20px;
-        font-weight: bold;
-        color: #4A5D3A;
-        margin-bottom: 20px;
-        font-family: Georgia, serif;
-    }
-    
-    .timer-circle {
-        width: 150px;
-        height: 150px;
-        margin: 0 auto 20px;
-        position: relative;
-    }
-    
-    .timer-circle svg {
-        transform: rotate(-90deg);
-    }
-    
-    .timer-circle circle {
-        fill: none;
-        stroke-width: 8;
-    }
-    
-    .timer-circle .bg {
-        stroke: #E8E4D8;
-    }
-    
-    .timer-circle .fill {
-        stroke: #4A5D3A;
-        stroke-linecap: round;
-    }
-    
-    .timer-display {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 32px;
-        font-weight: bold;
-        color: #4A5D3A;
-        font-family: Georgia, serif;
-    }
-    
-    .btn-start {
-        background: #4A5D3A;
-        color: #FAF7F0;
-        border: none;
-        padding: 12px 30px;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background 0.2s;
-        font-family: Georgia, serif;
-    }
-    
-    .btn-start:hover {
-        background: #3A4A2D;
-    }
-    
-    .days-circle {
-        width: 150px;
-        height: 150px;
-        margin: 0 auto;
-        border: 4px solid #C9A961;
-        border-radius: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: #FAF7F0;
-    }
-    
-    .days-number {
-        font-size: 48px;
-        font-weight: bold;
-        color: #4A5D3A;
-        font-family: Georgia, serif;
-    }
-    
-    .avatar-card {
-        grid-column: 2;
-        grid-row: 1 / 3;
-        text-align: center;
-    }
-    
-    .avatar-title {
-        font-size: 20px;
-        font-weight: bold;
-        color: #4A5D3A;
-        margin-bottom: 20px;
-        font-family: Georgia, serif;
-    }
-    
-    .avatar-circle {
-        width: 150px;
-        height: 150px;
-        background: #E8E4D8;
-        border-radius: 50%;
-        margin: 0 auto 20px;
-        border: 3px solid #C9A961;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .avatar-circle svg {
-        width: 100%;
-        height: 100%;
-    }
-    
-    .level-info {
-        margin-bottom: 20px;
-    }
-    
-    .level-text {
-        font-size: 18px;
-        font-weight: bold;
-        color: #4A5D3A;
-        margin-bottom: 5px;
-        font-family: Georgia, serif;
-    }
-    
-    .xp-text {
-        font-size: 14px;
-        color: #6B6B5E;
-        margin-bottom: 10px;
-        font-family: Georgia, serif;
-    }
-    
-    .xp-bar {
-        width: 100%;
-        height: 8px;
-        background: #E8E4D8;
-        border-radius: 4px;
-        overflow: hidden;
-        margin-bottom: 20px;
-    }
-    
-    .xp-fill {
-        height: 100%;
-        background: #C9A961;
-    }
-    
-    .time-info {
-        font-size: 14px;
-        color: #6B6B5E;
-        font-family: Georgia, serif;
-    }
-    
-    .no-data {
-        text-align: center;
-        color: #94A3B8;
-        padding: 20px;
-        font-family: Georgia, serif;
-    }
-</style>
+{# Скрытый блок с данными для JS #}
+<div id="avatar-config" 
+     data-seed="{{ avatar.seed ?: app.user.email }}"
+     data-skin="{{ avatar.skinColor ?: 'edb98a' }}"
+     data-hair-color="{{ avatar.hairColor ?: '724133' }}"
+     data-hair-style="{{ avatar.hairStyle ?: 'long01' }}"
+     style="display:none;">
+</div>
 
 <div class="dashboard-grid">
     <div class="card task-of-day">
         <h2 class="task-title">Задача дня</h2>
-        
         {% if todayTasks|length > 0 %}
             <div class="task-description">
-                {% for task in todayTasks %}
-                    {{ task.title }}{% if not loop.last %}, {% endif %}
-                {% endfor %}
+                {% for task in todayTasks %}{{ task.title }}{% if not loop.last %}, {% endif %}{% endfor %}
             </div>
-            
             <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ progress }}%"></div>
-                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: {{ progress }}%"></div></div>
                 <div class="progress-text">{{ progress }}% выполнено</div>
             </div>
         {% else %}
             <div class="no-data">На сегодня задач нет</div>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
-                </div>
-                <div class="progress-text">0% выполнено</div>
-            </div>
         {% endif %}
     </div>
-    
+
     <div class="stats-row">
         <div class="card timer-card">
             <h3 class="timer-title">Таймер подготовки</h3>
             <div class="timer-circle">
                 <svg width="150" height="150">
                     <circle class="bg" cx="75" cy="75" r="65"></circle>
-                    <circle class="fill" cx="75" cy="75" r="65" 
-                            stroke-dasharray="{{ 2 * 3.14159 * 65 }}"
-                            stroke-dashoffset="{{ 2 * 3.14159 * 65 }}">
-                    </circle>
+                    <circle class="fill" cx="75" cy="75" r="65" stroke-dasharray="408.4" stroke-dashoffset="408.4"></circle>
                 </svg>
                 <div class="timer-display" id="timer">45:00</div>
             </div>
@@ -288,11 +49,7 @@
         <div class="card days-card">
             <h3 class="days-title">Дней до экзамена</h3>
             <div class="days-circle">
-                {% if daysToExam is not null %}
-                    <div class="days-number">{{ daysToExam }}</div>
-                {% else %}
-                    <div class="days-number">-</div>
-                {% endif %}
+                <div class="days-number">{{ daysToExam ?? '-' }}</div>
             </div>
         </div>
     </div>
@@ -300,100 +57,17 @@
     <div class="card avatar-card">
         <h3 class="avatar-title">Ваш аватар</h3>
         <div class="avatar-circle" id="user-avatar"></div>
-        
         <div class="level-info">
             <div class="level-text">Уровень 5</div>
             <div class="xp-text">1,240 / 1,500 XP</div>
-            <div class="xp-bar">
-                <div class="xp-fill" style="width: 82.67%"></div>
-            </div>
+            <div class="xp-bar"><div class="xp-fill" style="width: 82.67%"></div></div>
         </div>
-        
-        <div class="time-info">
-            Всего времени: 24 часа
-        </div>
-        
-        <a href="{{ path('app_avatar') }}" style="display: inline-block; margin-top: 15px; color: #4A5D3A; text-decoration: underline; font-family: Georgia, serif;">Настроить аватар</a>
+        <a href="{{ path('app_avatar') }}" style="color: #4A5D3A;">Настроить аватар</a>
     </div>
 </div>
+{% endblock %}
 
-<script>
-    let timeLeft = 45 * 60;
-    let timerInterval = null;
-    let isRunning = false;
-    
-    const timerDisplay = document.getElementById('timer');
-    const startButton = document.getElementById('startTimer');
-    const timerCircle = document.querySelector('.timer-circle .fill');
-    const totalTime = 45 * 60;
-    const circumference = 2 * Math.PI * 65;
-    
-    function updateTimer() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
-        const offset = circumference * (1 - timeLeft / totalTime);
-        timerCircle.style.strokeDashoffset = offset;
-    }
-    
-    function startTimer() {
-        if (isRunning) {
-            clearInterval(timerInterval);
-            isRunning = false;
-            startButton.textContent = 'Начать';
-        } else {
-            isRunning = true;
-            startButton.textContent = 'Пауза';
-            timerInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateTimer();
-                } else {
-                    clearInterval(timerInterval);
-                    isRunning = false;
-                    startButton.textContent = 'Начать';
-                    alert('Время вышло!');
-                }
-            }, 1000);
-        }
-    }
-    
-    startButton.addEventListener('click', startTimer);
-    updateTimer();
-</script>
-
-<script type="module">
-import { createAvatar } from 'https://esm.sh/@dicebear/core@9';
-import * as styles from 'https://esm.sh/@dicebear/collection@9';
-
-function displayAvatar() {
-    var seed = "{{ avatar.seed ?: app.user.email }}";
-    var skinColor = "{{ avatar.skinColor ?: 'edb98a' }}";
-    var hairColor = "{{ avatar.hairColor ?: '724133' }}";
-    var hair = "{{ avatar.hairStyle ?: 'long01' }}";
-    
-    var options = {
-        seed: seed,
-        backgroundColor: ["b6e3f4"],
-        skinColor: [skinColor],
-        hairColor: [hairColor],
-        hair: [hair]
-    };
-    
-    try {
-        const avatar = createAvatar(styles.adventurer, options);
-        const svg = avatar.toString();
-        
-        var container = document.getElementById("user-avatar");
-        if (container) {
-            container.innerHTML = svg;
-        }
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
-document.addEventListener('DOMContentLoaded', displayAvatar);
-</script>
+{% block javascripts %}
+    {{ parent() }}
+    <script type="module" src="{{ asset('js/dashboard.js') }}"></script>
 {% endblock %}
