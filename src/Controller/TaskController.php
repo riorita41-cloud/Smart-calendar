@@ -17,20 +17,27 @@ class TaskController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        $tasks = $user->getStudyTasks();
-        
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         return $this->render('task/index.html.twig', [
-            'tasks' => $tasks,
+            'tasks' => $user->getStudyTasks(),
         ]);
     }
     
     #[Route('/task/new', name: 'app_task_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $task = new StudyTask();
-        $task->setUser($this->getUser());
+        $task->setUser($user);
         
-        $form = $this->createForm(\App\Form\StudyTaskType::class, $task);
+        $form = $this->createForm(StudyTaskType::class, $task);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
@@ -42,16 +49,21 @@ class TaskController extends AbstractController
         }
         
         return $this->render('task/new.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
     
     #[Route('/task/{id}/toggle', name: 'app_task_toggle', methods: ['POST'])]
     public function toggle(int $id, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $task = $entityManager->getRepository(StudyTask::class)->find($id);
         
-        if (!$task || $task->getUser() !== $this->getUser()) {
+        if (!$task || $task->getUser() !== $user) {
             throw $this->createNotFoundException('Задача не найдена');
         }
         
@@ -64,9 +76,14 @@ class TaskController extends AbstractController
     #[Route('/task/{id}/delete', name: 'app_task_delete', methods: ['POST'])]
     public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $task = $entityManager->getRepository(StudyTask::class)->find($id);
         
-        if (!$task || $task->getUser() !== $this->getUser()) {
+        if (!$task || $task->getUser() !== $user) {
             throw $this->createNotFoundException('Задача не найдена');
         }
         
@@ -78,25 +95,30 @@ class TaskController extends AbstractController
     }
 
     #[Route('/api/task/quick-add', name: 'app_task_quick_add', methods: ['POST'])]
-public function quickAdd(Request $request, EntityManagerInterface $entityManager): JsonResponse
-{
-    $data = json_decode($request->getContent(), true);
+    public function quickAdd(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Необходима авторизация'], 401);
+        }
 
-    $exam = $entityManager->getRepository(\App\Entity\Exam::class)->find($data['examId']);
+        $data = json_decode($request->getContent(), true);
 
-    if (!$exam || $exam->getUser() !== $this->getUser()) {
-        return new JsonResponse(['status' => 'error', 'message' => 'Экзамен не найден!'], 400);
+        $exam = $entityManager->getRepository(\App\Entity\Exam::class)->find($data['examId'] ?? null);
+
+        if (!$exam || $exam->getUser() !== $user) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Экзамен не найден!'], 400);
+        }
+
+        $task = new \App\Entity\StudyTask();
+        $task->setUser($user);
+        $task->setTitle($data['title'] ?? '');
+        $task->setScheduledDate(new \DateTimeImmutable($data['date'] ?? 'now'));
+        $task->setExam($exam);
+
+        $entityManager->persist($task);
+        $entityManager->flush();
+
+        return new JsonResponse(['status' => 'success']);
     }
-
-    $task = new \App\Entity\StudyTask();
-    $task->setUser($this->getUser());
-    $task->setTitle($data['title']);
-    $task->setScheduledDate(new \DateTimeImmutable($data['date']));
-    $task->setExam($exam);
-
-    $entityManager->persist($task);
-    $entityManager->flush();
-
-    return new JsonResponse(['status' => 'success']);
-}
 }

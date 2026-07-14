@@ -20,8 +20,7 @@ class Avatar
     #[ORM\Column(length: 20)]
     private ?string $gender = 'male';
 
-    
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $seed = null;
 
     #[ORM\Column(length: 20)]
@@ -60,13 +59,12 @@ class Avatar
         return $this;
     }
 
-    
     public function getSeed(): ?string
     {
         return $this->seed;
     }
 
-    public function setSeed(string $seed): static
+    public function setSeed(?string $seed): static
     {
         $this->seed = $seed;
         return $this;

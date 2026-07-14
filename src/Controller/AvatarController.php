@@ -25,6 +25,10 @@ class AvatarController extends AbstractController
         if (!$avatar) {
             $avatar = new Avatar();
             $avatar->setUser($user);
+            $avatar->setSeed($user->getEmail());
+            $avatar->setSkinColor('edb98a');
+            $avatar->setHairColor('724133');
+            $avatar->setHairStyle('long01');
             $entityManager->persist($avatar);
             $entityManager->flush();
         }
@@ -54,10 +58,8 @@ class AvatarController extends AbstractController
         $avatar->setHairColor($request->request->get('hairColor', '724133'));
         $avatar->setHairStyle($request->request->get('hair', 'long01'));
         
-        $seed = $request->request->get('seed');
-        if ($seed) {
-            $avatar->setSeed($seed);
-        }
+        $seed = $request->request->get('seed') ?: $user->getEmail();
+        $avatar->setSeed($seed);
         
         $entityManager->persist($avatar);
         $entityManager->flush();

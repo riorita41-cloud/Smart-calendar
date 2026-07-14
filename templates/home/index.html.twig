@@ -10,10 +10,11 @@
 {% block body %}
 {# Скрытый блок с данными для JS #}
 <div id="avatar-config" 
-     data-seed="{{ avatar.seed ?: app.user.email }}"
-     data-skin="{{ avatar.skinColor ?: 'edb98a' }}"
-     data-hair-color="{{ avatar.hairColor ?: '724133' }}"
-     data-hair-style="{{ avatar.hairStyle ?: 'long01' }}"
+   <div id="avatar-config" 
+     data-seed="{{ avatar.seed ?? app.user?.email ?? 'default@example.com' }}"
+     data-skin="{{ avatar.skinColor ?? 'edb98a' }}"
+     data-hair-color="{{ avatar.hairColor ?? '724133' }}"
+     data-hair-style="{{ avatar.hairStyle ?? 'long01' }}"
      style="display:none;">
 </div>
 

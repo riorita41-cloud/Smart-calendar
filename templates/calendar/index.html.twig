@@ -160,9 +160,9 @@
     <input type="text" id="taskTitle" placeholder="Название задачи">
     <input type="hidden" id="taskDate">
     <select id="examSelect">
-    {% for exam in app.user.exams %}
-        <option value="{{ exam.id }}">{{ exam.name }} ({{ exam.subject }})</option>
-    {% endfor %}
+        {% for exam in exams %}
+            <option value="{{ exam.id }}">{{ exam.name }} ({{ exam.subject }})</option>
+        {% endfor %}
     </select>
     <button id="saveTaskBtn">Сохранить</button>
     <button onclick="document.getElementById('taskModal').style.display='none'">Отмена</button>
