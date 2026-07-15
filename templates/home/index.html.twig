@@ -10,7 +10,6 @@
 {% block body %}
 {# Скрытый блок с данными для JS #}
 <div id="avatar-config" 
-   <div id="avatar-config" 
      data-seed="{{ avatar.seed ?? app.user?.email ?? 'default@example.com' }}"
      data-skin="{{ avatar.skinColor ?? 'edb98a' }}"
      data-hair-color="{{ avatar.hairColor ?? '724133' }}"
@@ -22,8 +21,12 @@
     <div class="card task-of-day">
         <h2 class="task-title">Задача дня</h2>
         {% if todayTasks|length > 0 %}
-            <div class="task-description">
-                {% for task in todayTasks %}{{ task.title }}{% if not loop.last %}, {% endif %}{% endfor %}
+            <div class="task-list-container">
+                {% for task in todayTasks %}
+                    <div class="task-list-item {% if task.isCompleted %}completed{% endif %}">
+                        {{ task.title }}
+                    </div>
+                {% endfor %}
             </div>
             <div class="progress-container">
                 <div class="progress-bar"><div class="progress-fill" style="width: {{ progress }}%"></div></div>

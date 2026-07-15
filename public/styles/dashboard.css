@@ -233,3 +233,67 @@
         padding: 20px;
         font-family: Georgia, serif;
     }
+
+    .task-list-container {
+    max-height: 200px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #FAF7F0;
+    border-radius: 8px;
+    border: 1px solid #D4CFC4;
+}
+
+.task-list-item {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: white;
+    border-left: 4px solid #4A5D3A;
+    border-radius: 6px;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    color: #2C2C2C;
+    line-height: 1.4;
+    transition: all 0.2s;
+}
+
+.task-list-item:hover {
+    background: #E8E4D8;
+    transform: translateX(3px);
+}
+
+.task-list-item.completed {
+    text-decoration: line-through !important;
+    color: #94A3B8 !important;
+    border-left-color: #94A3B8 !important;
+    opacity: 0.6;
+    background: #F5F5F5;
+}
+
+.task-list-item:last-child {
+    margin-bottom: 0;
+}
+
+.task-list-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.task-list-container::-webkit-scrollbar-track {
+    background: #E8E4D8;
+    border-radius: 4px;
+}
+
+.task-list-container::-webkit-scrollbar-thumb {
+    background: #C9A961;
+    border-radius: 4px;
+}
+
+.task-list-container::-webkit-scrollbar-thumb:hover {
+    background: #4A5D3A;
+}
+
+.task-list-container {
+    scrollbar-width: thin;
+    scrollbar-color: #C9A961 #E8E4D8;
+}
