@@ -13,6 +13,7 @@ class Avatar
     #[ORM\Column]
     private ?int $id = null;
 
+    
     #[ORM\OneToOne(inversedBy: 'avatar', targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
@@ -21,13 +22,14 @@ class Avatar
     private ?string $seed = null;
 
     #[ORM\Column(length: 20)]
-    private ?string $skinColor = 'edb98a';
+    private string $skinColor = 'edb98a'; 
 
     #[ORM\Column(length: 50)]
-    private ?string $hairStyle = 'long01';
+    private string $hairStyle = 'long01';
 
     #[ORM\Column(length: 20)]
-    private ?string $hairColor = '724133';
+    private string $hairColor = '724133';
+
 
     public function getId(): ?int
     {
@@ -56,7 +58,7 @@ class Avatar
         return $this;
     }
 
-    public function getSkinColor(): ?string
+    public function getSkinColor(): string
     {
         return $this->skinColor;
     }
@@ -67,7 +69,7 @@ class Avatar
         return $this;
     }
 
-    public function getHairStyle(): ?string
+    public function getHairStyle(): string
     {
         return $this->hairStyle;
     }
@@ -78,7 +80,7 @@ class Avatar
         return $this;
     }
 
-    public function getHairColor(): ?string
+    public function getHairColor(): string
     {
         return $this->hairColor;
     }
