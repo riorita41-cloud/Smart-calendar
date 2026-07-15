@@ -16,12 +16,7 @@ class AvatarController extends AbstractController
     {
         $user = $this->getUser();
         
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
-        
         $avatar = $user->getAvatar();
-        
         if (!$avatar) {
             $avatar = new Avatar();
             $avatar->setUser($user);
@@ -41,18 +36,13 @@ class AvatarController extends AbstractController
     #[Route('/avatar/save', name: 'app_avatar_save', methods: ['POST'])]
     public function save(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $submittedToken = $request->request->geЫt('_token');
+        if (!$this->isCsrfTokenValid('avatar_save', $submittedToken)) {
+            throw $this->createAccessDeniedException('Неверный CSRF-токен.');
+        }
+        
         $user = $this->getUser();
-        
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
-        
-        $avatar = $user->getAvatar();
-        
-        if (!$avatar) {
-            $avatar = new Avatar();
-            $avatar->setUser($user);
-        }
+        $avatar = $user->getAvatar() ?? (new Avatar())->setUser($user);
         
         $avatar->setSkinColor($request->request->get('skinColor', 'edb98a'));
         $avatar->setHairColor($request->request->get('hairColor', '724133'));

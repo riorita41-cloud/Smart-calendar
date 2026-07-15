@@ -17,6 +17,7 @@
         {% for task in tasks %}
             <div class="task-card">
                 <form method="post" action="{{ path('app_task_toggle', {id: task.id}) }}" style="margin: 0;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('toggle_task_' ~ task.id) }}">
                     <input type="checkbox" class="task-checkbox" {% if task.isCompleted %}checked{% endif %} onchange="this.form.submit()">
                 </form>
                 
@@ -29,6 +30,7 @@
                 
                 <div class="task-actions">
                     <form method="post" action="{{ path('app_task_delete', {id: task.id}) }}" onsubmit="return confirm('Удалить задачу?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_task_' ~ task.id) }}">
                         <button type="submit" class="btn-delete">Удалить</button>
                     </form>
                 </div>

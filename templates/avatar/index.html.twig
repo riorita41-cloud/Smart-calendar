@@ -25,6 +25,8 @@
         
         <div class="avatar-form">
             <form method="post" action="{{ path('app_avatar_save') }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('avatar_save') }}">
+                
                 <input type="hidden" name="seed" id="current-seed" value="{{ avatar.seed ?? app.user.email }}">
                 
                 <button type="button" class="btn-random" onclick="generateRandomAvatar()">

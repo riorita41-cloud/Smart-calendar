@@ -19,11 +19,11 @@ class CalendarController extends AbstractController
         $exams = $examRepository->findBy(['user' => $user]);
         $tasks = $studyTaskRepository->findBy(['user' => $user]);
         
-        $year = $request->query->get('year');
-        $month = $request->query->get('month');
+        $year = $request->query->getInt('year');
+        $month = $request->query->getInt('month');
         
-        if ($year && $month) {
-            $currentMonth = new \DateTimeImmutable($year . '-' . $month . '-01');
+        if ($year > 0 && $month > 0 && $month <= 12) {
+            $currentMonth = new \DateTimeImmutable("$year-$month-01");
         } else {
             $currentMonth = new \DateTimeImmutable('first day of this month');
         }
@@ -37,18 +37,9 @@ class CalendarController extends AbstractController
         $nextMonth = $currentMonth->modify('+1 month');
         
         $monthNames = [
-            1 => 'Январь',
-            2 => 'Февраль',
-            3 => 'Март',
-            4 => 'Апрель',
-            5 => 'Май',
-            6 => 'Июнь',
-            7 => 'Июль',
-            8 => 'Август',
-            9 => 'Сентябрь',
-            10 => 'Октябрь',
-            11 => 'Ноябрь',
-            12 => 'Декабрь'
+            1 => 'Январь', 2 => 'Февраль', 3 => 'Март', 4 => 'Апрель',
+            5 => 'Май', 6 => 'Июнь', 7 => 'Июль', 8 => 'Август',
+            9 => 'Сентябрь', 10 => 'Октябрь', 11 => 'Ноябрь', 12 => 'Декабрь'
         ];
         
         $monthTitle = $monthNames[$monthNum] . ' ' . $currentYear;
@@ -56,31 +47,19 @@ class CalendarController extends AbstractController
         $tasksByDay = [];
         foreach ($tasks as $task) {
             $dateKey = $task->getScheduledDate()->format('Y-m-d');
-            if (!isset($tasksByDay[$dateKey])) {
-                $tasksByDay[$dateKey] = [];
-            }
             $tasksByDay[$dateKey][] = $task;
         }
         
         $totalTasks = count($tasks);
-        $completedTasks = 0;
-        foreach ($tasks as $task) {
-            if ($task->isCompleted()) {
-                $completedTasks++;
-            }
-        }
+        $completedTasks = count(array_filter($tasks, fn($t) => $t->isCompleted()));
         $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
         
         $progressBySubject = [];
         foreach ($exams as $exam) {
             $examTasks = array_filter($tasks, fn($task) => $task->getExam() === $exam);
             $examTotal = count($examTasks);
-            $examCompleted = 0;
-            foreach ($examTasks as $task) {
-                if ($task->isCompleted()) {
-                    $examCompleted++;
-                }
-            }
+            $examCompleted = count(array_filter($examTasks, fn($t) => $t->isCompleted()));
+            
             $progressBySubject[$exam->getSubject()] = $examTotal > 0 ? round(($examCompleted / $examTotal) * 100) : 0;
         }
         

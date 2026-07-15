@@ -15,16 +15,22 @@
         {% for message in app.flashes('success') %}
             <div class="flash-success">{{ message }}</div>
         {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="flash-error" style="color: red;">{{ message }}</div>
+        {% endfor %}
     </div>
     
     <form method="post" action="{{ path('app_materials') }}" enctype="multipart/form-data">
+        {# ДОБАВЛЕНА CSRF-ЗАЩИТА #}
+        <input type="hidden" name="_token" value="{{ csrf_token('materials_upload') }}">
+        
         <div class="upload-grid">
             <div class="upload-card" id="dropZone">
                 <div class="upload-icon">📁</div>
                 <h2>Загрузить файлы</h2>
                 <p class="upload-text">Перетащите файлы сюда</p>
-                <p class="supported-formats">PDF, DOCX, TXT до 10MB</p>
-                <input type="file" name="files[]" id="fileInput" class="file-input-hidden" multiple accept=".pdf,.txt,.docx,.doc">
+                <p class="supported-formats">PDF, JPG, PNG до 5MB</p>
+                <input type="file" name="files[]" id="fileInput" class="file-input-hidden" multiple accept=".pdf,.jpg,.jpeg,.png">
                 <button type="button" class="btn-upload" onclick="document.getElementById('fileInput').click()">
                     Выбрать файлы
                 </button>
@@ -33,7 +39,7 @@
             
             <div class="manual-form">
                 <h2>Или введите вручную</h2>
-                <textarea name="manualContent" placeholder="Введите вопросы по одному на строку&#10;Например:&#10;1. Что такое алгоритм?&#10;2. Какие виды сортировок вы знаете?&#10;3. Что такое рекурсия?"></textarea>
+                <textarea name="manualContent" placeholder="Введите вопросы по одному на строку&#10;Например:&#10;1. Что такое алгоритм?"></textarea>
                 <button type="submit" class="btn-upload">
                     Сохранить материалы
                 </button>

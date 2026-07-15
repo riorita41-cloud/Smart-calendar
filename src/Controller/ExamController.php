@@ -17,9 +17,6 @@ class ExamController extends AbstractController
     public function index(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
 
         $exams = $entityManager->getRepository(Exam::class)->findBy(['user' => $user]);
         $materials = $entityManager->getRepository(ExamMaterial::class)->findBy(
@@ -37,10 +34,6 @@ class ExamController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
-        }
-
         $exam = new Exam();
         $exam->setUser($user);
 
@@ -61,14 +54,16 @@ class ExamController extends AbstractController
     }
 
     #[Route('/exam/{id}/delete', name: 'app_exam_delete', methods: ['POST'])]
-    public function delete(int $id, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
-        $user = $this->getUser();
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
+        $submittedToken = $request->request->get('_token');
+        if (!$this->isCsrfTokenValid('delete_exam_' . $id, $submittedToken)) {
+            throw $this->createAccessDeniedException('Ошибка безопасности: неверный CSRF-токен.');
         }
 
+        $user = $this->getUser();
         $exam = $entityManager->getRepository(Exam::class)->find($id);
+
         if (!$exam || $exam->getUser() !== $user) {
             throw $this->createNotFoundException('Экзамен не найден');
         }

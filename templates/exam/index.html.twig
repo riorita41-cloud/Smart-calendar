@@ -32,16 +32,20 @@
                     </div>
                     <div class="exam-meta">
                         <span class="icon"></span>
-                        {% set days = (exam.examDate|date('U') - 'now'|date('U')) / 86400|round %}
+                        {% set days = (exam.examDate|date('U') - 'now'|date('U')) / 86400 %}
                         {% if days > 0 %}
-                            Осталось дней: {{ days|round }}
+                            Осталось дней: {{ days|round(0, 'ceil') }}
                         {% else %}
                             Экзамен сегодня!
                         {% endif %}
                     </div>
                 </div>
+                
                 <form method="post" action="{{ path('app_exam_delete', {id: exam.id}) }}" 
                       onsubmit="return confirm('Удалить экзамен?');">
+                    
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete_exam_' ~ exam.id) }}">
+                    
                     <button type="submit" class="btn-delete">Удалить</button>
                 </form>
             </div>
@@ -49,9 +53,9 @@
     {% else %}
         <div class="empty-state">
             <div class="icon"></div>
-            <p>У вас пока нет экзаменов</p>
+            <p>У вас пока нет экзаменоЫв</p>
             <a href="{{ path('app_exam_new') }}" class="btn-add">Добавить первый экзамен</a>
         </div>
     {% endif %}
 </div>
-{% endblock %}
+{% endblock %}Ы
