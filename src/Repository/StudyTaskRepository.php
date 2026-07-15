@@ -14,13 +14,17 @@ class StudyTaskRepository extends ServiceEntityRepository
         parent::__construct($registry, StudyTask::class);
     }
 
+    
     public function findTasksGroupedByDate(User $user): array
     {
-        $tasks = $this->findBy(['user' => $user]);
+        $tasks = $this->findBy(['user' => $user], ['scheduledDate' => 'ASC']);
         $grouped = [];
+        
         foreach ($tasks as $task) {
-            $dateKey = $task->getScheduledDate()->format('Y-m-d');
-            $grouped[$dateKey][] = $task;
+            if ($task->getScheduledDate() !== null) {
+                $dateKey = $task->getScheduledDate()->format('Y-m-d');
+                $grouped[$dateKey][] = $task;
+            }
         }
         return $grouped;
     }
@@ -29,9 +33,15 @@ class StudyTaskRepository extends ServiceEntityRepository
     {
         $tasks = $this->findBy(['user' => $user]);
         $total = count($tasks);
-        $completed = count(array_filter($tasks, fn($t) => $t->isCompleted()));
+        
+        if ($total === 0) {
+            return ['progress' => 0];
+        }
+
+        $completed = count(array_filter($tasks, fn(StudyTask $t) => $t->isCompleted()));
+        
         return [
-            'progress' => $total > 0 ? round(($completed / $total) * 100) : 0
+            'progress' => (int) round(($completed / $total) * 100)
         ];
     }
 }

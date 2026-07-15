@@ -52,6 +52,9 @@
                         {% set dayTasks = tasksByDay[dateStr] ?? [] %}
                         <div class="day-cell {% if today.format('Y-m-d') == dateStr %}today{% endif %}" onclick="openTaskModal('{{ dateStr }}')">
                             {{ day }}
+                            {% if dayTasks is not empty %}
+                                <div class="task-dot"></div>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>
@@ -88,6 +91,8 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
 <div id="taskModal" class="modal">
     <h3>Новая задача</h3>
