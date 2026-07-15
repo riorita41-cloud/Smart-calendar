@@ -26,6 +26,8 @@ class CalendarController extends AbstractController
         
         $today = new \DateTimeImmutable();
         
+        $todayKey = $today->format('Y-m-d');
+        
         $monthNames = [
             1 => 'Январь', 2 => 'Февраль', 3 => 'Март', 4 => 'Апрель',
             5 => 'Май', 6 => 'Июнь', 7 => 'Июль', 8 => 'Август',
@@ -41,7 +43,7 @@ class CalendarController extends AbstractController
             'daysInMonth'    => (int)$currentMonth->format('t'),
             'firstDayOfWeek' => (int)$currentMonth->format('N'),
             'progress'       => $stats['progress'],
-            'todayTasks'     => $tasksByDay[$today->format('Y-m-d')] ?? [],
+            'todayTasks'     => $tasksByDay[$todayKey] ?? [],
             'today'          => $today,
             'prevMonth'      => $currentMonth->modify('-1 month'),
             'nextMonth'      => $currentMonth->modify('+1 month'),

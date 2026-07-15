@@ -16,32 +16,48 @@
             <div class="sidebar-title">Умный<br>Календарь</div>
             
             <ul class="nav-menu">
-    {% set routes = [
-        {'name': 'Главная', 'path': 'app_home'},
-        {'name': 'Календарь', 'path': 'app_calendar'},
-        {'name': 'Экзамены', 'path': 'app_exams'},
-        {'name': 'Материалы', 'path': 'app_materials'},
-        {'name': 'Аватар', 'path': 'app_avatar'}
-    ] %}
-
-    {% for item in routes %}
-        <li class="nav-item">
-            <a href="{{ path(item.path) }}" class="nav-link {% if app.request.attributes.get('_route') == item.path %}active{% endif %}">
-                {{ item.name }}
-            </a>
-        </li>
-    {% endfor %}
-    
-    <li class="nav-item">
-        <a href="{{ path('app_logout') }}" class="nav-link">Выйти</a>
-    </li>
-</ul>
+                <li class="nav-item">
+                    <a href="{{ path('app_home') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_home' %}active{% endif %}">
+                        <span class="nav-icon"></span> Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_calendar') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_calendar' %}active{% endif %}">
+                        <span class="nav-icon"></span> Календарь
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_tasks') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_tasks' %}active{% endif %}">
+                        <span class="nav-icon"></span> Задачи
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_exams') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_exams' %}active{% endif %}">
+                        <span class="nav-icon"></span> Экзамены
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_materials') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_materials' %}active{% endif %}">
+                        <span class="nav-icon"></span> Материалы
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_avatar') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_avatar' %}active{% endif %}">
+                        <span class="nav-icon"></span> Аватар
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_logout') }}" class="nav-link">
+                        <span class="nav-icon"></span> Выйти
+                    </a>
+                </li>
+            </ul>
         </aside>
         {% endblock %}
         
         <main class="main-content">
-            {% for type, messages in app.flashes %}
-                {% for message in messages %}
+            {% for type in ['success', 'error'] %}
+                {% for message in app.flashes(type) %}
                     <div class="flash-{{ type }}">{{ message }}</div>
                 {% endfor %}
             {% endfor %}
@@ -50,7 +66,6 @@
         </main>
     </div>
 
-    <script src="{{ asset('js/calendar.js') }}"></script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>
