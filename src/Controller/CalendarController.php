@@ -17,24 +17,14 @@ class CalendarController extends AbstractController
         $user = $this->getUser();
         
         $exams = $examRepository->findBy(['user' => $user]);
-        $tasks = $studyTaskRepository->findBy(['user' => $user]);
+        $tasksByDay = $studyTaskRepository->findTasksGroupedByDate($user);
+        $stats = $studyTaskRepository->getTaskStats($user);
         
-        $year = $request->query->getInt('year');
-        $month = $request->query->getInt('month');
+        $year = $request->query->getInt('year', (int)date('Y'));
+        $month = $request->query->getInt('month', (int)date('n'));
+        $currentMonth = new \DateTimeImmutable("$year-$month-01");
         
-        if ($year > 0 && $month > 0 && $month <= 12) {
-            $currentMonth = new \DateTimeImmutable("$year-$month-01");
-        } else {
-            $currentMonth = new \DateTimeImmutable('first day of this month');
-        }
-        
-        $currentYear = (int)$currentMonth->format('Y');
-        $monthNum = (int)$currentMonth->format('n');
-        $daysInMonth = (int)$currentMonth->format('t');
-        $firstDayOfWeek = (int)$currentMonth->format('N');
-        
-        $prevMonth = $currentMonth->modify('-1 month');
-        $nextMonth = $currentMonth->modify('+1 month');
+        $today = new \DateTimeImmutable();
         
         $monthNames = [
             1 => 'Январь', 2 => 'Февраль', 3 => 'Март', 4 => 'Апрель',
@@ -42,45 +32,19 @@ class CalendarController extends AbstractController
             9 => 'Сентябрь', 10 => 'Октябрь', 11 => 'Ноябрь', 12 => 'Декабрь'
         ];
         
-        $monthTitle = $monthNames[$monthNum] . ' ' . $currentYear;
-        
-        $tasksByDay = [];
-        foreach ($tasks as $task) {
-            $dateKey = $task->getScheduledDate()->format('Y-m-d');
-            $tasksByDay[$dateKey][] = $task;
-        }
-        
-        $totalTasks = count($tasks);
-        $completedTasks = count(array_filter($tasks, fn($t) => $t->isCompleted()));
-        $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
-        
-        $progressBySubject = [];
-        foreach ($exams as $exam) {
-            $examTasks = array_filter($tasks, fn($task) => $task->getExam() === $exam);
-            $examTotal = count($examTasks);
-            $examCompleted = count(array_filter($examTasks, fn($t) => $t->isCompleted()));
-            
-            $progressBySubject[$exam->getSubject()] = $examTotal > 0 ? round(($examCompleted / $examTotal) * 100) : 0;
-        }
-        
-        $today = new \DateTimeImmutable();
-        $todayTasks = $tasksByDay[$today->format('Y-m-d')] ?? [];
-        
         return $this->render('calendar/index.html.twig', [
-            'exams' => $exams,
-            'tasks' => $tasks,
-            'tasksByDay' => $tasksByDay,
-            'currentYear' => $currentYear,
-            'month' => $monthNum,
-            'monthTitle' => $monthTitle,
-            'daysInMonth' => $daysInMonth,
-            'firstDayOfWeek' => $firstDayOfWeek,
-            'progress' => $progress,
-            'progressBySubject' => $progressBySubject,
-            'todayTasks' => $todayTasks,
-            'today' => $today,
-            'prevMonth' => $prevMonth,
-            'nextMonth' => $nextMonth,
+            'exams'          => $exams,
+            'tasksByDay'     => $tasksByDay,
+            'currentYear'    => (int)$currentMonth->format('Y'),
+            'month'          => (int)$currentMonth->format('n'),
+            'monthTitle'     => $monthNames[(int)$currentMonth->format('n')] . ' ' . $currentMonth->format('Y'),
+            'daysInMonth'    => (int)$currentMonth->format('t'),
+            'firstDayOfWeek' => (int)$currentMonth->format('N'),
+            'progress'       => $stats['progress'],
+            'todayTasks'     => $tasksByDay[$today->format('Y-m-d')] ?? [],
+            'today'          => $today,
+            'prevMonth'      => $currentMonth->modify('-1 month'),
+            'nextMonth'      => $currentMonth->modify('+1 month'),
         ]);
     }
 }

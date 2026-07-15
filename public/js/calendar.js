@@ -1,7 +1,8 @@
 function toggleDropdown(id) {
     const dropdown = document.getElementById(id);
-    const allDropdowns = document.querySelectorAll('.dropdown-menu');
+    if (!dropdown) return;
     
+    const allDropdowns = document.querySelectorAll('.dropdown-menu');
     allDropdowns.forEach(d => {
         if (d.id !== id) {
             d.classList.remove('show');
@@ -12,7 +13,7 @@ function toggleDropdown(id) {
 }
 
 document.addEventListener('click', function(event) {
-    if (!event.target.closest('.month-year-selector')) {
+    if (!event.target.closest('.selector-btn') && !event.target.closest('.dropdown-menu')) {
         document.querySelectorAll('.dropdown-menu').forEach(d => {
             d.classList.remove('show');
         });
@@ -20,36 +21,64 @@ document.addEventListener('click', function(event) {
 });
 
 function openTaskModal(date) {
-    document.getElementById('taskDate').value = date;
-    document.getElementById('taskModal').style.display = 'block';
+    const modal = document.getElementById('taskModal');
+    if (modal) {
+        document.getElementById('taskDate').value = date;
+        modal.style.display = 'block';
+    }
 }
 
-document.getElementById('saveTaskBtn').addEventListener('click', function() {
-    const data = {
-        title: document.getElementById('taskTitle').value,
-        date: document.getElementById('taskDate').value,
-        examId: document.getElementById('examSelect').value
-    };
+const saveBtn = document.getElementById('saveTaskBtn');
+if (saveBtn) {
+    saveBtn.addEventListener('click', function() {
+        const title = document.getElementById('taskTitle').value.trim();
+        if (!title) {
+            alert('Введите название задачи');
+            return;
+        }
 
-    const csrfToken = document.getElementById('csrf_token').value;
+        const data = {
+            title: title,
+            date: document.getElementById('taskDate').value
+        };
 
-    fetch('/api/task/quick-add', {
+        const csrfInput = document.getElementById('csrf_token');
+        const csrfToken = csrfInput ? csrfInput.value : '';
+
+        fetch('/api/task/quick-add', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken 
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Ошибка сети');
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                location.reload();
+            } else {
+                alert(data.message || 'Ошибка сохранения');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Произошла ошибка при отправке запроса');
+        });
+    });
+}
+
+function toggleTask(taskId) {
+    fetch(`/api/task/${taskId}/toggle`, {
         method: 'POST',
-        headers: { 
+        headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === 'success') {
-            location.reload();
-        } else {
-            alert(data.message);
+            'X-CSRF-TOKEN': document.getElementById('csrf_token').value
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
+    .then(() => location.reload())
+    .catch(err => console.error(err));
+}

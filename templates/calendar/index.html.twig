@@ -28,14 +28,11 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        
                         <div style="position: relative;">
                             <button class="selector-btn" onclick="toggleDropdown('yearDropdown')">{{ currentYear }}</button>
                             <div id="yearDropdown" class="dropdown-menu">
                                 {% for y in (currentYear - 5)..(currentYear + 5) %}
-                                    <a href="{{ path('app_calendar', {year: y, month: month}) }}" class="dropdown-item {% if y == currentYear %}active{% endif %}">
-                                        {{ y }}
-                                    </a>
+                                    <a href="{{ path('app_calendar', {year: y, month: month}) }}" class="dropdown-item {% if y == currentYear %}active{% endif %}">{{ y }}</a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -45,58 +42,16 @@
                 </div>
                 
                 <div class="weekdays">
-                    <div class="weekday">Пн</div>
-                    <div class="weekday">Вт</div>
-                    <div class="weekday">Ср</div>
-                    <div class="weekday">Чт</div>
-                    <div class="weekday">Пт</div>
-                    <div class="weekday">Сб</div>
-                    <div class="weekday">Вс</div>
+                    {% for day in ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] %}<div class="weekday">{{ day }}</div>{% endfor %}
                 </div>
                 
                 <div class="days-grid">
-                    {% for i in 1..(firstDayOfWeek - 1) %}
-                        <div class="day-cell empty"></div>
-                    {% endfor %}
-                    
+                    {% for i in 1..(firstDayOfWeek - 1) %}<div class="day-cell empty"></div>{% endfor %}
                     {% for day in 1..daysInMonth %}
-                        {% set dateStr = currentYear ~ '-' ~ (month < 10 ? '0' ~ month : month) ~ '-' ~ (day < 10 ? '0' ~ day : day) %}
+                        {% set dateStr = currentYear ~ '-' ~ (month < 10 ? '0'~month : month) ~ '-' ~ (day < 10 ? '0'~day : day) %}
                         {% set dayTasks = tasksByDay[dateStr] ?? [] %}
-                        {% set isToday = today.format('Y-m-d') == dateStr %}
-                        
-                        {% set isExamDay = false %}
-                        {% set examName = '' %}
-                        {% for exam in exams %}
-                            {% if exam.examDate.format('Y-m-d') == dateStr %}
-                                {% set isExamDay = true %}
-                                {% set examName = exam.name %}
-                            {% endif %}
-                        {% endfor %}
-                        
-                        {% set allDone = dayTasks|length > 0 and (dayTasks|filter(t => t.isCompleted)|length == dayTasks|length) %}
-                        {% set hasTasks = dayTasks|length > 0 %}
-                        
-                        <div class="day-cell {% if isToday %}today{% endif %} {% if isExamDay %}exam-day{% endif %} {% if hasTasks and not isExamDay %}has-tasks{% endif %} {% if allDone %}all-done{% endif %}" 
-                             onclick="openTaskModal('{{ dateStr }}')">
+                        <div class="day-cell {% if today.format('Y-m-d') == dateStr %}today{% endif %}" onclick="openTaskModal('{{ dateStr }}')">
                             {{ day }}
-                            
-                            {% if hasTasks or isExamDay %}
-                                <div class="task-dot"></div>
-                            {% endif %}
-                            
-                            {% if hasTasks or isExamDay %}
-                                <div class="tooltip">
-                                    {% if isExamDay %}
-                                        <div class="exam-label">{{ examName }}</div>
-                                    {% endif %}
-                                    {% for task in dayTasks %}
-                                        <div class="task-item">
-                                            <span>{% if task.isCompleted %}+{% else %}o{% endif %}</span>
-                                            <span>{{ task.title }}</span>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>
@@ -108,29 +63,38 @@
         <div class="calendar-sidebar">
             <div class="calendar-card">
                 <h2 class="sidebar-title">План на сегодня</h2>
+                {% for task in todayTasks %}
+                    <div class="today-task">
+                        <input type="checkbox" class="task-checkbox" {% if task.isCompleted %}checked{% endif %} onchange="toggleTask({{ task.id }})">
+                        <div class="task-info">
+                            <div class="task-name {% if task.isCompleted %}done{% endif %}">{{ task.title }}</div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="empty-state">Задач на сегодня нет</div>
+                {% endfor %}
+            </div>
+
+            <div class="calendar-card">
+                <h2 class="sidebar-title">Прогресс</h2>
+                <div class="progress-circle-container">
+                    <div class="progress-circle">
+                        <svg width="120" height="120">
+                            <circle class="bg" cx="60" cy="60" r="54" />
+                            <circle class="fill" cx="60" cy="60" r="54" style="stroke-dasharray: 340; stroke-dashoffset: {{ 340 - (340 * progress / 100) }}" />
+                        </svg>
+                        <div class="progress-text">{{ progress }}%</div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
 <div id="taskModal" class="modal">
     <h3>Новая задача</h3>
+    <input type="hidden" id="csrf_token" value="{{ csrf_token('task_action') }}">
     <input type="text" id="taskTitle" placeholder="Название задачи">
     <input type="hidden" id="taskDate">
-    <select id="examSelect">
-        {% for exam in exams %}
-            <option value="{{ exam.id }}">{{ exam.name }} ({{ exam.subject }})</option>
-        {% endfor %}
-    </select>
-    
-    <input type="hidden" id="csrf_token" value="{{ csrf_token('quick_add_task') }}">
-    
     <button id="saveTaskBtn">Сохранить</button>
     <button onclick="document.getElementById('taskModal').style.display='none'">Отмена</button>
 </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/calendar.js') }}"></script>
 {% endblock %}
