@@ -5,6 +5,10 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/calendar.css') }}">
+    <style>
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { background: #FAF7F0; margin: 15% auto; padding: 25px; width: 300px; border-radius: 12px; text-align: center; border: 1px solid #D4CFC4; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    </style>
 {% endblock %}
 
 {% block body %}
@@ -16,7 +20,6 @@
             <div class="calendar-card">
                 <div class="month-header">
                     <a href="{{ path('app_calendar', {year: prevMonth.format('Y'), month: prevMonth.format('n')}) }}" class="month-nav">&lt;</a>
-                    
                     <div class="month-year-selector">
                         <div style="position: relative;">
                             <button class="selector-btn" onclick="toggleDropdown('monthDropdown')">{{ monthTitle|split(' ')[0] }}</button>
@@ -37,7 +40,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <a href="{{ path('app_calendar', {year: nextMonth.format('Y'), month: nextMonth.format('n')}) }}" class="month-nav">&gt;</a>
                 </div>
                 
@@ -54,6 +56,16 @@
                             {{ day }}
                             {% if dayTasks is not empty %}
                                 <div class="task-dot"></div>
+                                <div class="tooltip">
+                                    {% for task in dayTasks %}
+                                        <div class="task-item">
+                                            <span class="check {{ task.isCompleted ? 'done' : 'uncheck' }}">
+                                                {{ task.isCompleted ? '✓' : '○' }}
+                                            </span>
+                                            <span class="name">{{ task.title }}</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             {% endif %}
                         </div>
                     {% endfor %}
@@ -77,29 +89,67 @@
                     <div class="empty-state">Задач на сегодня нет</div>
                 {% endfor %}
             </div>
-
-            <div class="calendar-card">
-                <h2 class="sidebar-title">Прогресс</h2>
-                <div class="progress-circle-container">
-                    <div class="progress-circle">
-                        <svg width="120" height="120">
-                            <circle class="bg" cx="60" cy="60" r="54" />
-                            <circle class="fill" cx="60" cy="60" r="54" style="stroke-dasharray: 340; stroke-dashoffset: {{ 340 - (340 * progress / 100) }}" />
-                        </svg>
-                        <div class="progress-text">{{ progress }}%</div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
 <div id="taskModal" class="modal">
-    <h3>Новая задача</h3>
-    <input type="hidden" id="csrf_token" value="{{ csrf_token('task_action') }}">
-    <input type="text" id="taskTitle" placeholder="Название задачи">
-    <input type="hidden" id="taskDate">
-    <button id="saveTaskBtn">Сохранить</button>
-    <button onclick="document.getElementById('taskModal').style.display='none'">Отмена</button>
+    <div class="modal-content">
+        <h3>Новая задача</h3>
+        <input type="hidden" id="csrf_token" value="{{ csrf_token('task_action') }}">
+        <input type="text" id="taskTitle" placeholder="Название задачи" style="width: 100%; margin-bottom: 10px; padding: 8px;">
+        <input type="hidden" id="taskDate">
+        <button id="saveTaskBtn" style="width: 100%; padding: 10px; background: #4A5D3A; color: white; border: none; border-radius: 6px; cursor: pointer;">Сохранить</button>
+        <button onclick="document.getElementById('taskModal').style.display='none'" style="width: 100%; padding: 10px; margin-top: 10px; background: #E8E4D8; border: none; border-radius: 6px; cursor: pointer;">Отмена</button>
+    </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function openTaskModal(date) {
+        document.getElementById('taskDate').value = date;
+        document.getElementById('taskModal').style.display = 'block';
+    }
+
+    document.getElementById('saveTaskBtn').addEventListener('click', function() {
+        const title = document.getElementById('taskTitle').value;
+        const date = document.getElementById('taskDate').value;
+        const token = document.getElementById('csrf_token').value;
+
+        if (!title.trim()) return alert('Введите название!');
+
+        fetch('{{ path("app_task_quick_add") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token
+            },
+            body: JSON.stringify({ title: title, date: date })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                location.reload();
+            } else {
+                alert('Ошибка: ' + data.message);
+            }
+        });
+    });
+
+    function toggleTask(id) {
+        const token = document.getElementById('csrf_token').value;
+        fetch('/api/task/' + id + '/toggle', {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': token }
+        }).then(() => location.reload());
+    }
+
+    function toggleDropdown(id) {
+        document.querySelectorAll('.dropdown-menu').forEach(d => {
+            if (d.id !== id) d.classList.remove('show');
+        });
+        document.getElementById(id).classList.toggle('show');
+    }
+</script>
 {% endblock %}

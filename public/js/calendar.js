@@ -1,3 +1,43 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const saveBtn = document.getElementById('saveTaskBtn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            const titleInput = document.getElementById('taskTitle');
+            const dateInput = document.getElementById('taskDate');
+            const csrfTokenInput = document.getElementById('csrf_token');
+
+            if (!titleInput || !dateInput || !csrfTokenInput) return;
+
+            const title = titleInput.value.trim();
+            const date = dateInput.value;
+            const csrfToken = csrfTokenInput.value;
+
+            if (!title) {
+                alert('Введите название задачи');
+                return;
+            }
+
+            fetch('/api/task/quick-add', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken 
+                },
+                body: JSON.stringify({ title: title, date: date, examId: null })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    location.reload(); 
+                } else {
+                    alert(data.message || 'Ошибка сохранения');
+                }
+            })
+            .catch(err => console.error('Error:', err));
+        });
+    }
+});
+
 function openTaskModal(dateStr) {
     const modal = document.getElementById('taskModal');
     const dateInput = document.getElementById('taskDate');
@@ -7,42 +47,10 @@ function openTaskModal(dateStr) {
     }
 }
 
-const saveBtn = document.getElementById('saveTaskBtn');
-if (saveBtn) {
-    saveBtn.addEventListener('click', function() {
-        const title = document.getElementById('taskTitle').value.trim();
-        const date = document.getElementById('taskDate').value;
-        const csrfToken = document.getElementById('csrf_token').value;
-
-        if (!title) {
-            alert('Введите название задачи');
-            return;
-        }
-
-        const data = { title: title, date: date, examId: null };
-
-        fetch('/api/task/quick-add', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken 
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                location.reload(); 
-            } else {
-                alert(data.message || 'Ошибка сохранения');
-            }
-        })
-        .catch(err => console.error('Error:', err));
-    });
-}
-
 function toggleTask(taskId) {
-    const csrfToken = document.getElementById('csrf_token').value;
+    const csrfToken = document.getElementById('csrf_token')?.value;
+    if (!csrfToken) return;
+
     fetch(`/api/task/${taskId}/toggle`, {
         method: 'POST',
         headers: {
@@ -55,8 +63,11 @@ function toggleTask(taskId) {
 }
 
 function toggleDropdown(id) {
+    const menu = document.getElementById(id);
+    if (!menu) return;
+    
     document.querySelectorAll('.dropdown-menu').forEach(d => {
         if (d.id !== id) d.classList.remove('show');
     });
-    document.getElementById(id).classList.toggle('show');
+    menu.classList.toggle('show');
 }
