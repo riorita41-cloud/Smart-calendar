@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ExamMaterial;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,10 +24,10 @@ class MaterialsController extends AbstractController
         );
         
         if ($request->isMethod('POST')) {
+            // Проверка CSRF токена
             if (!$this->isCsrfTokenValid('materials_upload', $request->request->get('_token'))) {
                 throw $this->createAccessDeniedException('Неверный CSRF-токен');
             }
-            // -----------------------------
 
             $manualContent = $request->request->get('manualContent');
             $files = $request->files->all('files');
@@ -52,7 +53,7 @@ class MaterialsController extends AbstractController
                             $this->processFile($file, $user, $entityManager);
                             $saved = true;
                         } catch (\Exception $e) {
-                            $this->addFlash('error', 'Ошибка: ' . $e->getMessage());
+                            $this->addFlash('error', 'Ошибка файла: ' . $e->getMessage());
                         }
                     }
                 }
@@ -76,19 +77,27 @@ class MaterialsController extends AbstractController
     private function processFile(UploadedFile $file, $user, EntityManagerInterface $entityManager)
     {
         $allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-        if (!in_array($file->getClientMimeType(), $allowedTypes)) {
-            throw new \Exception('Недопустимый формат файла.');
+        $mimeType = $file->getMimeType();
+        
+        if (!in_array($mimeType, $allowedTypes)) {
+            throw new \Exception('Недопустимый формат файла: ' . $mimeType);
         }
+
         if ($file->getSize() > 5 * 1024 * 1024) {
             throw new \Exception('Файл слишком большой (макс. 5МБ).');
         }
 
         $originalName = $file->getClientOriginalName();
-        $extension = $file->guessExtension() ?: 'txt';
-        $newName = uniqid() . '.' . $extension;
+        $extension = $file->guessExtension() ?: 'bin';
+        $newName = uniqid('mat_', true) . '.' . $extension;
         
         $uploadDir = $this->getParameter('kernel.project_dir') . '/uploads/materials';
-        $file->move($uploadDir, $newName);
+        
+        try {
+            $file->move($uploadDir, $newName);
+        } catch (FileException $e) {
+            throw new \Exception('Не удалось сохранить файл на сервере.');
+        }
         
         $material = new ExamMaterial();
         $material->setName($originalName);

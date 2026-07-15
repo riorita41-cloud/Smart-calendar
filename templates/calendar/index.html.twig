@@ -91,9 +91,7 @@
                                     {% endif %}
                                     {% for task in dayTasks %}
                                         <div class="task-item">
-                                            <span class="{% if task.isCompleted %}check{% else %}uncheck{% endif %}">
-                                                {% if task.isCompleted %}+{% else %}o{% endif %}
-                                            </span>
+                                            <span>{% if task.isCompleted %}+{% else %}o{% endif %}</span>
                                             <span>{{ task.title }}</span>
                                         </div>
                                     {% endfor %}
@@ -110,46 +108,6 @@
         <div class="calendar-sidebar">
             <div class="calendar-card">
                 <h2 class="sidebar-title">План на сегодня</h2>
-                {% if todayTasks|length > 0 %}
-                    {% for task in todayTasks %}
-                        <div class="today-task">
-                            <input type="checkbox" class="task-checkbox" {% if task.isCompleted %}checked{% endif %} data-task-id="{{ task.id }}">
-                            <div class="task-info">
-                                <div class="task-name {% if task.isCompleted %}done{% endif %}">{{ task.title }}</div>
-                                {% if task.description %}
-                                    <div class="task-time">{{ task.description|slice(0, 50) }}{% if task.description|length > 50 %}...{% endif %}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="empty-state">
-                        <div class="icon"></div>
-                        <div>На сегодня задач нет!</div>
-                    </div>
-                {% endif %}
-            </div>
-            
-            <div class="calendar-card">
-                <h2 class="sidebar-title">Общий прогресс</h2>
-                <div class="progress-circle-container">
-                    <div class="progress-circle">
-                        <svg width="120" height="120">
-                            <circle class="bg" cx="60" cy="60" r="50"></circle>
-                            <circle class="fill" cx="60" cy="60" r="50" stroke-dasharray="{{ 2 * 3.14159 * 50 }}" stroke-dashoffset="{{ 2 * 3.14159 * 50 * (1 - progress / 100) }}"></circle>
-                        </svg>
-                        <div class="progress-text">{{ progress }}%</div>
-                    </div>
-                    <div>
-                        {% for subject, percent in progressBySubject %}
-                            <div class="subject-progress">
-                                <span class="star"></span>
-                                <span class="name">{{ subject }}</span>
-                                <span class="percent">{{ percent }}%</span>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -164,6 +122,9 @@
             <option value="{{ exam.id }}">{{ exam.name }} ({{ exam.subject }})</option>
         {% endfor %}
     </select>
+    
+    <input type="hidden" id="csrf_token" value="{{ csrf_token('quick_add_task') }}">
+    
     <button id="saveTaskBtn">Сохранить</button>
     <button onclick="document.getElementById('taskModal').style.display='none'">Отмена</button>
 </div>
