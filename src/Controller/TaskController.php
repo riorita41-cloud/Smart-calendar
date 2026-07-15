@@ -118,4 +118,33 @@ class TaskController extends AbstractController
 
         return new JsonResponse(['status' => 'success', 'message' => 'Задача добавлена']);
     }
+
+            #[Route('/api/tasks/delete-bulk', name: 'app_tasks_delete_bulk', methods: ['POST'])]
+    public function deleteBulk(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $taskIds = $data['taskIds'] ?? [];
+
+        if (empty($taskIds)) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Не выбраны задачи'], 400);
+        }
+
+        $token = $request->headers->get('X-CSRF-TOKEN');
+        if (!$token || !$this->isCsrfTokenValid('task_action', $token)) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Неверный токен безопасности'], 403);
+        }
+
+        $tasks = $entityManager->getRepository(StudyTask::class)->findBy([
+            'id' => $taskIds,
+            'user' => $this->getUser()
+        ]);
+
+        foreach ($tasks as $task) {
+            $entityManager->remove($task);
+        }
+
+        $entityManager->flush();
+
+        return new JsonResponse(['status' => 'success', 'message' => 'Задачи удалены']);
+    }
 }

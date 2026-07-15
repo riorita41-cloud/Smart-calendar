@@ -6,7 +6,14 @@
 <div class="tasks-page">
     <div class="tasks-header">
         <h1 class="tasks-title">Мои задачи</h1>
-        <a href="{{ path('app_task_new') }}" class="btn-add">+ Добавить задачу</a>
+        <div class="header-actions">
+            <button id="bulkModeBtn" class="btn-bulk-mode"> Выбрать для удаления</button>
+            <button id="bulkDeleteBtn" class="btn-delete-bulk" style="display: none;">
+                Удалить выбранные (<span id="selectedCount">0</span>)
+            </button>
+            <button id="cancelBulkBtn" class="btn-cancel-bulk" style="display: none;">Отмена</button>
+            <a href="{{ path('app_task_new') }}" class="btn-add">+ Добавить задачу</a>
+        </div>
     </div>
     
     {% for message in app.flashes('success') %}
@@ -14,12 +21,23 @@
     {% endfor %}
     
     {% if tasks|length > 0 %}
+        <div class="bulk-select-header" id="bulkSelectHeader" style="display: none;">
+            <label class="select-all-label">
+                <input type="checkbox" id="selectAllTasks" class="task-select-checkbox">
+                <span>Выбрать все</span>
+            </label>
+        </div>
+
         {% for task in tasks %}
-            <div class="task-card">
-                <form method="post" action="{{ path('app_task_toggle', {id: task.id}) }}" style="margin: 0;">
+            <div class="task-card {% if task.isCompleted %}completed{% endif %}" data-task-id="{{ task.id }}">
+                <form method="post" action="{{ path('app_task_toggle', {id: task.id}) }}" class="toggle-form normal-mode">
                     <input type="hidden" name="_token" value="{{ csrf_token('toggle_task_' ~ task.id) }}">
-                    <input type="checkbox" class="task-checkbox" {% if task.isCompleted %}checked{% endif %} onchange="this.form.submit()">
+                    <input type="checkbox" class="task-status-checkbox" {% if task.isCompleted %}checked{% endif %} onchange="this.form.submit()" title="Отметить как выполненную">
                 </form>
+                
+                <div class="bulk-mode-checkbox" style="display: none;">
+                    <input type="checkbox" class="task-select-checkbox" value="{{ task.id }}">
+                </div>
                 
                 <div class="task-info">
                     <div class="task-title {% if task.isCompleted %}done{% endif %}">{{ task.title }}</div>
@@ -28,10 +46,10 @@
                     {% if task.description %}<div class="task-meta">{{ task.description|slice(0, 80) }}{% if task.description|length > 80 %}...{% endif %}</div>{% endif %}
                 </div>
                 
-                <div class="task-actions">
-                    <form method="post" action="{{ path('app_task_delete', {id: task.id}) }}" onsubmit="return confirm('Удалить задачу?');">
+                <div class="task-actions normal-mode">
+                    <form method="post" action="{{ path('app_task_delete', {id: task.id}) }}" onsubmit="return confirm('Удалить эту задачу?');" class="delete-form">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_task_' ~ task.id) }}">
-                        <button type="submit" class="btn-delete">Удалить</button>
+                        <button type="submit" class="btn-delete-single">Удалить</button>
                     </form>
                 </div>
             </div>
@@ -43,4 +61,11 @@
         </div>
     {% endif %}
 </div>
+
+<input type="hidden" id="csrf_token_bulk" value="{{ csrf_token('task_action') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/tasks.js') }}"></script>
 {% endblock %}
