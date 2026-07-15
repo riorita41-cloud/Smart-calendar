@@ -13,23 +13,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ExamController extends AbstractController
 {
-    // --- БЛОК: Управление экзаменами (из первого контроллера) ---
-
     #[Route('/exams', name: 'app_exams')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        // Проверка: если пользователь не авторизован, отправляем на логин
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
 
-        // Получаем экзамены пользователя
-        $exams = $entityManager->getRepository(Exam::class)->findBy(
-            ['user' => $user]
-        );
-
-        // Получаем материалы пользователя (из второго контроллера)
+        $exams = $entityManager->getRepository(Exam::class)->findBy(['user' => $user]);
         $materials = $entityManager->getRepository(ExamMaterial::class)->findBy(
             ['user' => $user],
             ['uploadedAt' => 'DESC']
@@ -37,7 +29,7 @@ class ExamController extends AbstractController
 
         return $this->render('exams/index.html.twig', [
             'exams' => $exams,
-            'materials' => $materials, // Передаем и материалы тоже
+            'materials' => $materials,
         ]);
     }
 
@@ -50,7 +42,6 @@ class ExamController extends AbstractController
         }
 
         $exam = new Exam();
-        // Привязываем экзамен к текущему пользователю
         $exam->setUser($user);
 
         $form = $this->createForm(ExamType::class, $exam);
@@ -60,12 +51,12 @@ class ExamController extends AbstractController
             $entityManager->persist($exam);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Exam created successfully!');
+            $this->addFlash('success', 'Экзамен успешно создан!');
             return $this->redirectToRoute('app_exams');
         }
 
         return $this->render('exam/new.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -78,44 +69,35 @@ class ExamController extends AbstractController
         }
 
         $exam = $entityManager->getRepository(Exam::class)->find($id);
-
-        // Проверка безопасности: существует ли экзамен и принадлежит ли он текущему пользователю
         if (!$exam || $exam->getUser() !== $user) {
-            throw $this->createNotFoundException('Exam not found');
+            throw $this->createNotFoundException('Экзамен не найден');
         }
 
         $entityManager->remove($exam);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Exam deleted');
+        $this->addFlash('success', 'Экзамен удален');
         return $this->redirectToRoute('app_exams');
     }
-
-    // --- БЛОК: Работа с материалами (из второго контроллера) ---
 
     #[Route('/materials/view/{id}', name: 'app_materials_view')]
     public function view(ExamMaterial $material): Response
     {
-        // Проверка безопасности: доступ разрешен только владельцу материала
         if ($material->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('Доступ запрещён');
         }
 
-        // Если это "ручная" ссылка (текст), показываем шаблон
         if ($material->getFileType() === 'manual') {
             return $this->render('exams/view_material.html.twig', [
                 'material' => $material,
             ]);
         }
 
-        // Если это файл, отдаем его для скачивания
         $filePath = $this->getParameter('kernel.project_dir') . '/' . $material->getFilePath();
-
         if (!file_exists($filePath)) {
             throw $this->createNotFoundException('Файл не найден');
         }
 
-        // Используем встроенный метод Symfony для скачивания файлов
         return $this->file($filePath, $material->getName());
     }
 }

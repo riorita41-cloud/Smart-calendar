@@ -17,9 +17,6 @@ class Avatar
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $gender = 'male';
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $seed = null;
 
@@ -45,17 +42,6 @@ class Avatar
     public function setUser(User $user): static
     {
         $this->user = $user;
-        return $this;
-    }
-
-    public function getGender(): ?string
-    {
-        return $this->gender;
-    }
-
-    public function setGender(string $gender): static
-    {
-        $this->gender = $gender;
         return $this;
     }
 
