@@ -4,16 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
         saveBtn.addEventListener('click', function() {
             const titleInput = document.getElementById('taskTitle');
             const dateInput = document.getElementById('taskDate');
+            const examSelect = document.getElementById('taskExam');
             const csrfTokenInput = document.getElementById('csrf_token');
 
             if (!titleInput || !dateInput || !csrfTokenInput) return;
 
             const title = titleInput.value.trim();
             const date = dateInput.value;
+            const examId = examSelect ? examSelect.value : null;
             const csrfToken = csrfTokenInput.value;
 
             if (!title) {
                 alert('Введите название задачи');
+                return;
+            }
+
+            if (!examId) {
+                alert('Выберите экзамен');
                 return;
             }
 
@@ -23,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken 
                 },
-                body: JSON.stringify({ title: title, date: date, examId: null })
+                body: JSON.stringify({ title: title, date: date, examId: examId })
             })
             .then(response => response.json())
             .then(data => {
@@ -49,17 +56,29 @@ function openTaskModal(dateStr) {
 
 function toggleTask(taskId) {
     const csrfToken = document.getElementById('csrf_token')?.value;
-    if (!csrfToken) return;
+    if (!csrfToken) {
+        console.error('CSRF токен не найден');
+        return;
+    }
 
-    fetch(`/api/task/${taskId}/toggle`, {
+    fetch('/api/task/' + taskId + '/toggle', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
         }
     })
-    .then(() => location.reload())
-    .catch(err => console.error(err));
+    .then(response => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Ошибка при обновлении задачи');
+        }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        alert('Ошибка соединения');
+    });
 }
 
 function toggleDropdown(id) {

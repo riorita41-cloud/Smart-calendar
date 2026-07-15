@@ -5,11 +5,6 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/calendar.css') }}">
-    <style>
-        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
-        .modal-content { background: #FAF7F0; margin: 10% auto; padding: 25px; width: 320px; border-radius: 12px; text-align: center; border: 1px solid #D4CFC4; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal-content select, .modal-content input { width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-    </style>
 {% endblock %}
 
 {% block body %}
@@ -44,9 +39,23 @@
                     {% for day in 1..daysInMonth %}
                         {% set dateStr = currentYear ~ '-' ~ (month < 10 ? '0'~month : month) ~ '-' ~ (day < 10 ? '0'~day : day) %}
                         {% set dayTasks = tasksByDay[dateStr] ?? [] %}
-                        <div class="day-cell {% if today.format('Y-m-d') == dateStr %}today{% endif %}" onclick="openTaskModal('{{ dateStr }}')">
+                        <div class="day-cell {% if today.format('Y-m-d') == dateStr %}today{% endif %}" 
+                             onclick="openTaskModal('{{ dateStr }}')">
                             {{ day }}
                             {% if dayTasks is not empty %}<div class="task-dot"></div>{% endif %}
+                            
+                            <div class="day-tooltip">
+                                <div class="tooltip-title">Задачи на {{ dateStr }}</div>
+                                {% if dayTasks is empty %}
+                                    <div class="tooltip-empty">Нет задач</div>
+                                {% else %}
+                                    {% for task in dayTasks %}
+                                        <div class="tooltip-task-item {% if task.isCompleted %}done{% endif %}">
+                                            {{ task.title }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
@@ -81,38 +90,13 @@
                 <option value="{{ exam.id }}">{{ exam.name }}</option>
             {% endfor %}
         </select>
-        <button id="saveTaskBtn" style="width: 100%; padding: 10px; background: #4A5D3A; color: white; border: none; border-radius: 6px; cursor: pointer;">Сохранить</button>
-        <button onclick="document.getElementById('taskModal').style.display='none'" style="width: 100%; padding: 10px; margin-top: 10px; background: #E8E4D8; border: none; border-radius: 6px; cursor: pointer;">Отмена</button>
+        <button id="saveTaskBtn" class="btn-save-task">Сохранить</button>
+        <button onclick="document.getElementById('taskModal').style.display='none'" class="btn-cancel-task">Отмена</button>
     </div>
 </div>
 {% endblock %}
 
 {% block javascripts %}
-<script>
-    function openTaskModal(date) {
-        document.getElementById('taskDate').value = date;
-        document.getElementById('taskModal').style.display = 'block';
-    }
-    document.getElementById('saveTaskBtn').addEventListener('click', function() {
-        const title = document.getElementById('taskTitle').value;
-        const date = document.getElementById('taskDate').value;
-        const examId = document.getElementById('taskExam').value;
-        const token = document.getElementById('csrf_token').value;
-
-        if (!title.trim() || !examId) return alert('Заполните все поля!');
-
-        fetch('{{ path("app_task_quick_add") }}', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': token },
-            body: JSON.stringify({ title: title, date: date, examId: examId })
-        })
-        .then(res => res.json())
-        .then(data => { data.status === 'success' ? location.reload() : alert(data.message); });
-    });
-    function toggleTask(id) {
-        fetch('/api/task/' + id + '/toggle', { method: 'POST', headers: { 'X-CSRF-TOKEN': document.getElementById('csrf_token').value } })
-        .then(() => location.reload());
-    }
-    function toggleDropdown(id) { document.getElementById(id).classList.toggle('show'); }
-</script>
+    {{ parent() }}
+    <script src="{{ asset('js/calendar.js') }}"></script>
 {% endblock %}

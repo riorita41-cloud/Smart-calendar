@@ -27,24 +27,25 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/task/{id}/toggle', name: 'app_task_toggle', methods: ['POST'])]
-    public function toggle(Request $request, int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/api/task/{id}/toggle', name: 'app_task_toggle', methods: ['POST'])]
+    public function toggle(Request $request, int $id, EntityManagerInterface $entityManager): JsonResponse
     {
         $task = $entityManager->getRepository(StudyTask::class)->find($id);
 
         if (!$task || $task->getUser() !== $this->getUser()) {
-            throw $this->createNotFoundException('Задача не найдена');
+            return new JsonResponse(['status' => 'error', 'message' => 'Задача не найдена'], 404);
         }
 
-        $token = $request->request->get('_token');
-        if (!$this->isCsrfTokenValid('toggle_task_' . $id, $token)) {
-            throw $this->createAccessDeniedException('Неверный токен безопасности');
+        $token = $request->headers->get('X-CSRF-TOKEN');
+        
+        if (!$token || !$this->isCsrfTokenValid('task_action', $token)) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Неверный токен безопасности'], 403);
         }
 
         $task->setIsCompleted(!$task->isCompleted());
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_tasks');
+        return new JsonResponse(['status' => 'success']);
     }
 
     #[Route('/task/{id}/delete', name: 'app_task_delete', methods: ['POST'])]
@@ -75,7 +76,7 @@ class TaskController extends AbstractController
         $task->setUser($this->getUser());
         $task->setIsCompleted(false);
 
-        $form = $this->createForm(\App\Form\StudyTaskType::class, $task);
+        $form = $this->createForm(StudyTaskType::class, $task);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
