@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Расписание - {{ exam.name }}{% endblock %}
+
+{% block body %}
+<style>
+    .schedule-page { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .back-link { display: inline-block; color: #6366F1; text-decoration: none; margin-bottom: 20px; font-family: Georgia, serif; }
+    .back-link:hover { text-decoration: underline; }
+    .schedule-header { background: #FAF7F0; border-radius: 16px; padding: 30px; border: 1px solid #D4CFC4; margin-bottom: 30px; text-align: center; }
+    .schedule-title { font-size: 28px; color: #4A5D3A; margin-bottom: 10px; font-family: Georgia, serif; }
+    .schedule-summary { display: flex; justify-content: center; gap: 40px; margin-top: 20px; flex-wrap: wrap; }
+    .summary-item { text-align: center; }
+    .summary-number { font-size: 32px; font-weight: bold; color: #C9A961; font-family: Georgia, serif; }
+    .summary-label { font-size: 14px; color: #6B6B5E; font-family: Georgia, serif; }
+    
+    .timeline { position: relative; padding-left: 30px; }
+    .timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: #D4CFC4; }
+    
+    .timeline-item { position: relative; margin-bottom: 25px; background: white; border-radius: 12px; padding: 20px; border: 1px solid #D4CFC4; transition: all 0.2s; }
+    .timeline-item:hover { box-shadow: 0 4px 12px rgba(74, 93, 58, 0.1); border-color: #C9A961; }
+    .timeline-item.completed { opacity: 0.7; background: #F5F1E8; }
+    .timeline-item.completed .timeline-date { background: #4A5D3A; color: white; }
+    
+    .timeline-dot { position: absolute; left: -26px; top: 20px; width: 14px; height: 14px; border-radius: 50%; background: #C9A961; border: 3px solid #FAF7F0; }
+    .timeline-item.completed .timeline-dot { background: #4A5D3A; }
+    
+    .timeline-date { display: inline-block; background: #E8E4D8; color: #4A5D3A; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-family: Georgia, serif; margin-bottom: 10px; }
+    .timeline-time { font-size: 14px; color: #6B6B5E; margin-bottom: 8px; font-family: Georgia, serif; }
+    .timeline-task { font-size: 16px; color: #2C2C2C; font-family: Georgia, serif; margin-bottom: 10px; }
+    .timeline-task strong { color: #C9A961; }
+    
+    .btn-complete { background: #4A5D3A; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: Georgia, serif; font-size: 14px; transition: background 0.2s; }
+    .btn-complete:hover { background: #3A4A2D; }
+    
+    .btn-uncomplete {
+        background: #F5F1E8;
+        color: #4A5D3A;
+        border: 1px solid #D4CFC4;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: Georgia, serif;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+    .btn-uncomplete:hover {
+        background: #E8E4D8;
+        border-color: #C9A961;
+    }
+    
+    .completed-badge { color: #4A5D3A; font-weight: bold; font-family: Georgia, serif; }
+    
+    .no-schedule { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; border: 2px dashed #D4CFC4; }
+    .no-schedule h3 { color: #4A5D3A; font-family: Georgia, serif; margin-bottom: 15px; }
+    .no-schedule p { color: #6B6B5E; margin-bottom: 20px; }
+    
+    .question-item {
+        transition: background 0.2s;
+        padding: 8px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+    }
+    .question-item:hover {
+        background: #FAF7F0;
+    }
+    .question-number {
+        color: #6B6B5E;
+        font-size: 12px;
+        margin-right: 5px;
+    }
+    .question-answer {
+        margin-top: 5px;
+        padding: 5px 8px;
+        background: #F0F4FF;
+        border-radius: 4px;
+        font-size: 13px;
+    }
+    .answer-label {
+        color: #667eea;
+        font-weight: bold;
+    }
+</style>
+
+<div class="schedule-page">
+    <a href="{{ path('app_exams') }}" class="back-link">← Назад к экзаменам</a>
+    
+    <div class="schedule-header">
+        <h1 class="schedule-title">Расписание подготовки к "{{ exam.name }}"</h1>
+        <div class="schedule-summary">
+            <div class="summary-item">
+                <div class="summary-number">{{ exam.examDate|date('d.m.Y') }}</div>
+                <div class="summary-label">Дата экзамена</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-number">{{ schedules|length }}</div>
+                <div class="summary-label">Дней подготовки</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-number">{{ exam.questionsPerDay }}</div>
+                <div class="summary-label">Вопросов в день</div>
+            </div>
+        </div>
+    </div>
+
+    {% if schedules|length > 0 %}
+        <div class="timeline">
+            {% for schedule in schedules %}
+                <div class="timeline-item {% if schedule.isCompleted %}completed{% endif %}">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">
+                        {{ schedule.studyDate|date('d F, D')|replace({
+                            'January': 'января', 'February': 'февраля', 'March': 'марта', 
+                            'April': 'апреля', 'May': 'мая', 'June': 'июня', 
+                            'July': 'июля', 'August': 'августа', 'September': 'сентября', 
+                            'October': 'октября', 'November': 'ноября', 'December': 'декабря',
+                            'Mon': 'Пн', 'Tue': 'Вт', 'Wed': 'Ср', 'Thu': 'Чт', 
+                            'Fri': 'Пт', 'Sat': 'Сб', 'Sun': 'Вс'
+                        }) }}
+                    </div>
+                    <div class="timeline-time">⏰ {{ schedule.startTime|date('H:i') }} – {{ schedule.endTime|date('H:i') }}</div>
+                    <div class="timeline-task">
+                        <strong>{{ schedule.questionsCount }} вопросов</strong>
+                        
+                        {% if schedule.questionIds %}
+                            <div class="questions-list" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #E8E4D8;">
+                                {% for questionId in schedule.questionIds %}
+                                    {% if allQuestions[questionId] is defined %}
+                                        <div class="question-item">
+                                            <span class="question-number">{{ loop.index }}.</span> 
+                                            {{ allQuestions[questionId].text }}
+                                            
+                                            {% if allQuestions[questionId].answer %}
+                                                <div class="question-answer">
+                                                    <span class="answer-label">Ответ:</span> {{ allQuestions[questionId].answer }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if not schedule.isCompleted %}
+                        <form method="post" action="{{ path('app_schedule_complete', {id: schedule.id}) }}" style="display: inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('schedule_action') }}">
+                            <button type="submit" class="btn-complete">✓ Отметить как выполненное</button>
+                        </form>
+                    {% else %}
+                        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                            <span class="completed-badge">✓ Выполнено</span>
+                            <form method="post" action="{{ path('app_schedule_uncomplete', {id: schedule.id}) }}" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('schedule_action') }}">
+                                <button type="submit" class="btn-uncomplete">↺ Вернуть в невыполненные</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-schedule">
+            <h3>Расписание ещё не составлено</h3>
+            <p>Нажмите кнопку "Составить расписание" на странице экзамена</p>
+            <a href="{{ path('app_exams') }}" class="back-link">← Вернуться к экзаменам</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

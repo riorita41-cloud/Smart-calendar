@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\ExamMaterial;
+use App\Entity\Question;
+use App\Form\ExamMaterialType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class MaterialsController extends AbstractController
 {
     #[Route('/materials', name: 'app_materials')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
         
@@ -23,89 +23,125 @@ class MaterialsController extends AbstractController
             ['uploadedAt' => 'DESC']
         );
         
-        if ($request->isMethod('POST')) {
-            // Проверка CSRF токена
-            if (!$this->isCsrfTokenValid('materials_upload', $request->request->get('_token'))) {
-                throw $this->createAccessDeniedException('Неверный CSRF-токен');
-            }
-
-            $manualContent = $request->request->get('manualContent');
-            $files = $request->files->all('files');
-            $saved = false;
-            
-            if (!empty($manualContent)) {
-                $material = new ExamMaterial();
-                $material->setName('Ручной ввод');
-                $material->setContent($manualContent);
-                $material->setFileType('manual');
-                $material->setUploadedAt(new \DateTime());
-                $material->setUser($user);
-                $entityManager->persist($material);
-                $saved = true;
-            }
-            
-            if ($files) {
-                if (!is_array($files)) { $files = [$files]; }
-                
-                foreach ($files as $file) {
-                    if ($file instanceof UploadedFile && $file->isValid()) {
-                        try {
-                            $this->processFile($file, $user, $entityManager);
-                            $saved = true;
-                        } catch (\Exception $e) {
-                            $this->addFlash('error', 'Ошибка файла: ' . $e->getMessage());
-                        }
-                    }
-                }
-            }
-            
-            if ($saved) {
-                $entityManager->flush();
-                $this->addFlash('success', 'Материалы успешно загружены!');
-            } else {
-                $this->addFlash('error', 'Ничего не выбрано для загрузки');
-            }
-            
-            return $this->redirectToRoute('app_materials');
-        }
-        
         return $this->render('materials/index.html.twig', [
             'materials' => $materials,
         ]);
     }
-    
-    private function processFile(UploadedFile $file, $user, EntityManagerInterface $entityManager)
+
+    #[Route('/materials/new', name: 'app_material_new')]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-        $mimeType = $file->getMimeType();
-        
-        if (!in_array($mimeType, $allowedTypes)) {
-            throw new \Exception('Недопустимый формат файла: ' . $mimeType);
-        }
-
-        if ($file->getSize() > 5 * 1024 * 1024) {
-            throw new \Exception('Файл слишком большой (макс. 5МБ).');
-        }
-
-        $originalName = $file->getClientOriginalName();
-        $extension = $file->guessExtension() ?: 'bin';
-        $newName = uniqid('mat_', true) . '.' . $extension;
-        
-        $uploadDir = $this->getParameter('kernel.project_dir') . '/uploads/materials';
-        
-        try {
-            $file->move($uploadDir, $newName);
-        } catch (FileException $e) {
-            throw new \Exception('Не удалось сохранить файл на сервере.');
-        }
-        
         $material = new ExamMaterial();
-        $material->setName($originalName);
-        $material->setFileType($extension);
-        $material->setFilePath('uploads/materials/' . $newName);
+        $material->setUser($this->getUser());
+        $material->setFileType('manual');
         $material->setUploadedAt(new \DateTime());
-        $material->setUser($user);
+
+        $form = $this->createForm(ExamMaterialType::class, $material);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($material);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Материал создан! Теперь добавьте в него вопросы.');
+            return $this->redirectToRoute('app_questions_add', ['id' => $material->getId()]);
+        }
+
+        return $this->render('materials/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/materials/{id}/questions', name: 'app_questions_add')]
+    public function addQuestions(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $material = $entityManager->getRepository(ExamMaterial::class)->find($id);
         
-        $entityManager->persist($material);
+        if (!$material || $material->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException('Материал не найден');
+        }
+
+        if ($request->isMethod('POST')) {
+            $questionsText = $request->request->get('questions');
+            
+            $lines = array_filter(array_map('trim', explode("\n", $questionsText)));
+            
+            $maxOrder = 0;
+            foreach ($material->getQuestions() as $q) {
+                if ($q->getOrderNumber() > $maxOrder) {
+                    $maxOrder = $q->getOrderNumber();
+                }
+            }
+            $orderNumber = $maxOrder + 1;
+            
+            $addedCount = 0;
+            foreach ($lines as $line) {
+                if (empty($line)) continue;
+                
+                if (preg_match('/^(.+?)(?:Ответ:|\|)\s*(.+)$/i', $line, $matches)) {
+                    $questionText = trim($matches[1]);
+                    $answer = trim($matches[2]);
+                } else {
+                    $questionText = $line;
+                    $answer = null;
+                }
+                
+                $question = new Question();
+                $question->setText($questionText);
+                $question->setAnswer($answer);
+                $question->setOrderNumber($orderNumber++);
+                
+                $material->addQuestion($question);
+                $addedCount++;
+            }
+            
+            $entityManager->persist($material);
+            $entityManager->flush();
+            
+            $this->addFlash('success', "Успешно добавлено вопросов: {$addedCount}");
+            return $this->redirectToRoute('app_questions_add', ['id' => $material->getId()]);
+        }
+
+        return $this->render('materials/add_questions.html.twig', [
+            'material' => $material,
+        ]);
+    }
+
+    #[Route('/materials/{id}/view', name: 'app_material_view')]
+    public function view(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $material = $entityManager->getRepository(ExamMaterial::class)->find($id);
+        
+        if (!$material || $material->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException('Материал не найден');
+        }
+
+        $questions = $material->getQuestions()->toArray();
+        usort($questions, fn($a, $b) => $a->getOrderNumber() <=> $b->getOrderNumber());
+
+        return $this->render('materials/view.html.twig', [
+            'material' => $material,
+            'questions' => $questions,
+        ]);
+    }
+
+    #[Route('/materials/{id}/delete', name: 'app_material_delete', methods: ['POST'])]
+    public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $material = $entityManager->getRepository(ExamMaterial::class)->find($id);
+        
+        if (!$material || $material->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException('Материал не найден');
+        }
+
+        if (!$this->isCsrfTokenValid('delete' . $material->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Неверный токен безопасности');
+        }
+
+        $entityManager->remove($material); 
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Материал и все его вопросы удалены');
+        return $this->redirectToRoute('app_materials');
     }
 }

@@ -11,42 +11,76 @@
 <div class="exams-container">
     <h1 class="page-title">Экзамены</h1>
     
-    <!-- Секция экзаменов -->
     <div class="section">
-        <h2 class="section-title"> Мои экзамены</h2>
+        <div class="section-header">
+            <h2 class="section-title"> Мои экзамены</h2>
+            <a href="{{ path('app_exam_new') }}" class="btn-add-exam">+ Добавить экзамен</a>
+        </div>
         
         {% if exams|length > 0 %}
             {% for exam in exams %}
                 <div class="exam-card">
-                    <div class="exam-name">{{ exam.name }}</div>
-                    {% if exam.examDate %}
+                    <div class="exam-header">
+                        <div class="exam-info">
+                            <div class="exam-name">{{ exam.name }}</div>
+                            <div class="exam-subject">{{ exam.subject }}</div>
+                        </div>
                         <div class="exam-date">📅 {{ exam.examDate|date('d.m.Y') }}</div>
-                    {% endif %}
+                    </div>
+                    
+                    <div class="exam-schedule-info">
+                        {% if exam.questionsPerDay > 0 %}
+                            <div class="schedule-badge">
+                                📚 <strong>{{ exam.questionsPerDay }} вопросов/день</strong>
+                                <span class="schedule-details">
+                                    ({{ exam.studyDaysFormatted|join(', ') }}, {{ exam.studyStartTime|date('H:i') }} – {{ exam.studyEndTime|date('H:i') }})
+                                </span>
+                            </div>
+                            <a href="{{ path('app_exam_schedule', {id: exam.id}) }}" class="btn-view-schedule">
+                                 Смотреть расписание
+                            </a>
+                        {% else %}
+                            <div class="no-schedule">Расписание ещё не составлено</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="exam-actions">
+                        <form method="post" action="{{ path('app_exam_generate_schedule', {id: exam.id}) }}" class="inline-form">
+                            <button type="submit" class="btn-generate-schedule" onclick="return confirm('Составить новое расписание? Старое будет удалено.')">
+                                ⚙️ Составить расписание
+                            </button>
+                        </form>
+                        
+                        <form method="post" action="{{ path('app_exam_delete', {id: exam.id}) }}" class="inline-form" onsubmit="return confirm('Удалить экзамен?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_exam_' ~ exam.id) }}">
+                            <button type="submit" class="btn-delete-exam">️ Удалить</button>
+                        </form>
+                    </div>
                 </div>
             {% endfor %}
         {% else %}
             <div class="no-data">
                 <p>У вас пока нет добавленных экзаменов</p>
+                <a href="{{ path('app_exam_new') }}" class="btn-add">Добавить первый экзамен</a>
             </div>
         {% endif %}
     </div>
     
-    <!-- Секция материалов -->
     <div class="section">
         <h2 class="section-title"> Материалы для подготовки</h2>
         
         {% if materials|length > 0 %}
             <div class="materials-grid">
                 {% for material in materials %}
-                    <a href="{{ path('app_materials_view', {id: material.id}) }}" class="material-card">
+                    <a href="{{ path('app_material_view', {id: material.id}) }}" class="material-card">
                         <div class="material-header">
                             <div class="material-icon {{ material.fileType }}">
                                 {% if material.fileType == 'pdf' %}
-                                    📄
+                                    
                                 {% elseif material.fileType == 'txt' %}
                                     
                                 {% elseif material.fileType == 'docx' %}
-                                    📄
+                                    
                                 {% else %}
                                     ✍️
                                 {% endif %}

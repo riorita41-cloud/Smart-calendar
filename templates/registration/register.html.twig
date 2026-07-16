@@ -2,7 +2,6 @@
 
 {% block title %}Регистрация{% endblock %}
 
-{# Убираем меню и включаем центрирование #}
 {% block sidebar %}{% endblock %}
 {% block body_class %}full-width-layout{% endblock %}
 
@@ -12,25 +11,32 @@
         <h1 class="register-title">Регистрация</h1>
     </div>
     
-    {% for message in app.flashes('error') %}
-        <div class="alert-error">{{ message }}</div>
+    {% for type in ['success', 'error'] %}
+        {% for message in app.flashes(type) %}
+            <div class="alert-{{ type }}">{{ message }}</div>
+        {% endfor %}
     {% endfor %}
+    
+    {# ВАЖНО: выводим глобальные ошибки формы #}
+    {{ form_errors(registrationForm) }}
     
     {{ form_start(registrationForm) }}
         <div class="form-group">
-            {{ form_label(registrationForm.email) }}
-            {{ form_widget(registrationForm.email, {'attr': {'autocomplete': 'email'}}) }}
+            {{ form_label(registrationForm.email, 'Email') }}
+            {{ form_widget(registrationForm.email, {'attr': {'autocomplete': 'email', 'class': 'form-control'}}) }}
+            {{ form_errors(registrationForm.email) }}
         </div>
         
         <div class="form-group">
             {{ form_label(registrationForm.plainPassword, 'Пароль') }}
-            {{ form_widget(registrationForm.plainPassword, {'attr': {'autocomplete': 'new-password'}}) }}
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'autocomplete': 'new-password', 'class': 'form-control'}}) }}
+            {{ form_errors(registrationForm.plainPassword) }}
         </div>
 
-        {# Заменяем "Agree terms" на "Запомнить меня" или нужный чекбокс #}
-        <div class="remember-me">
-            {{ form_widget(registrationForm.agreeTerms) }}
-            <label for="registration_form_agreeTerms">Я согласен с условиями</label>
+        <div class="form-group remember-me">
+            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'checkbox-control'}}) }}
+            {{ form_label(registrationForm.agreeTerms, 'Я согласен с условиями') }}
+            {{ form_errors(registrationForm.agreeTerms) }}
         </div>
         
         <button type="submit" class="btn-register">Зарегистрироваться</button>
