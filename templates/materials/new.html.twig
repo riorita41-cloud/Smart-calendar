@@ -2,39 +2,48 @@
 
 {% block title %}Новый материал{% endblock %}
 
-{% block body %}
-<style>
-    .form-page { max-width: 600px; margin: 40px auto; padding: 30px; background: white; border-radius: 16px; border: 1px solid #E8E4D8; }
-    .form-title { font-size: 24px; color: #4A5D3A; font-family: Georgia, serif; margin-bottom: 25px; text-align: center; }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; margin-bottom: 8px; color: #4A5D3A; font-family: Georgia, serif; font-weight: bold; }
-    .form-control { width: 100%; padding: 12px; border: 1px solid #D4CFC4; border-radius: 8px; font-family: Georgia, serif; font-size: 15px; box-sizing: border-box; }
-    .form-control:focus { outline: none; border-color: #667eea; }
-    .btn-submit { width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px; border-radius: 8px; font-family: Georgia, serif; font-size: 16px; cursor: pointer; transition: all 0.2s; }
-    .btn-submit:hover { opacity: 0.9; }
-    .back-link { display: block; text-align: center; margin-top: 20px; color: #6B6B5E; text-decoration: none; font-family: Georgia, serif; }
-    .back-link:hover { text-decoration: underline; }
-</style>
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/materials.css') }}">
+{% endblock %}
 
-<div class="form-page">
-    <h1 class="form-title">Создание нового материала</h1>
+{% block body %}
+<div class="material-form-page">
+    <h1 class="form-page-title">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 10px;">
+            <path d="M12 5v14M5 12h14" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Создание нового материала
+    </h1>
     
     {{ form_start(form) }}
         <div class="form-group">
-            {{ form_label(form.name) }}
-            {{ form_widget(form.name) }}
+            {{ form_label(form.name, 'Название материала') }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Например: Билеты 1-20'}}) }}
             {{ form_errors(form.name) }}
+            <div class="form-hint">Введите краткое название для вашего материала</div>
         </div>
         
         <div class="form-group">
-            {{ form_label(form.exam) }}
-            {{ form_widget(form.exam) }}
+            {{ form_label(form.exam, 'Экзамен (необязательно)') }}
+            {{ form_widget(form.exam, {'attr': {'class': 'form-control'}}) }}
             {{ form_errors(form.exam) }}
+            <div class="form-hint">Привяжите материал к конкретному экзамену или оставьте общим</div>
         </div>
         
-        <button type="submit" class="btn-submit">Создать и перейти к вопросам</button>
+        <button type="submit" class="btn-submit">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 8px;">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Создать и перейти к вопросам
+        </button>
     {{ form_end(form) }}
     
-    <a href="{{ path('app_materials') }}" class="back-link">← Вернуться к списку</a>
+    <a href="{{ path('app_materials') }}" class="form-back-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 12H5M5 12l6 6M5 12l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Вернуться к списку
+    </a>
 </div>
 {% endblock %}

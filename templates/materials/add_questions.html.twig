@@ -2,52 +2,65 @@
 
 {% block title %}Добавить вопросы - {{ material.name }}{% endblock %}
 
-{% block body %}
-<style>
-    .questions-page { max-width: 800px; margin: 40px auto; padding: 0 20px; }
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .page-title { font-size: 24px; color: #4A5D3A; font-family: Georgia, serif; margin: 0; }
-    .back-link { color: #667eea; text-decoration: none; font-family: Georgia, serif; }
-    .back-link:hover { text-decoration: underline; }
-    
-    .hint-box { background: #F0F4FF; border-left: 4px solid #667eea; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: Georgia, serif; color: #4A5568; }
-    .hint-box strong { color: #667eea; }
-    
-    .form-box { background: white; padding: 25px; border-radius: 12px; border: 1px solid #E8E4D8; }
-    textarea.questions-input {
-        width: 100%; min-height: 300px; padding: 15px; border: 1px solid #D4CFC4; border-radius: 8px;
-        font-family: monospace; font-size: 14px; line-height: 1.6; resize: vertical; box-sizing: border-box;
-    }
-    textarea.questions-input:focus { outline: none; border-color: #667eea; }
-    
-    .btn-save { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-family: Georgia, serif; font-size: 16px; cursor: pointer; margin-top: 15px; }
-    .btn-save:hover { opacity: 0.9; }
-</style>
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/materials.css') }}">
+{% endblock %}
 
-<div class="questions-page">
-    <div class="page-header">
-        <h1 class="page-title">Добавить вопросы: {{ material.name }}</h1>
-        <a href="{{ path('app_materials') }}" class="back-link">← К материалам</a>
+{% block body %}
+<div class="add-questions-page">
+    <div class="questions-page-header">
+        <h1 class="questions-page-title">
+            Добавить вопросы: {{ material.name }}
+        </h1>
+        <a href="{{ path('app_materials') }}" class="questions-back-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 12H5M5 12l6 6M5 12l6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            К материалам
+        </a>
     </div>
     
     <div class="hint-box">
-        💡 <strong>Подсказка:</strong> Вставьте вопросы по одному на строку.<br>
-        Если у вопроса есть ответ, отделите его словом <strong>Ответ:</strong> или символом <strong>|</strong>.<br>
-        <em>Пример: Что такое PHP? Ответ: Язык программирования</em><br>
-        <em>Пример: Сколько будет 2+2? | 4</em>
+        <div class="hint-box-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Подсказка:
+        </div>
+        <div>
+            Вставьте вопросы по одному на строку.<br>
+            Если у вопроса есть ответ, отделите его словом <strong>Ответ:</strong> или символом <strong>|</strong>.<br>
+            <em>Пример: Что такое PHP? Ответ: Язык программирования</em><br>
+        </div>
     </div>
     
-    <div class="form-box">
+    <div class="questions-form-box">
         <form method="post">
-            <textarea name="questions" class="questions-input" placeholder="Вставьте ваши вопросы сюда...&#10;1. Первый вопрос? Ответ: Первый ответ&#10;2. Второй вопрос? | Второй ответ"></textarea>
-            <button type="submit" class="btn-save">💾 Сохранить вопросы</button>
+            <textarea name="questions" class="questions-textarea" placeholder="Вставьте ваши вопросы сюда...
+1. Первый вопрос? Ответ: Первый ответ
+2. Второй вопрос? | Второй ответ"></textarea>
+            <button type="submit" class="questions-save-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Сохранить вопросы
+            </button>
         </form>
     </div>
     
     {% if material.questions|length > 0 %}
-        <div style="margin-top: 30px;">
-            <h3 style="font-family: Georgia, serif; color: #4A5D3A;">Уже добавлено вопросов: {{ material.questions|length }}</h3>
-            <a href="{{ path('app_material_view', {id: material.id}) }}" class="back-link">Посмотреть все вопросы →</a>
+        <div class="existing-questions-section">
+            <div class="existing-questions-title">
+                Уже добавлено вопросов: <span class="existing-questions-count">{{ material.questions|length }}</span>
+            </div>
+            <a href="{{ path('app_material_view', {id: material.id}) }}" class="view-questions-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Посмотреть все вопросы
+            </a>
         </div>
     {% endif %}
 </div>
