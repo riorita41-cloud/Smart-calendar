@@ -503,3 +503,58 @@ body {
 .toggle-form, .delete-form {
     margin: 0;
 }
+
+.flash-success,
+.flash-error {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 10px;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    z-index: 10000;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: slideInRight 0.4s ease-out;
+    max-width: 400px;
+    cursor: pointer;
+}
+
+.flash-success {
+    background: linear-gradient(135deg, #4A5D3A 0%, #6B7A5A 100%);
+    color: #FAF7F0;
+    border: 1px solid #3A4A2D;
+}
+
+.flash-error {
+    background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+    color: white;
+    border: 1px solid #B91C1C;
+}
+
+.flash-success.fade-out,
+.flash-error.fade-out {
+    animation: slideOutRight 0.4s ease-out forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(450px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(450px);
+        opacity: 0;
+    }
+}
