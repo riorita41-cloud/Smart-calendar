@@ -96,21 +96,23 @@ class TaskController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data['title']) || empty($data['examId'])) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Заполните все поля'], 400);
-        }
-
-        $exam = $entityManager->getRepository(Exam::class)->find($data['examId']);
-        if (!$exam || $exam->getUser() !== $this->getUser()) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Экзамен не найден'], 404);
+        if (empty($data['title'])) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Введите название задачи'], 400);
         }
 
         $task = new StudyTask();
         $task->setUser($this->getUser());
-        $task->setExam($exam);
         $task->setTitle($data['title']);
         $task->setScheduledDate(new \DateTimeImmutable($data['date'] ?? 'now'));
         $task->setIsCompleted(false);
+
+        if (!empty($data['examId'])) {
+            $exam = $entityManager->getRepository(Exam::class)->find($data['examId']);
+            if (!$exam || $exam->getUser() !== $this->getUser()) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Экзамен не найден'], 404);
+            }
+            $task->setExam($exam);
+        }
 
         $entityManager->persist($task);
         $entityManager->flush();

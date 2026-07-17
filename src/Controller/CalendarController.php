@@ -28,6 +28,14 @@ class CalendarController extends AbstractController
         
         $todayKey = $today->format('Y-m-d');
         
+        $examDates = [];
+        $examByDate = [];
+        foreach ($exams as $exam) {
+            $dateKey = $exam->getExamDate()->format('Y-m-d');
+            $examDates[] = $dateKey;
+            $examByDate[$dateKey] = $exam->getName();
+        }
+        
         $monthNames = [
             1 => 'Январь', 2 => 'Февраль', 3 => 'Март', 4 => 'Апрель',
             5 => 'Май', 6 => 'Июнь', 7 => 'Июль', 8 => 'Август',
@@ -36,6 +44,8 @@ class CalendarController extends AbstractController
         
         return $this->render('calendar/index.html.twig', [
             'exams'          => $exams,
+            'examDates'      => $examDates,
+            'examByDate'     => $examByDate,
             'tasksByDay'     => $tasksByDay,
             'currentYear'    => (int)$currentMonth->format('Y'),
             'month'          => (int)$currentMonth->format('n'),

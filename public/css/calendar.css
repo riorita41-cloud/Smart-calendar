@@ -446,3 +446,57 @@
 .btn-cancel-task:hover {
     background: var(--color-border) !important;
 }
+
+.day-cell.exam-day {
+    background: var(--color-accent);
+    color: var(--color-bg-light);
+    font-weight: bold;
+    border: 2px solid var(--color-primary);
+}
+
+.day-cell.exam-day:hover {
+    background: #B8984F;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(201, 169, 97, 0.3);
+}
+
+.day-cell.exam-day .task-dot {
+    background: var(--color-bg-light);
+}
+
+.day-cell.exam-day {
+    background: var(--color-accent);
+    color: var(--color-bg-light);
+    font-weight: bold;
+    border: 2px solid var(--color-primary);
+    flex-direction: column;
+    padding: 8px 6px;
+}
+
+.day-cell.exam-day:hover {
+    background: #B8984F;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(201, 169, 97, 0.3);
+}
+
+.day-cell.exam-day .task-dot {
+    background: var(--color-bg-light);
+}
+
+.exam-label {
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.2;
+    margin-top: 4px;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    color: var(--color-bg-light);
+    font-family: Georgia, serif;
+}
+
+.day-cell.exam-day .day-number {
+    font-size: 18px;
+}

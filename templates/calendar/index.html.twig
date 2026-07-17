@@ -39,9 +39,12 @@
                     {% for day in 1..daysInMonth %}
                         {% set dateStr = currentYear ~ '-' ~ (month < 10 ? '0'~month : month) ~ '-' ~ (day < 10 ? '0'~day : day) %}
                         {% set dayTasks = tasksByDay[dateStr] ?? [] %}
-                        <div class="day-cell {% if today.format('Y-m-d') == dateStr %}today{% endif %}" 
-                             onclick="openTaskModal('{{ dateStr }}')">
-                            {{ day }}
+                        <div class="day-cell {% if today.format('Y-m-d') == dateStr %}today{% endif %} {% if dateStr in examDates %}exam-day{% endif %}" 
+                            onclick="openTaskModal('{{ dateStr }}')">
+                            <span class="day-number">{{ day }}</span>
+                            {% if dateStr in examDates %}
+                                <div class="exam-label">{{ examByDate[dateStr] }}</div>
+                            {% endif %}
                             {% if dayTasks is not empty %}<div class="task-dot"></div>{% endif %}
                             
                             <div class="day-tooltip">
@@ -84,7 +87,7 @@
         <input type="hidden" id="taskDate">
         <input type="text" id="taskTitle" placeholder="Название задачи">
         <select id="taskExam">
-            <option value="">-- Выберите экзамен --</option>
+            <option value="">-- Повседневная задача --</option>
             {% for exam in exams %}
                 <option value="{{ exam.id }}">{{ exam.name }}</option>
             {% endfor %}

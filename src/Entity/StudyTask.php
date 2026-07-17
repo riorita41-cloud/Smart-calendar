@@ -26,8 +26,8 @@ class StudyTask
     private bool $isCompleted = false;
 
     #[ORM\ManyToOne(targetEntity: Exam::class, inversedBy: 'studyTasks')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Exam $exam = null;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Exam $exam = null;     
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'studyTasks')]
     #[ORM\JoinColumn(nullable: false)]

@@ -44,7 +44,8 @@ class StudyTaskType extends AbstractType
                 'choice_label' => function($exam) {
                     return $exam->getName() . ' (' . $exam->getSubject() . ')';
                 },
-                'placeholder' => 'Выберите экзамен'
+                'required' => false,
+                'placeholder' => '-- Повседневная задача (без экзамена) --'
             ])
         ;
     }

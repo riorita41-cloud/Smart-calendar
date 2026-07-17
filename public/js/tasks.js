@@ -18,10 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (!examId) {
-                alert('Выберите экзамен');
-                return;
-            }
 
             if (!csrfToken) {
                 alert('Ошибка безопасности: токен не найден');
