@@ -44,9 +44,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        // Принудительно перенаправляем на страницу экзаменов после успешного входа
-        // (игнорируем предыдущую страницу, чтобы не возвращаться на /register)
-        return new RedirectResponse($this->urlGenerator->generate('app_exams'));
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
 
     protected function getLoginUrl(Request $request): string

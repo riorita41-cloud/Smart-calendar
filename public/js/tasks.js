@@ -1,4 +1,57 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const saveBtn = document.getElementById('saveTaskBtn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            const titleInput = document.getElementById('taskTitle');
+            const dateInput = document.getElementById('taskDate');
+            const examSelect = document.getElementById('taskExam');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            if (!titleInput || !dateInput) return;
+
+            const title = titleInput.value.trim();
+            const date = dateInput.value;
+            const examId = examSelect ? examSelect.value : null;
+
+            if (!title) {
+                alert('Введите название задачи');
+                return;
+            }
+
+            if (!examId) {
+                alert('Выберите экзамен');
+                return;
+            }
+
+            if (!csrfToken) {
+                alert('Ошибка безопасности: токен не найден');
+                return;
+            }
+
+            fetch('/api/task/quick-add', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken 
+                },
+                body: JSON.stringify({ title: title, date: date, examId: examId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    location.reload(); 
+                } else {
+                    alert(data.message || 'Ошибка сохранения');
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Ошибка соединения');
+            });
+        });
+    }
+
     const bulkModeBtn = document.getElementById('bulkModeBtn');
     const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
     const cancelBulkBtn = document.getElementById('cancelBulkBtn');
@@ -10,11 +63,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function enterBulkMode() {
         bulkMode = true;
-        bulkModeBtn.style.display = 'none';
-        cancelBulkBtn.style.display = 'inline-flex';
-        bulkSelectHeader.style.display = 'flex';
+        if (bulkModeBtn) bulkModeBtn.style.display = 'none';
+        if (cancelBulkBtn) cancelBulkBtn.style.display = 'inline-flex';
+        if (bulkSelectHeader) bulkSelectHeader.style.display = 'flex';
         
-        document.querySelectorAll('.normal-mode').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.normal-mode').forEach(el => {
+            if (!el.classList.contains('task-actions')) {
+                el.style.display = 'none';
+            }
+        });
         document.querySelectorAll('.bulk-mode-checkbox').forEach(el => el.style.display = 'flex');
         document.querySelectorAll('.task-card').forEach(el => el.classList.add('bulk-mode'));
         
@@ -23,10 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function exitBulkMode() {
         bulkMode = false;
-        bulkModeBtn.style.display = 'inline-flex';
-        cancelBulkBtn.style.display = 'none';
-        bulkDeleteBtn.style.display = 'none';
-        bulkSelectHeader.style.display = 'none';
+        if (bulkModeBtn) bulkModeBtn.style.display = 'inline-flex';
+        if (cancelBulkBtn) cancelBulkBtn.style.display = 'none';
+        if (bulkDeleteBtn) bulkDeleteBtn.style.display = 'none';
+        if (bulkSelectHeader) bulkSelectHeader.style.display = 'none';
         
         document.querySelectorAll('.normal-mode').forEach(el => el.style.display = '');
         document.querySelectorAll('.bulk-mode-checkbox').forEach(el => el.style.display = 'none');
@@ -39,8 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateBulkDeleteButton() {
         const checkedBoxes = document.querySelectorAll('.task-select-checkbox:not(#selectAllTasks):checked');
         const count = checkedBoxes.length;
-        selectedCountSpan.textContent = count;
-        bulkDeleteBtn.style.display = count > 0 ? 'inline-flex' : 'none';
+        if (selectedCountSpan) selectedCountSpan.textContent = count;
+        if (bulkDeleteBtn) {
+            bulkDeleteBtn.style.display = count > 0 ? 'inline-flex' : 'none';
+        }
         
         if (selectAllCheckbox) {
             const allBoxes = document.querySelectorAll('.task-select-checkbox:not(#selectAllTasks)');
@@ -71,16 +130,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const checkedBoxes = document.querySelectorAll('.task-select-checkbox:not(#selectAllTasks):checked');
             const taskIds = Array.from(checkedBoxes).map(cb => cb.value);
-            const csrfToken = document.getElementById('csrf_token_bulk')?.value;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            if (!csrfToken) {
+                alert('Ошибка безопасности: токен не найден');
+                return;
+            }
 
             bulkDeleteBtn.disabled = true;
             bulkDeleteBtn.textContent = 'Удаление...';
 
             fetch('/api/tasks/delete-bulk', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken || ''
+                    'X-CSRF-TOKEN': csrfToken
                 },
                 body: JSON.stringify({ taskIds: taskIds })
             })
@@ -100,5 +165,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 bulkDeleteBtn.disabled = false;
             });
         });
+    }
+});
+
+function openTaskModal(dateStr) {
+    const modal = document.getElementById('taskModal');
+    const dateInput = document.getElementById('taskDate');
+    if (modal && dateInput) {
+        dateInput.value = dateStr;
+        modal.style.display = 'block';
+    }
+}
+
+function toggleTask(taskId) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    if (!csrfToken) {
+        console.error('CSRF токен не найден');
+        alert('Ошибка безопасности: токен не найден. Обновите страницу.');
+        return;
+    }
+
+    fetch('/api/task/' + taskId + '/toggle', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            location.reload();
+        } else {
+            alert(data.message || 'Ошибка при обновлении задачи');
+        }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        alert('Ошибка соединения');
+    });
+}
+
+function toggleDropdown(id) {
+    const menu = document.getElementById(id);
+    if (!menu) return;
+    
+    document.querySelectorAll('.dropdown-menu').forEach(d => {
+        if (d.id !== id) d.classList.remove('show');
+    });
+    menu.classList.toggle('show');
+}
+
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.month-year-selector')) {
+        document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
     }
 });

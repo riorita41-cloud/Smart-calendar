@@ -1,13 +1,30 @@
+:root {
+    --color-primary: #4A5D3A;
+    --color-primary-dark: #3A4A2D;
+    --color-accent: #C9A961;
+    --color-bg: #F5F1E8;
+    --color-bg-light: #FAF7F0;
+    --color-bg-secondary: #E8E4D8;
+    --color-border: #D4CFC4;
+    --color-text: #2C2C2C;
+    --color-text-secondary: #6B6B5E;
+    --color-text-muted: #94A3B8;
+    --shadow-light: rgba(74, 93, 58, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.15);
+    --shadow-modal: rgba(0, 0, 0, 0.2);
+    --overlay: rgba(0, 0, 0, 0.5);
+}
+
 .calendar-page {
     font-family: Georgia, 'Times New Roman', serif;
-    background: #F5F1E8;
+    background: var(--color-bg);
     min-height: 100vh;
     padding: 40px 20px;
 }
 
 .calendar-title {
     text-align: center;
-    color: #4A5D3A;
+    color: var(--color-primary);
     font-size: 32px;
     margin-bottom: 30px;
     font-family: Georgia, serif;
@@ -32,12 +49,12 @@
 }
 
 .calendar-card {
-    background: #FAF7F0;
+    background: var(--color-bg-light);
     border-radius: 12px;
     padding: 30px;
-    box-shadow: 0 2px 8px rgba(74, 93, 58, 0.1);
+    box-shadow: 0 2px 8px var(--shadow-light);
     margin-bottom: 20px;
-    border: 1px solid #D4CFC4;
+    border: 1px solid var(--color-border);
 }
 
 .month-header {
@@ -56,8 +73,8 @@
 }
 
 .selector-btn {
-    background: #4A5D3A;
-    color: #FAF7F0;
+    background: var(--color-primary);
+    color: var(--color-bg-light);
     border: none;
     padding: 12px 24px;
     border-radius: 8px;
@@ -70,7 +87,7 @@
 }
 
 .selector-btn:hover {
-    background: #3A4A2D;
+    background: var(--color-primary-dark);
 }
 
 .selector-btn::after {
@@ -83,14 +100,14 @@
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    background: #FAF7F0;
-    border: 2px solid #4A5D3A;
+    background: var(--color-bg-light);
+    border: 2px solid var(--color-primary);
     border-radius: 8px;
     padding: 10px;
     margin-top: 10px;
     z-index: 1000;
     display: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px var(--shadow-dark);
     max-height: 300px;
     overflow-y: auto;
 }
@@ -102,7 +119,7 @@
 .dropdown-item {
     display: block;
     padding: 10px 20px;
-    color: #2C2C2C;
+    color: var(--color-text);
     text-decoration: none;
     border-radius: 6px;
     transition: all 0.2s;
@@ -111,22 +128,22 @@
 }
 
 .dropdown-item:hover {
-    background: #4A5D3A;
-    color: #FAF7F0;
+    background: var(--color-primary);
+    color: var(--color-bg-light);
 }
 
 .dropdown-item.active {
-    background: #C9A961;
-    color: #FAF7F0;
+    background: var(--color-accent);
+    color: var(--color-bg-light);
     font-weight: bold;
 }
 
 .month-nav {
-    background: #4A5D3A;
+    background: var(--color-primary);
     border: none;
     font-size: 20px;
     cursor: pointer;
-    color: #FAF7F0;
+    color: var(--color-bg-light);
     padding: 12px 20px;
     border-radius: 8px;
     transition: all 0.2s;
@@ -138,7 +155,7 @@
 }
 
 .month-nav:hover {
-    background: #3A4A2D;
+    background: var(--color-primary-dark);
     transform: scale(1.05);
 }
 
@@ -151,7 +168,7 @@
 
 .weekday {
     text-align: center;
-    color: #6B6B5E;
+    color: var(--color-text-secondary);
     font-weight: bold;
     font-size: 15px;
     padding: 12px 8px;
@@ -172,10 +189,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #E8E4D8;
+    background: var(--color-bg-secondary);
     border-radius: 10px;
     font-size: 20px;
-    color: #2C2C2C;
+    color: var(--color-text);
     cursor: pointer;
     transition: all 0.2s;
     font-family: Georgia, serif;
@@ -183,19 +200,19 @@
 }
 
 .day-cell:hover {
-    background: #D4CFC4;
+    background: var(--color-border);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .day-cell.today {
-    background: #4A5D3A;
-    color: #FAF7F0;
+    background: var(--color-primary);
+    color: var(--color-bg-light);
     font-weight: bold;
 }
 
 .day-cell.today:hover {
-    background: #3A4A2D;
+    background: var(--color-primary-dark);
 }
 
 .day-cell.empty {
@@ -215,7 +232,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #C9A961;
+    background: var(--color-accent);
 }
 
 .day-tooltip {
@@ -225,11 +242,11 @@
     bottom: calc(100% + 10px);
     left: 50%;
     transform: translateX(-50%);
-    background: #FAF7F0;
-    border: 1px solid #D4CFC4;
+    background: var(--color-bg-light);
+    border: 1px solid var(--color-border);
     border-radius: 10px;
     padding: 12px 15px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 16px var(--shadow-dark);
     z-index: 1000;
     min-width: 220px;
     max-width: 280px;
@@ -244,16 +261,16 @@
 
 .tooltip-title {
     margin: 0 0 10px 0;
-    color: #4A5D3A;
+    color: var(--color-primary);
     font-size: 14px;
     font-weight: bold;
     font-family: Georgia, serif;
-    border-bottom: 1px solid #D4CFC4;
+    border-bottom: 1px solid var(--color-border);
     padding-bottom: 8px;
 }
 
 .tooltip-empty {
-    color: #94A3B8;
+    color: var(--color-text-muted);
     font-size: 13px;
     font-family: Georgia, serif;
     text-align: center;
@@ -263,9 +280,9 @@
 .tooltip-task-item {
     padding: 6px 0;
     font-size: 14px;
-    color: #2C2C2C;
+    color: var(--color-text);
     font-family: Georgia, serif;
-    border-bottom: 1px solid #E8E4D8;
+    border-bottom: 1px solid var(--color-bg-secondary);
     line-height: 1.4;
 }
 
@@ -275,14 +292,14 @@
 
 .tooltip-task-item.done {
     text-decoration: line-through;
-    color: #94A3B8;
+    color: var(--color-text-muted);
 }
 
 .btn-adjust {
     display: block;
     margin: 10px auto 0;
-    background: #4A5D3A;
-    color: #FAF7F0;
+    background: var(--color-primary);
+    color: var(--color-bg-light);
     border: none;
     padding: 16px 30px;
     border-radius: 10px;
@@ -297,16 +314,16 @@
 }
 
 .btn-adjust:hover {
-    background: #3A4A2D;
+    background: var(--color-primary-dark);
 }
 
 .sidebar-title {
-    color: #4A5D3A;
+    color: var(--color-primary);
     font-size: 22px;
     margin-bottom: 20px;
     margin-top: 0;
     font-family: Georgia, serif;
-    border-bottom: 2px solid #4A5D3A;
+    border-bottom: 2px solid var(--color-primary);
     padding-bottom: 10px;
 }
 
@@ -315,7 +332,7 @@
     align-items: center;
     gap: 12px;
     padding: 14px 12px;
-    border-bottom: 1px solid #D4CFC4;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .today-task:last-child {
@@ -326,12 +343,12 @@
     width: 20px;
     height: 20px;
     cursor: pointer;
-    accent-color: #4A5D3A;
+    accent-color: var(--color-primary);
     flex-shrink: 0;
 }
 
 .task-name {
-    color: #2C2C2C;
+    color: var(--color-text);
     font-size: 15px;
     font-family: Georgia, serif;
     line-height: 1.4;
@@ -339,30 +356,30 @@
 
 .task-name.done {
     text-decoration: line-through;
-    color: #94A3B8;
+    color: var(--color-text-muted);
 }
 
 .empty-state {
     text-align: center;
-    color: #94A3B8;
+    color: var(--color-text-muted);
     padding: 40px 20px;
     font-family: Georgia, serif;
     font-size: 15px;
 }
 
-.modal { 
-    display: none; 
-    position: fixed; 
-    z-index: 1000; 
-    left: 0; 
-    top: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0,0,0,0.5); 
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--overlay);
 }
 
 .modal h3 {
-    color: #4A5D3A;
+    color: var(--color-primary);
     margin-top: 0;
     text-align: center;
     font-family: Georgia, serif;
@@ -372,9 +389,9 @@
     width: 100%;
     padding: 12px;
     margin: 10px 0;
-    border: 1px solid #D4CFC4;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
-    background: #E8E4D8;
+    background: var(--color-bg-secondary);
     box-sizing: border-box;
     font-family: Georgia, serif;
     font-size: 15px;
@@ -393,39 +410,39 @@
 }
 
 #saveTaskBtn {
-    background: #4A5D3A;
-    color: #FAF7F0;
+    background: var(--color-primary);
+    color: var(--color-bg-light);
 }
 
 #saveTaskBtn:hover {
-    background: #3A4A2D;
+    background: var(--color-primary-dark);
 }
 
 .modal-content {
-    background: #FAF7F0;
+    background: var(--color-bg-light);
     margin: 10% auto;
     padding: 30px;
     width: 350px;
     border-radius: 12px;
-    border: 1px solid #D4CFC4;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 10px 25px var(--shadow-modal);
     position: relative;
 }
 
 .btn-save-task {
-    background: #4A5D3A !important;
-    color: #FAF7F0 !important;
+    background: var(--color-primary) !important;
+    color: var(--color-bg-light) !important;
 }
 
 .btn-save-task:hover {
-    background: #3A4A2D !important;
+    background: var(--color-primary-dark) !important;
 }
 
 .btn-cancel-task {
-    background: #E8E4D8 !important;
-    color: #2C2C2C !important;
+    background: var(--color-bg-secondary) !important;
+    color: var(--color-text) !important;
 }
 
 .btn-cancel-task:hover {
-    background: #D4CFC4 !important;
+    background: var(--color-border) !important;
 }

@@ -65,7 +65,6 @@ class TaskController extends AbstractController
         $entityManager->remove($task);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Задача успешно удалена');
         return $this->redirectToRoute('app_tasks');
     }
 
@@ -119,7 +118,7 @@ class TaskController extends AbstractController
         return new JsonResponse(['status' => 'success', 'message' => 'Задача добавлена']);
     }
 
-            #[Route('/api/tasks/delete-bulk', name: 'app_tasks_delete_bulk', methods: ['POST'])]
+    #[Route('/api/tasks/delete-bulk', name: 'app_tasks_delete_bulk', methods: ['POST'])]
     public function deleteBulk(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

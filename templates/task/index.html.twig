@@ -7,7 +7,7 @@
     <div class="tasks-header">
         <h1 class="tasks-title">Мои задачи</h1>
         <div class="header-actions">
-            <button id="bulkModeBtn" class="btn-bulk-mode"> Выбрать для удаления</button>
+            <button id="bulkModeBtn" class="btn-bulk-mode">Выбрать для удаления</button>
             <button id="bulkDeleteBtn" class="btn-delete-bulk" style="display: none;">
                 Удалить выбранные (<span id="selectedCount">0</span>)
             </button>
@@ -30,10 +30,9 @@
 
         {% for task in tasks %}
             <div class="task-card {% if task.isCompleted %}completed{% endif %}" data-task-id="{{ task.id }}">
-                <form method="post" action="{{ path('app_task_toggle', {id: task.id}) }}" class="toggle-form normal-mode">
-                    <input type="hidden" name="_token" value="{{ csrf_token('toggle_task_' ~ task.id) }}">
-                    <input type="checkbox" class="task-status-checkbox" {% if task.isCompleted %}checked{% endif %} onchange="this.form.submit()" title="Отметить как выполненную">
-                </form>
+                <div class="task-checkbox-wrapper normal-mode">
+                    <input type="checkbox" class="task-status-checkbox" {% if task.isCompleted %}checked{% endif %} onchange="toggleTask({{ task.id }})" title="Отметить как выполненную">
+                </div>
                 
                 <div class="bulk-mode-checkbox" style="display: none;">
                     <input type="checkbox" class="task-select-checkbox" value="{{ task.id }}">
@@ -61,8 +60,6 @@
         </div>
     {% endif %}
 </div>
-
-<input type="hidden" id="csrf_token_bulk" value="{{ csrf_token('task_action') }}">
 {% endblock %}
 
 {% block javascripts %}

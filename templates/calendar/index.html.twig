@@ -81,7 +81,6 @@
 <div id="taskModal" class="modal">
     <div class="modal-content">
         <h3>Новая задача</h3>
-        <input type="hidden" id="csrf_token" value="{{ csrf_token('task_action') }}">
         <input type="hidden" id="taskDate">
         <input type="text" id="taskTitle" placeholder="Название задачи">
         <select id="taskExam">
@@ -98,5 +97,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/calendar.js') }}"></script>
+    <script src="{{ asset('js/tasks.js') }}"></script>
 {% endblock %}

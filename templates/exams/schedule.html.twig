@@ -2,88 +2,19 @@
 
 {% block title %}Расписание - {{ exam.name }}{% endblock %}
 
-{% block body %}
-<style>
-    .schedule-page { max-width: 900px; margin: 0 auto; padding: 20px; }
-    .back-link { display: inline-block; color: #6366F1; text-decoration: none; margin-bottom: 20px; font-family: Georgia, serif; }
-    .back-link:hover { text-decoration: underline; }
-    .schedule-header { background: #FAF7F0; border-radius: 16px; padding: 30px; border: 1px solid #D4CFC4; margin-bottom: 30px; text-align: center; }
-    .schedule-title { font-size: 28px; color: #4A5D3A; margin-bottom: 10px; font-family: Georgia, serif; }
-    .schedule-summary { display: flex; justify-content: center; gap: 40px; margin-top: 20px; flex-wrap: wrap; }
-    .summary-item { text-align: center; }
-    .summary-number { font-size: 32px; font-weight: bold; color: #C9A961; font-family: Georgia, serif; }
-    .summary-label { font-size: 14px; color: #6B6B5E; font-family: Georgia, serif; }
-    
-    .timeline { position: relative; padding-left: 30px; }
-    .timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: #D4CFC4; }
-    
-    .timeline-item { position: relative; margin-bottom: 25px; background: white; border-radius: 12px; padding: 20px; border: 1px solid #D4CFC4; transition: all 0.2s; }
-    .timeline-item:hover { box-shadow: 0 4px 12px rgba(74, 93, 58, 0.1); border-color: #C9A961; }
-    .timeline-item.completed { opacity: 0.7; background: #F5F1E8; }
-    .timeline-item.completed .timeline-date { background: #4A5D3A; color: white; }
-    
-    .timeline-dot { position: absolute; left: -26px; top: 20px; width: 14px; height: 14px; border-radius: 50%; background: #C9A961; border: 3px solid #FAF7F0; }
-    .timeline-item.completed .timeline-dot { background: #4A5D3A; }
-    
-    .timeline-date { display: inline-block; background: #E8E4D8; color: #4A5D3A; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-family: Georgia, serif; margin-bottom: 10px; }
-    .timeline-time { font-size: 14px; color: #6B6B5E; margin-bottom: 8px; font-family: Georgia, serif; }
-    .timeline-task { font-size: 16px; color: #2C2C2C; font-family: Georgia, serif; margin-bottom: 10px; }
-    .timeline-task strong { color: #C9A961; }
-    
-    .btn-complete { background: #4A5D3A; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: Georgia, serif; font-size: 14px; transition: background 0.2s; }
-    .btn-complete:hover { background: #3A4A2D; }
-    
-    .btn-uncomplete {
-        background: #F5F1E8;
-        color: #4A5D3A;
-        border: 1px solid #D4CFC4;
-        padding: 8px 16px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-family: Georgia, serif;
-        font-size: 14px;
-        transition: all 0.2s;
-    }
-    .btn-uncomplete:hover {
-        background: #E8E4D8;
-        border-color: #C9A961;
-    }
-    
-    .completed-badge { color: #4A5D3A; font-weight: bold; font-family: Georgia, serif; }
-    
-    .no-schedule { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; border: 2px dashed #D4CFC4; }
-    .no-schedule h3 { color: #4A5D3A; font-family: Georgia, serif; margin-bottom: 15px; }
-    .no-schedule p { color: #6B6B5E; margin-bottom: 20px; }
-    
-    .question-item {
-        transition: background 0.2s;
-        padding: 8px;
-        border-radius: 6px;
-        margin-bottom: 8px;
-    }
-    .question-item:hover {
-        background: #FAF7F0;
-    }
-    .question-number {
-        color: #6B6B5E;
-        font-size: 12px;
-        margin-right: 5px;
-    }
-    .question-answer {
-        margin-top: 5px;
-        padding: 5px 8px;
-        background: #F0F4FF;
-        border-radius: 4px;
-        font-size: 13px;
-    }
-    .answer-label {
-        color: #667eea;
-        font-weight: bold;
-    }
-</style>
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/schedule.css') }}">
+{% endblock %}
 
+{% block body %}
 <div class="schedule-page">
-    <a href="{{ path('app_exams') }}" class="back-link">← Назад к экзаменам</a>
+    <a href="{{ path('app_exams') }}" class="back-link">
+        <svg class="back-icon" viewBox="0 0 24 24" width="18" height="18">
+            <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Назад к экзаменам
+    </a>
     
     <div class="schedule-header">
         <h1 class="schedule-title">Расписание подготовки к "{{ exam.name }}"</h1>
@@ -118,12 +49,20 @@
                             'Fri': 'Пт', 'Sat': 'Сб', 'Sun': 'Вс'
                         }) }}
                     </div>
-                    <div class="timeline-time">⏰ {{ schedule.startTime|date('H:i') }} – {{ schedule.endTime|date('H:i') }}</div>
+                    <div class="timeline-time">
+                        <svg class="time-icon" viewBox="0 0 24 24" width="16" height="16">
+                            <path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                        {{ schedule.startTime|date('H:i') }} – {{ schedule.endTime|date('H:i') }}
+                    </div>
                     <div class="timeline-task">
+                        <svg class="task-icon" viewBox="0 0 24 24" width="16" height="16">
+                            <path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+                        </svg>
                         <strong>{{ schedule.questionsCount }} вопросов</strong>
                         
                         {% if schedule.questionIds %}
-                            <div class="questions-list" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #E8E4D8;">
+                            <div class="questions-list">
                                 {% for questionId in schedule.questionIds %}
                                     {% if allQuestions[questionId] is defined %}
                                         <div class="question-item">
@@ -143,16 +82,31 @@
                     </div>
                     
                     {% if not schedule.isCompleted %}
-                        <form method="post" action="{{ path('app_schedule_complete', {id: schedule.id}) }}" style="display: inline;">
+                        <form method="post" action="{{ path('app_schedule_complete', {id: schedule.id}) }}" class="inline-form">
                             <input type="hidden" name="_token" value="{{ csrf_token('schedule_action') }}">
-                            <button type="submit" class="btn-complete">✓ Отметить как выполненное</button>
+                            <button type="submit" class="btn-complete">
+                                <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16">
+                                    <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                                Отметить как выполненное
+                            </button>
                         </form>
                     {% else %}
-                        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                            <span class="completed-badge">✓ Выполнено</span>
-                            <form method="post" action="{{ path('app_schedule_uncomplete', {id: schedule.id}) }}" style="display: inline;">
+                        <div class="completed-actions">
+                            <span class="completed-badge">
+                                <svg class="badge-icon" viewBox="0 0 24 24" width="16" height="16">
+                                    <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                                Выполнено
+                            </span>
+                            <form method="post" action="{{ path('app_schedule_uncomplete', {id: schedule.id}) }}" class="inline-form">
                                 <input type="hidden" name="_token" value="{{ csrf_token('schedule_action') }}">
-                                <button type="submit" class="btn-uncomplete">↺ Вернуть в невыполненные</button>
+                                <button type="submit" class="btn-uncomplete">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16">
+                                        <path fill="currentColor" d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>
+                                    </svg>
+                                    Вернуть в невыполненные
+                                </button>
                             </form>
                         </div>
                     {% endif %}
@@ -163,7 +117,12 @@
         <div class="no-schedule">
             <h3>Расписание ещё не составлено</h3>
             <p>Нажмите кнопку "Составить расписание" на странице экзамена</p>
-            <a href="{{ path('app_exams') }}" class="back-link">← Вернуться к экзаменам</a>
+            <a href="{{ path('app_exams') }}" class="back-link">
+                <svg class="back-icon" viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Вернуться к экзаменам
+            </a>
         </div>
     {% endif %}
 </div>
