@@ -156,7 +156,6 @@
     margin-bottom: 20px;
 }
 
-/* Добавлена поддержка иконок */
 .btn-upload {
     background: var(--color-primary);
     color: white;
@@ -315,7 +314,6 @@
     word-wrap: break-word;
 }
 
-/* Добавлена поддержка иконок */
 .download-link {
     display: inline-flex;
     align-items: center;
@@ -656,7 +654,6 @@ select.form-control:focus {
     opacity: 0.7;
 }
 
-/* Добавлена поддержка иконок */
 .questions-save-btn {
     display: inline-flex;
     align-items: center;
@@ -719,9 +716,6 @@ select.form-control:focus {
     transform: translateX(3px);
 }
 
-/* ============================================
-   АДАПТИВНОСТЬ
-   ============================================ */
 @media (max-width: 768px) {
     .upload-grid {
         grid-template-columns: 1fr;

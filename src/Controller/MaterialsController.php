@@ -62,7 +62,16 @@ class MaterialsController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
-            $questionsText = $request->request->get('questions');
+            $questionsText = $request->request->get('questions', '');
+            
+            $validationErrors = $this->validateQuestionsFormat($questionsText);
+            
+            if (!empty($validationErrors)) {
+                $errorMessage = implode('<br>', $validationErrors);
+                $this->addFlash('error', $errorMessage);
+                
+                return $this->redirectToRoute('app_questions_add', ['id' => $material->getId()]);
+            }
             
             $lines = array_filter(array_map('trim', explode("\n", $questionsText)));
             
@@ -143,5 +152,36 @@ class MaterialsController extends AbstractController
 
         $this->addFlash('success', 'Материал и все его вопросы удалены');
         return $this->redirectToRoute('app_materials');
+    }
+
+    private function validateQuestionsFormat(string $text): array
+    {
+        $errors = [];
+        $lines = explode("\n", $text);
+
+        foreach ($lines as $index => $line) {
+            $lineNumber = $index + 1;
+            $trimmedLine = trim($line);
+
+            if ($trimmedLine === '') {
+                continue;
+            }
+
+            $pipeCount = substr_count($trimmedLine, '|');
+            if ($pipeCount > 1) {
+                $errors[] = "Строка {$lineNumber}: найдено {$pipeCount} символов \"|\". Допускается только один.";
+            }
+
+            $answerCount = preg_match_all('/ответ:/i', $trimmedLine);
+            if ($answerCount > 1) {
+                $errors[] = "Строка {$lineNumber}: найдено {$answerCount} слов \"Ответ:\". Допускается только одно.";
+            }
+
+            if ($pipeCount > 0 && $answerCount > 0) {
+                $errors[] = "Строка {$lineNumber}: нельзя использовать \"|\" и \"Ответ:\" одновременно. Выберите один разделитель.";
+            }
+        }
+
+        return $errors;
     }
 }
