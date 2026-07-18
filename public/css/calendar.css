@@ -1,20 +1,3 @@
-:root {
-    --color-primary: #4A5D3A;
-    --color-primary-dark: #3A4A2D;
-    --color-accent: #C9A961;
-    --color-bg: #F5F1E8;
-    --color-bg-light: #FAF7F0;
-    --color-bg-secondary: #E8E4D8;
-    --color-border: #D4CFC4;
-    --color-text: #2C2C2C;
-    --color-text-secondary: #6B6B5E;
-    --color-text-muted: #94A3B8;
-    --shadow-light: rgba(74, 93, 58, 0.1);
-    --shadow-dark: rgba(0, 0, 0, 0.15);
-    --shadow-modal: rgba(0, 0, 0, 0.2);
-    --overlay: rgba(0, 0, 0, 0.5);
-}
-
 .calendar-page {
     font-family: Georgia, 'Times New Roman', serif;
     background: var(--color-bg);
@@ -359,14 +342,6 @@
     color: var(--color-text-muted);
 }
 
-.empty-state {
-    text-align: center;
-    color: var(--color-text-muted);
-    padding: 40px 20px;
-    font-family: Georgia, serif;
-    font-size: 15px;
-}
-
 .modal {
     display: none;
     position: fixed;
@@ -452,23 +427,6 @@
     color: var(--color-bg-light);
     font-weight: bold;
     border: 2px solid var(--color-primary);
-}
-
-.day-cell.exam-day:hover {
-    background: #B8984F;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(201, 169, 97, 0.3);
-}
-
-.day-cell.exam-day .task-dot {
-    background: var(--color-bg-light);
-}
-
-.day-cell.exam-day {
-    background: var(--color-accent);
-    color: var(--color-bg-light);
-    font-weight: bold;
-    border: 2px solid var(--color-primary);
     flex-direction: column;
     padding: 8px 6px;
 }
@@ -483,20 +441,21 @@
     background: var(--color-bg-light);
 }
 
+.day-cell.exam-day .day-number {
+    font-size: 18px;
+}
+
 .exam-label {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: bold;
     text-align: center;
-    line-height: 1.2;
-    margin-top: 4px;
+    line-height: 1.1;
+    margin-top: 2px;
     word-wrap: break-word;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
     max-width: 100%;
     color: var(--color-bg-light);
     font-family: Georgia, serif;
-}
-
-.day-cell.exam-day .day-number {
-    font-size: 18px;
+    display: block;
+    width: 100%;
 }

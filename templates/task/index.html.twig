@@ -7,11 +7,11 @@
     <div class="tasks-header">
         <h1 class="tasks-title">Мои задачи</h1>
         <div class="header-actions">
-            <button id="bulkModeBtn" class="btn-bulk-mode">Выбрать для удаления</button>
-            <button id="bulkDeleteBtn" class="btn-delete-bulk" style="display: none;">
+            <button id="bulkModeBtn" class="btn-outline-primary">Выбрать для удаления</button>
+            <button id="bulkDeleteBtn" class="btn-outline-danger" style="display: none;">
                 Удалить выбранные (<span id="selectedCount">0</span>)
             </button>
-            <button id="cancelBulkBtn" class="btn-cancel-bulk" style="display: none;">Отмена</button>
+            <button id="cancelBulkBtn" class="btn-outline-secondary" style="display: none;">Отмена</button>
             <a href="{{ path('app_task_new') }}" class="btn-add">+ Добавить задачу</a>
         </div>
     </div>
@@ -48,7 +48,7 @@
                 <div class="task-actions normal-mode">
                     <form method="post" action="{{ path('app_task_delete', {id: task.id}) }}" onsubmit="return confirm('Удалить эту задачу?');" class="delete-form">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_task_' ~ task.id) }}">
-                        <button type="submit" class="btn-delete-single">Удалить</button>
+                        <button type="submit" class="btn-outline-neutral">Удалить</button>
                     </form>
                 </div>
             </div>

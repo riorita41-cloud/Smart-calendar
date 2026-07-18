@@ -14,15 +14,13 @@ if (dropZone && fileInput) {
     
     ['dragenter', 'dragover'].forEach(eventName => {
         dropZone.addEventListener(eventName, () => {
-            dropZone.style.borderColor = '#6366F1';
-            dropZone.style.background = '#E8E4FF';
+            dropZone.classList.add('drag-over');
         }, false);
     });
     
     ['dragleave', 'drop'].forEach(eventName => {
         dropZone.addEventListener(eventName, () => {
-            dropZone.style.borderColor = '#D4CFC4';
-            dropZone.style.background = '#FAF7F0';
+            dropZone.classList.remove('drag-over');
         }, false);
     });
     
@@ -41,7 +39,13 @@ if (dropZone && fileInput) {
     function updateFileList(files) {
         fileList.innerHTML = '<strong>Выбрано файлов:</strong><br>';
         for (let file of files) {
-            fileList.innerHTML += '📄 ' + file.name + '<br>';
+            fileList.innerHTML += `<span style="display:inline-flex; align-items:center; gap:6px; margin-bottom:4px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                ${file.name}
+            </span><br>`;
         }
     }
 }

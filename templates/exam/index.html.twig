@@ -8,11 +8,15 @@
 {% endblock %}
 
 {% block body %}
-  
 <div class="exams-page">
     <div class="exams-header">
         <h1 class="exams-title">Мои экзамены</h1>
-        <a href="{{ path('app_exam_new') }}" class="btn-add">+ Добавить экзамен</a>
+        <a href="{{ path('app_exam_new') }}" class="btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Добавить экзамен
+        </a>
     </div>
     
     {% for message in app.flashes('success') %}
@@ -25,13 +29,26 @@
                 <div class="exam-info">
                     <h3>{{ exam.name }}</h3>
                     <div class="exam-meta">
-                        <span class="icon"></span>{{ exam.subject }}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        {{ exam.subject }}
                     </div>
                     <div class="exam-meta">
-                        <span class="icon"></span>{{ exam.examDate|date('d.m.Y') }}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/>
+                            <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/>
+                            <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        {{ exam.examDate|date('d.m.Y') }}
                     </div>
                     <div class="exam-meta">
-                        <span class="icon"></span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="2"/>
+                        </svg>
                         {% set days = (exam.examDate|date('U') - 'now'|date('U')) / 86400 %}
                         {% if days > 0 %}
                             Осталось дней: {{ days|round(0, 'ceil') }}
@@ -43,19 +60,20 @@
                 
                 <form method="post" action="{{ path('app_exam_delete', {id: exam.id}) }}" 
                       onsubmit="return confirm('Удалить экзамен?');">
-                    
                     <input type="hidden" name="_token" value="{{ csrf_token('delete_exam_' ~ exam.id) }}">
-                    
-                    <button type="submit" class="btn-delete">Удалить</button>
+                    <button type="submit" class="btn-outline-danger">Удалить</button>
                 </form>
             </div>
         {% endfor %}
     {% else %}
         <div class="empty-state">
-            <div class="icon"></div>
-            <p>У вас пока нет экзаменоЫв</p>
-            <a href="{{ path('app_exam_new') }}" class="btn-add">Добавить первый экзамен</a>
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="1.5" style="margin-bottom: 20px;">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p>У вас пока нет экзаменов</p>
+            <a href="{{ path('app_exam_new') }}" class="btn-primary">Добавить первый экзамен</a>
         </div>
     {% endif %}
 </div>
-{% endblock %}Ы
+{% endblock %}

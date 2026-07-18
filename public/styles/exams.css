@@ -1,118 +1,84 @@
-  .exams-page {
-        font-family: Georgia, 'Times New Roman', serif;
-        background: #F5F1E8;
-        min-height: 100vh;
-        padding: 40px 20px;
-    }
-    
-    .exams-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        max-width: 800px;
-        margin: 0 auto 30px;
-    }
-    
-    .exams-title {
-        color: #4A5D3A;
-        font-size: 32px;
-        margin: 0;
-        font-family: Georgia, serif;
-    }
-    
-    .btn-add {
-        background: #4A5D3A;
-        color: #FAF7F0;
-        padding: 12px 24px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: background 0.2s;
-        font-family: Georgia, serif;
-    }
-    
-    .btn-add:hover {
-        background: #3A4A2D;
-    }
-    
-    .exam-card {
-        background: #FAF7F0;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 2px 8px rgba(74, 93, 58, 0.1);
-        margin-bottom: 20px;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: 1px solid #D4CFC4;
-    }
-    
-    .exam-info h3 {
-        color: #4A5D3A;
-        margin: 0 0 10px;
-        font-size: 22px;
-        font-family: Georgia, serif;
-    }
-    
-    .exam-meta {
-        color: #6B6B5E;
-        font-size: 15px;
-        margin-bottom: 5px;
-        font-family: Georgia, serif;
-    }
-    
-    .exam-meta .icon {
-        margin-right: 8px;
-    }
-    
-    .btn-delete {
-        background: #8B4513;
-        color: #FAF7F0;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        font-family: Georgia, serif;
-    }
-    
-    .btn-delete:hover {
-        background: #6B3410;
-    }
-    
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        background: #FAF7F0;
-        border-radius: 12px;
-        max-width: 800px;
-        margin: 0 auto;
-        border: 1px solid #D4CFC4;
-    }
-    
-    .empty-state .icon {
-        font-size: 64px;
-        margin-bottom: 20px;
-    }
-    
-    .empty-state p {
-        color: #6B6B5E;
-        font-size: 18px;
-        margin-bottom: 20px;
-        font-family: Georgia, serif;
-    }
-    
-    .flash-success {
-        background: #4A5D3A;
-        color: #FAF7F0;
-        padding: 15px 20px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        border-left: 4px solid #C9A961;
-    }
+.exams-page {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--color-bg);
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.exams-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto 30px;
+}
+
+.exams-title {
+    color: var(--color-primary);
+    font-size: 32px;
+    margin: 0;
+}
+
+.exam-card {
+    background: var(--color-bg-light);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 8px var(--shadow-light);
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    transition: all 0.2s;
+}
+
+.exam-card:hover {
+    box-shadow: 0 4px 12px var(--shadow-light);
+}
+
+.exam-info h3 {
+    color: var(--color-primary);
+    margin: 0 0 10px;
+    font-size: 22px;
+}
+
+.exam-meta {
+    color: var(--color-text-secondary);
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.exam-meta .icon {
+    margin-right: 8px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-bg-light);
+    border-radius: 12px;
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid var(--color-border);
+}
+
+.empty-state .icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    color: var(--color-primary);
+}
+
+.flash-success {
+    background: var(--color-success);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    border-left: 4px solid var(--color-accent);
+}

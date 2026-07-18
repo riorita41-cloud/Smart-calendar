@@ -8,7 +8,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #6366F1;
+    color: var(--color-primary);
     text-decoration: none;
     margin-bottom: 20px;
     font-family: Georgia, serif;
@@ -17,7 +17,7 @@
 }
 
 .back-link:hover {
-    color: #4F46E5;
+    color: var(--color-primary-dark);
     transform: translateX(-4px);
 }
 
@@ -30,19 +30,18 @@
 }
 
 .schedule-header {
-    background: #FAF7F0;
+    background: var(--color-bg-light);
     border-radius: 16px;
     padding: 30px;
-    border: 1px solid #D4CFC4;
+    border: 1px solid var(--color-border);
     margin-bottom: 30px;
     text-align: center;
 }
 
 .schedule-title {
     font-size: 28px;
-    color: #4A5D3A;
+    color: var(--color-primary);
     margin-bottom: 10px;
-    font-family: Georgia, serif;
 }
 
 .schedule-summary {
@@ -60,14 +59,12 @@
 .summary-number {
     font-size: 32px;
     font-weight: bold;
-    color: #C9A961;
-    font-family: Georgia, serif;
+    color: var(--color-accent);
 }
 
 .summary-label {
     font-size: 14px;
-    color: #6B6B5E;
-    font-family: Georgia, serif;
+    color: var(--color-text-secondary);
 }
 
 .timeline {
@@ -82,7 +79,7 @@
     top: 0;
     bottom: 0;
     width: 2px;
-    background: #D4CFC4;
+    background: var(--color-border);
 }
 
 .timeline-item {
@@ -91,22 +88,22 @@
     background: white;
     border-radius: 12px;
     padding: 20px;
-    border: 1px solid #D4CFC4;
+    border: 1px solid var(--color-border);
     transition: all 0.2s;
 }
 
 .timeline-item:hover {
-    box-shadow: 0 4px 12px rgba(74, 93, 58, 0.1);
-    border-color: #C9A961;
+    box-shadow: 0 4px 12px var(--shadow-light);
+    border-color: var(--color-accent);
 }
 
 .timeline-item.completed {
     opacity: 0.7;
-    background: #F5F1E8;
+    background: var(--color-bg);
 }
 
 .timeline-item.completed .timeline-date {
-    background: #4A5D3A;
+    background: var(--color-primary);
     color: white;
 }
 
@@ -117,22 +114,21 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: #C9A961;
-    border: 3px solid #FAF7F0;
+    background: var(--color-accent);
+    border: 3px solid var(--color-bg-light);
 }
 
 .timeline-item.completed .timeline-dot {
-    background: #4A5D3A;
+    background: var(--color-primary);
 }
 
 .timeline-date {
     display: inline-block;
-    background: #E8E4D8;
-    color: #4A5D3A;
+    background: var(--color-bg-secondary);
+    color: var(--color-primary);
     padding: 6px 12px;
     border-radius: 6px;
     font-weight: bold;
-    font-family: Georgia, serif;
     margin-bottom: 10px;
 }
 
@@ -141,36 +137,34 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #6B6B5E;
+    color: var(--color-text-secondary);
     margin-bottom: 8px;
-    font-family: Georgia, serif;
 }
 
 .time-icon {
-    color: #6B6B5E;
+    color: var(--color-text-secondary);
 }
 
 .timeline-task {
     font-size: 16px;
-    color: #2C2C2C;
-    font-family: Georgia, serif;
+    color: var(--color-text);
     margin-bottom: 10px;
 }
 
 .timeline-task strong {
-    color: #C9A961;
+    color: var(--color-accent);
 }
 
 .task-icon {
     vertical-align: middle;
     margin-right: 8px;
-    color: #C9A961;
+    color: var(--color-accent);
 }
 
 .questions-list {
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid #E8E4D8;
+    border-top: 1px solid var(--color-bg-secondary);
 }
 
 .question-item {
@@ -181,11 +175,11 @@
 }
 
 .question-item:hover {
-    background: #FAF7F0;
+    background: var(--color-bg-light);
 }
 
 .question-number {
-    color: #6B6B5E;
+    color: var(--color-text-secondary);
     font-size: 12px;
     margin-right: 5px;
 }
@@ -193,17 +187,16 @@
 .question-answer {
     margin-top: 5px;
     padding: 5px 8px;
-    background: #F0F4FF;
+    background: var(--color-bg-light);
     border-radius: 4px;
     font-size: 13px;
 }
 
 .answer-label {
-    color: #667eea;
+    color: var(--color-primary);
     font-weight: bold;
 }
 
-/* === Кнопки === */
 .inline-form {
     display: inline-block;
     margin: 0;
@@ -213,7 +206,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #4A5D3A;
+    background: var(--color-primary);
     color: white;
     border: none;
     padding: 8px 16px;
@@ -226,7 +219,7 @@
 }
 
 .btn-complete:hover {
-    background: #3A4A2D;
+    background: var(--color-primary-dark);
     transform: translateY(-1px);
 }
 
@@ -234,9 +227,9 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #F5F1E8;
-    color: #4A5D3A;
-    border: 1px solid #D4CFC4;
+    background: var(--color-bg);
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
@@ -247,8 +240,8 @@
 }
 
 .btn-uncomplete:hover {
-    background: #E8E4D8;
-    border-color: #C9A961;
+    background: var(--color-bg-secondary);
+    border-color: var(--color-accent);
 }
 
 .btn-icon {
@@ -271,32 +264,20 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: #4A5D3A;
+    color: var(--color-primary);
     font-weight: bold;
-    font-family: Georgia, serif;
 }
 
 .badge-icon {
-    color: #4A5D3A;
+    color: var(--color-primary);
 }
 
-/* === Нет расписания === */
-.no-schedule {
-    text-align: center;
-    padding: 60px 20px;
-    background: white;
-    border-radius: 12px;
-    border: 2px dashed #D4CFC4;
-}
-
-.no-schedule h3 {
-    color: #4A5D3A;
-    font-family: Georgia, serif;
-    margin-bottom: 15px;
-}
-
-.no-schedule p {
-    color: #6B6B5E;
-    margin-bottom: 20px;
-    font-family: Georgia, serif;
+@media (max-width: 640px) {
+    .schedule-summary {
+        gap: 20px;
+    }
+    
+    .summary-number {
+        font-size: 24px;
+    }
 }
