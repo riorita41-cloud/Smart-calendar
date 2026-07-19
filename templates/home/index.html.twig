@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block body %}
-{# Скрытый блок с данными для JS #}
 <div id="avatar-config" 
      data-seed="{{ avatar.seed ?? app.user?.email ?? 'default@example.com' }}"
      data-skin="{{ avatar.skinColor ?? 'edb98a' }}"
@@ -39,15 +38,38 @@
 
     <div class="stats-row">
         <div class="card timer-card">
-            <h3 class="timer-title">Таймер подготовки</h3>
-            <div class="timer-circle">
-                <svg width="150" height="150">
-                    <circle class="bg" cx="75" cy="75" r="65"></circle>
-                    <circle class="fill" cx="75" cy="75" r="65" stroke-dasharray="408.4" stroke-dashoffset="408.4"></circle>
-                </svg>
-                <div class="timer-display" id="timer">45:00</div>
+            <h3 class="timer-title"> Pomodoro Таймер</h3>
+            
+            <div class="timer-mode work" id="timer-mode">
+                <span class="mode-text">Режим: Работа</span>
             </div>
-            <button class="btn-start" id="startTimer">Начать</button>
+            
+            <div class="timer-display" id="timer-display">25:00</div>
+            
+            {# === ДОБАВЛЕНО: Точки прогресса цикла (4 сессии) === #}
+            <div class="cycle-dots" id="cycle-dots">
+                <span class="cycle-dot active"></span>
+                <span class="cycle-dot"></span>
+                <span class="cycle-dot"></span>
+                <span class="cycle-dot"></span>
+            </div>
+            <div class="cycle-info" id="cycle-info">Сессия 1 из 4</div>
+            
+            <div class="timer-controls">
+                <button id="start-btn" class="btn-start">Старт</button>
+                <button id="pause-btn" class="btn-pause" style="display: none;">Пауза</button>
+                <button id="reset-btn" class="btn-reset">Сброс</button>
+            </div>
+            
+            <div class="timer-stats">
+                <span>Сегодня завершено сессий: </span>
+                {% set todayStr = 'now'|date('Y-m-d') %}
+                <strong id="sessions-count">
+                    {{ user.studySessions|filter(s => s.finishedAt is not null and s.finishedAt.format('Y-m-d') == todayStr and s.isCompleted)|length }}
+                </strong>
+            </div>
+            
+            <div id="timer-message" class="timer-message" style="display: none;"></div>
         </div>
         
         <div class="card days-card">
@@ -55,18 +77,35 @@
             <div class="days-circle">
                 <div class="days-number">{{ daysToExam ?? '-' }}</div>
             </div>
+            {% if nearestExam %}
+                <div class="days-exam-name">{{ nearestExam.name }}</div>
+            {% endif %}
         </div>
     </div>
     
     <div class="card avatar-card">
         <h3 class="avatar-title">Ваш аватар</h3>
         <div class="avatar-circle" id="user-avatar"></div>
+        
         <div class="level-info">
-            <div class="level-text">Уровень 5</div>
-            <div class="xp-text">1,240 / 1,500 XP</div>
-            <div class="xp-bar"><div class="xp-fill" style="width: 82.67%"></div></div>
+            {% set titles = {1: 'Новичок', 2: 'Ученик', 3: 'Старательный', 4: 'Знающий', 5: 'Подготовленный', 6: 'Уверенный', 7: 'Эксперт', 8: 'Мастер', 9: 'Гуру', 10: 'Легенда'} %}
+            {% set currentTitle = titles[user.level] ?? 'Легенда' %}
+            
+            {% set prevLevelXp = ((user.level - 1) ** 2) * 100 %}
+            {% set nextLevelXp = (user.level ** 2) * 100 %}
+            {% set levelRange = nextLevelXp - prevLevelXp %}
+            {% set currentLevelXp = user.xp - prevLevelXp %}
+            {% set xpPercent = levelRange > 0 ? (currentLevelXp / levelRange * 100) : 100 %}
+            
+            <div class="level-text">Уровень {{ user.level }} — {{ currentTitle }}</div>
+            <div class="xp-text">{{ user.xp }} / {{ nextLevelXp }} XP</div>
+            <div class="xp-bar">
+                <div class="xp-fill" style="width: {{ xpPercent }}%"></div>
+            </div>
+            <div class="streak-text"> Серия дней: {{ user.streakDays }}</div>
         </div>
-        <a href="{{ path('app_avatar') }}" style="color: #4A5D3A;">Настроить аватар</a>
+        
+        <a href="{{ path('app_avatar') }}" class="btn-configure-avatar">Настроить аватар</a>
     </div>
 </div>
 {% endblock %}
@@ -74,4 +113,6 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="module" src="{{ asset('js/dashboard.js') }}"></script>
+    
+    <script src="{{ asset('js/pomodoro.js') }}"></script>
 {% endblock %}

@@ -73,6 +73,10 @@
 .timer-card, .days-card {
     flex: 1;
     text-align: center;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .timer-title, .days-title {
@@ -144,6 +148,7 @@
     align-items: center;
     justify-content: center;
     background: var(--color-bg-light);
+    flex-shrink: 0;
 }
 
 .days-number {
@@ -301,4 +306,284 @@
     .stats-row {
         flex-direction: column;
     }
+}
+
+.timer-display {
+    font-size: 56px;
+    font-weight: bold;
+    color: var(--color-text);
+    font-family: 'Courier New', monospace; 
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+    position: static; 
+    transform: none;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn-start, .btn-pause, .btn-reset {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: Georgia, serif;
+}
+
+.btn-start {
+    background: var(--color-primary);
+    color: var(--color-bg-light);
+}
+.btn-start:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-pause {
+    background: var(--color-accent);
+    color: white;
+}
+.btn-pause:hover {
+    background: #B8984F;
+    transform: translateY(-2px);
+}
+
+.btn-reset {
+    background: transparent;
+    border: 2px solid var(--color-border);
+    color: var(--color-text-secondary);
+}
+.btn-reset:hover {
+    border-color: var(--color-error);
+    color: var(--color-error);
+    transform: translateY(-2px);
+}
+
+.timer-stats {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+}
+
+.timer-stats strong {
+    color: var(--color-primary);
+    font-size: 18px;
+}
+
+.timer-message {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: Georgia, serif;
+    animation: fadeIn 0.3s ease;
+}
+
+.timer-message.success {
+    background: rgba(144, 204, 116, 0.2);
+    color: #2d6a24;
+    border: 1px solid #90cc74;
+}
+
+.timer-message.error {
+    background: var(--color-error-light);
+    color: #991b1b;
+    border: 1px solid var(--color-error-lighter);
+}
+
+.timer-message.info {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.level-info {
+    margin-bottom: 24px;
+}
+
+.level-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+    font-family: Georgia, serif;
+}
+
+.xp-text {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+}
+
+.xp-bar {
+    width: 100%;
+    height: 12px;
+    background: var(--color-bg-secondary);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-primary) 100%);
+    transition: width 0.5s ease;
+}
+
+.streak-text {
+    font-size: 15px;
+    color: var(--color-accent);
+    font-weight: bold;
+    font-family: Georgia, serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.btn-configure-avatar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid var(--color-border);
+    transition: all 0.2s;
+    font-family: Georgia, serif;
+}
+
+.btn-configure-avatar:hover {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.timer-mode {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 15px;
+    padding: 8px 16px;
+    background: var(--color-bg-secondary);
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+    transition: all 0.3s;
+    font-family: Georgia, serif;
+    width: fit-content;
+}
+
+.timer-mode.work {
+    background: rgba(74, 93, 58, 0.15);
+    color: var(--color-primary);
+}
+
+.timer-mode.short-break {
+    background: rgba(100, 149, 237, 0.15);
+    color: #4a6fa5;
+}
+
+.timer-mode.long-break {
+    background: rgba(201, 169, 97, 0.2);
+    color: #7a5f15;
+}
+
+.timer-mode svg {
+    flex-shrink: 0;
+}
+
+.mode-text {
+    white-space: nowrap;
+}
+
+.cycle-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0 8px;
+}
+
+.cycle-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    transition: all 0.3s;
+}
+
+.cycle-dot.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: scale(1.2);
+}
+
+.cycle-dot.completed {
+    background: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.cycle-info {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    text-align: center;
+    font-family: Georgia, serif;
+    margin-bottom: 15px;
+}
+
+.timer-card.break-mode .timer-display {
+    color: #4a6fa5;
+}
+
+.timer-card.long-break-mode .timer-display {
+    color: #7a5f15;
+}
+
+.timer-message.level-up {
+    background: rgba(201, 169, 97, 0.15);
+    color: #7a5f15;
+    border: 2px solid var(--color-accent);
+    font-weight: bold;
+    text-align: center;
+    animation: levelUpPulse 1.5s ease-in-out;
+}
+
+@keyframes levelUpPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(201, 169, 97, 0); }
+    50% { transform: scale(1.03); box-shadow: 0 0 15px rgba(201, 169, 97, 0.4); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(201, 169, 97, 0); }
+}
+
+.days-exam-name {
+    margin-top: 15px;
+    font-size: 15px;
+    color: var(--color-text);
+    font-weight: 600;
+    font-family: Georgia, serif;
+    text-align: center;
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    padding: 0 10px;
 }

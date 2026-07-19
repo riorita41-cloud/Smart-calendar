@@ -187,3 +187,41 @@
         font-size: 22px;
     }
 }
+
+.form-actions {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: end;
+    margin-top: 40px;
+    gap: 20px;
+}
+
+.btn-back {
+    grid-column: 1;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: color 0.2s;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+}
+
+.btn-back:hover {
+    color: var(--color-primary);
+}
+
+.btn-submit {
+    grid-column: 2;
+    justify-self: center;
+    width: 100%;
+    max-width: 280px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}

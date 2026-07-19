@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use App\Entity\StudyTask;
 use App\Entity\Avatar;
+use App\Entity\StudySchedule; 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,6 +35,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(options: ['default' => 0])]
+    private int $xp = 0;
+
+    #[ORM\Column(options: ['default' => 1])]
+    private int $level = 1;
+
+    #[ORM\Column(options: ['default' => 0])]
+    private int $streakDays = 0;
+
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $lastActivityDate = null;
+    // ==========================================
+    #[ORM\OneToMany(targetEntity: XpLog::class, mappedBy: 'user', cascade: ['persist'])]
+    private Collection $xpLogs;
+
+    #[ORM\OneToMany(targetEntity: StudySession::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private Collection $studySessions;
+
     #[ORM\OneToMany(targetEntity: Exam::class, mappedBy: 'user')]
     private Collection $exams;
 
@@ -43,17 +62,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(targetEntity: Avatar::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Avatar $avatar = null;
 
-    /**
-     * @var Collection<int, ExamMaterial>
-     */
     #[ORM\OneToMany(targetEntity: ExamMaterial::class, mappedBy: 'user')]
     private Collection $examMaterials;
+
+    #[ORM\OneToMany(targetEntity: StudySchedule::class, mappedBy: 'user')]
+    private Collection $studySchedules;
 
     public function __construct()
     {
         $this->exams = new ArrayCollection();
         $this->studyTasks = new ArrayCollection();
         $this->examMaterials = new ArrayCollection();
+        $this->xpLogs = new ArrayCollection();
+        $this->studySessions = new ArrayCollection();
+        
+        // ДОБАВЛЕНО: Инициализация новой коллекции
+        $this->studySchedules = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,6 +178,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function removeStudyTask(StudyTask $studyTask): static
+    {
+        if ($this->studyTasks->removeElement($studyTask)) {
+            if ($studyTask->getUser() === $this) {
+                $studyTask->setUser(null);
+            }
+        }
+        return $this;
+    }
     
     public function getAvatar(): ?Avatar
     {
@@ -166,19 +199,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeStudyTask(StudyTask $studyTask): static
-    {
-        if ($this->studyTasks->removeElement($studyTask)) {
-            if ($studyTask->getUser() === $this) {
-                $studyTask->setUser(null);
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ExamMaterial>
-     */
     public function getExamMaterials(): Collection
     {
         return $this->examMaterials;
@@ -190,19 +210,138 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->examMaterials->add($examMaterial);
             $examMaterial->setUser($this);
         }
-
         return $this;
     }
 
     public function removeExamMaterial(ExamMaterial $examMaterial): static
     {
         if ($this->examMaterials->removeElement($examMaterial)) {
-            // set the owning side to null (unless already changed)
             if ($examMaterial->getUser() === $this) {
                 $examMaterial->setUser(null);
             }
         }
+        return $this;
+    }
 
+    public function getXp(): int
+    {
+        return $this->xp;
+    }
+
+    public function setXp(int $xp): static
+    {
+        $this->xp = $xp;
+        return $this;
+    }
+
+    public function addXp(int $amount): static
+    {
+        $this->xp += $amount;
+        return $this;
+    }
+
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level): static
+    {
+        $this->level = $level;
+        return $this;
+    }
+
+    public function getStreakDays(): int
+    {
+        return $this->streakDays;
+    }
+
+    public function setStreakDays(int $streakDays): static
+    {
+        $this->streakDays = $streakDays;
+        return $this;
+    }
+
+    public function getLastActivityDate(): ?\DateTimeInterface
+    {
+        return $this->lastActivityDate;
+    }
+
+    public function setLastActivityDate(?\DateTimeInterface $lastActivityDate): static
+    {
+        $this->lastActivityDate = $lastActivityDate;
+        return $this;
+    }
+
+    public function getXpLogs(): Collection
+    {
+        return $this->xpLogs;
+    }
+
+    public function addXpLog(XpLog $xpLog): static
+    {
+        if (!$this->xpLogs->contains($xpLog)) {
+            $this->xpLogs->add($xpLog);
+            $xpLog->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeXpLog(XpLog $xpLog): static
+    {
+        if ($this->xpLogs->removeElement($xpLog)) {
+            if ($xpLog->getUser() === $this) {
+                $xpLog->setUser(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getStudySessions(): Collection
+    {
+        return $this->studySessions;
+    }
+
+    public function addStudySession(StudySession $studySession): static
+    {
+        if (!$this->studySessions->contains($studySession)) {
+            $this->studySessions->add($studySession);
+            $studySession->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeStudySession(StudySession $studySession): static
+    {
+        if ($this->studySessions->removeElement($studySession)) {
+            if ($studySession->getUser() === $this) {
+                $studySession->setUser(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getStudySchedules(): Collection
+    {
+        return $this->studySchedules;
+    }
+
+    public function addStudySchedule(StudySchedule $studySchedule): static
+    {
+        if (!$this->studySchedules->contains($studySchedule)) {
+            $this->studySchedules->add($studySchedule);
+            $studySchedule->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeStudySchedule(StudySchedule $studySchedule): static
+    {
+        if ($this->studySchedules->removeElement($studySchedule)) {
+            if ($studySchedule->getUser() === $this) {
+                $studySchedule->setUser(null);
+            }
+        }
         return $this;
     }
 }

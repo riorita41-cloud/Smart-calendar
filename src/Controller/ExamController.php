@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Exam;
-use App\Entity\Question; // ДОБАВЛЕНО
+use App\Entity\Question;
 use App\Entity\StudySchedule;
 use App\Form\ExamType;
 use App\Service\ScheduleGenerator;
+use App\Service\XpService; 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -124,7 +125,8 @@ class ExamController extends AbstractController
         int $id,
         Request $request,
         EntityManagerInterface $entityManager,
-        StudySchedule $schedule
+        StudySchedule $schedule,
+        XpService $xpService 
     ): Response {
         if ($schedule->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('Доступ запрещён');
@@ -135,10 +137,8 @@ class ExamController extends AbstractController
             throw $this->createAccessDeniedException('Неверный токен безопасности');
         }
 
-        // 1. Отмечаем день расписания как выполненный
         $schedule->setIsCompleted(true);
         
-        // 2. ДОБАВЛЕНО: Отмечаем все вопросы этого дня как выученные в базе данных
         $questionIds = $schedule->getQuestionIds() ?? [];
         if (!empty($questionIds)) {
             $questionRepo = $entityManager->getRepository(Question::class);
@@ -152,7 +152,15 @@ class ExamController extends AbstractController
         
         $entityManager->flush();
 
-        $this->addFlash('success', 'Занятие и все его вопросы отмечены как выученные!');
+        $user = $this->getUser();
+        $xpResult = $xpService->awardXp($user, 30, 'schedule_day_completed');
+        
+        if ($xpResult['leveledUp']) {
+            $this->addFlash('success', "🎉 Поздравляем! Вы достигли уровня {$xpResult['newLevel']} ({$xpResult['title']}) и получили +{$xpResult['xpAdded']} XP!");
+        } else {
+            $this->addFlash('success', "Занятие и все его вопросы отмечены как выученные! +{$xpResult['xpAdded']} XP (Всего: {$xpResult['xp']} XP)");
+        }
+
         return $this->redirectToRoute('app_exam_schedule', ['id' => $schedule->getExam()->getId()]);
     }
 
@@ -172,10 +180,8 @@ class ExamController extends AbstractController
             throw $this->createAccessDeniedException('Неверный токен безопасности');
         }
 
-        // 1. Снимаем отметку с дня расписания
         $schedule->setIsCompleted(false);
         
-        // 2. ДОБАВЛЕНО: Снимаем отметку с вопросов этого дня (чтобы данные были синхронизированы)
         $questionIds = $schedule->getQuestionIds() ?? [];
         if (!empty($questionIds)) {
             $questionRepo = $entityManager->getRepository(Question::class);
