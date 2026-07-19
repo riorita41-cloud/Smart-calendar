@@ -90,3 +90,49 @@ function toggleDropdown(id) {
     });
     menu.classList.toggle('show');
 }
+
+function toggleStudied(questionId, btn) {
+    // Получаем CSRF токен из meta-тега (как в base.html.twig)
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    if (!csrfToken) {
+        alert('Ошибка безопасности: токен не найден');
+        return;
+    }
+    
+    const originalText = btn.textContent;
+    btn.textContent = '...';
+    btn.disabled = true;
+    
+    fetch('/api/question/' + questionId + '/toggle-studied', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const item = btn.closest('.tooltip-study-item');
+        
+        if (data.status === 'success') {
+            if (data.studied) {
+                item.classList.add('studied');
+                btn.textContent = '✓ Выучено';
+            } else {
+                item.classList.remove('studied');
+                btn.textContent = 'Отметить как выучено';
+            }
+        } else {
+            alert(data.message || 'Ошибка при обновлении');
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    })
+    .catch(err => {
+        console.error('Error:', err);
+        alert('Ошибка соединения');
+        btn.textContent = originalText;
+        btn.disabled = false;
+    });
+}

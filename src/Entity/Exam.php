@@ -46,8 +46,9 @@ class Exam
     #[ORM\OneToMany(mappedBy: 'exam', targetEntity: StudyTask::class, cascade: ['remove'])]
     private Collection $studyTasks;
 
-    #[ORM\OneToMany(mappedBy: 'exam', targetEntity: ExamMaterial::class)]
-    private Collection $materials;
+        #[ORM\OneToMany(mappedBy: 'exam', targetEntity: ExamMaterial::class, cascade: ['remove'], orphanRemoval: true)]
+        #[ORM\JoinColumn(onDelete: "CASCADE")]
+        private Collection $materials;
 
     public function __construct()
     {

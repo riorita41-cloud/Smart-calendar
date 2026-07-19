@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Exam;
+use App\Entity\Question; // ДОБАВЛЕНО
 use App\Entity\StudySchedule;
 use App\Form\ExamType;
 use App\Service\ScheduleGenerator;
@@ -70,7 +71,6 @@ class ExamController extends AbstractController
             throw $this->createNotFoundException('Экзамен не найден');
         }
         
-        // Проверка CSRF токена
         if (!$this->isCsrfTokenValid('generate_schedule_' . $exam->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Неверный токен безопасности');
         }
@@ -135,10 +135,24 @@ class ExamController extends AbstractController
             throw $this->createAccessDeniedException('Неверный токен безопасности');
         }
 
+        // 1. Отмечаем день расписания как выполненный
         $schedule->setIsCompleted(true);
+        
+        // 2. ДОБАВЛЕНО: Отмечаем все вопросы этого дня как выученные в базе данных
+        $questionIds = $schedule->getQuestionIds() ?? [];
+        if (!empty($questionIds)) {
+            $questionRepo = $entityManager->getRepository(Question::class);
+            foreach ($questionIds as $qId) {
+                $question = $questionRepo->find($qId);
+                if ($question) {
+                    $question->setStudied(true);
+                }
+            }
+        }
+        
         $entityManager->flush();
 
-        $this->addFlash('success', 'Занятие отмечено как выполненное!');
+        $this->addFlash('success', 'Занятие и все его вопросы отмечены как выученные!');
         return $this->redirectToRoute('app_exam_schedule', ['id' => $schedule->getExam()->getId()]);
     }
 
@@ -158,7 +172,21 @@ class ExamController extends AbstractController
             throw $this->createAccessDeniedException('Неверный токен безопасности');
         }
 
+        // 1. Снимаем отметку с дня расписания
         $schedule->setIsCompleted(false);
+        
+        // 2. ДОБАВЛЕНО: Снимаем отметку с вопросов этого дня (чтобы данные были синхронизированы)
+        $questionIds = $schedule->getQuestionIds() ?? [];
+        if (!empty($questionIds)) {
+            $questionRepo = $entityManager->getRepository(Question::class);
+            foreach ($questionIds as $qId) {
+                $question = $questionRepo->find($qId);
+                if ($question) {
+                    $question->setStudied(false);
+                }
+            }
+        }
+        
         $entityManager->flush();
 
         $this->addFlash('success', 'Занятие возвращено в невыполненные');

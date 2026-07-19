@@ -7,6 +7,7 @@ use App\Entity\Question;
 use App\Form\ExamMaterialType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -152,6 +153,28 @@ class MaterialsController extends AbstractController
 
         $this->addFlash('success', 'Материал и все его вопросы удалены');
         return $this->redirectToRoute('app_materials');
+    }
+
+    #[Route('/api/question/{id}/toggle-studied', name: 'api_question_toggle_studied', methods: ['POST'])]
+    public function toggleStudied(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $question = $entityManager->getRepository(Question::class)->find($id);
+        
+        if (!$question) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Вопрос не найден'], 404);
+        }
+        
+        if ($question->getMaterial()->getUser() !== $this->getUser()) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Нет доступа'], 403);
+        }
+        
+        $question->setStudied(!$question->isStudied());
+        $entityManager->flush();
+        
+        return new JsonResponse([
+            'status' => 'success',
+            'studied' => $question->isStudied(),
+        ]);
     }
 
     private function validateQuestionsFormat(string $text): array

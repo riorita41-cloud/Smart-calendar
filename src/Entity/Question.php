@@ -22,6 +22,9 @@ class Question
     #[ORM\Column]
     private int $orderNumber = 0;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $studied = false;
+
     #[ORM\ManyToOne(targetEntity: ExamMaterial::class, inversedBy: 'questions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ExamMaterial $material = null;
@@ -61,6 +64,17 @@ class Question
     public function setOrderNumber(int $orderNumber): static
     {
         $this->orderNumber = $orderNumber;
+        return $this;
+    }
+
+    public function isStudied(): bool
+    {
+        return $this->studied;
+    }
+
+    public function setStudied(bool $studied): static
+    {
+        $this->studied = $studied;
         return $this;
     }
 

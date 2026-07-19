@@ -39,24 +39,70 @@
                     {% for day in 1..daysInMonth %}
                         {% set dateStr = currentYear ~ '-' ~ (month < 10 ? '0'~month : month) ~ '-' ~ (day < 10 ? '0'~day : day) %}
                         {% set dayTasks = tasksByDay[dateStr] ?? [] %}
+                        {% set dayQuestions = studyQuestionsByDay[dateStr] ?? [] %}
                         <div class="day-cell {% if today.format('Y-m-d') == dateStr %}today{% endif %} {% if dateStr in examDates %}exam-day{% endif %}" 
                             onclick="openTaskModal('{{ dateStr }}')">
                             <span class="day-number">{{ day }}</span>
                             {% if dateStr in examDates %}
                                 <div class="exam-label">{{ examByDate[dateStr] }}</div>
                             {% endif %}
-                            {% if dayTasks is not empty %}<div class="task-dot"></div>{% endif %}
+                            {% if dayTasks is not empty or dayQuestions is not empty %}
+                                <div class="day-indicators">
+                                    {% if dayTasks is not empty %}
+                                        <div class="task-dot" title="Есть задачи"></div>
+                                    {% endif %}
+                                    {% if dayQuestions is not empty %}
+                                        <div class="question-dot" title="Есть вопросы для изучения"></div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
                             
                             <div class="day-tooltip">
                                 <div class="tooltip-title">Задачи на {{ dateStr }}</div>
-                                {% if dayTasks is empty %}
+    
+                                {% if dayTasks is empty and dayQuestions is empty %}
                                     <div class="tooltip-empty">Нет задач</div>
                                 {% else %}
-                                    {% for task in dayTasks %}
+                                    {% set maxTasks = 3 %}
+                                    {% for task in dayTasks|slice(0, maxTasks) %}
                                         <div class="tooltip-task-item {% if task.isCompleted %}done{% endif %}">
                                             {{ task.title }}
                                         </div>
                                     {% endfor %}
+        
+                                    {% if dayTasks|length > maxTasks %}
+                                        <div class="tooltip-more-items">
+                                            + ещё {{ dayTasks|length - maxTasks }} задач
+                                        </div>
+                                    {% endif %}
+        
+                                    {% if dayQuestions is not empty %}
+                                        <div class="tooltip-study-section">
+                                            <div class="tooltip-study-title">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                Выучить вопросы ({{ dayQuestions|length }}):
+                                            </div>
+                
+                                            {% set maxQuestions = 2 %}
+                                            {% for question in dayQuestions|slice(0, maxQuestions) %}
+                                                <div class="tooltip-study-item {% if question.completed %}studied{% endif %}">
+                                                    <div class="study-question-text">{{ question.text|length > 50 ? question.text|slice(0, 50) ~ '...' : question.text }}</div>
+                                                    {% if question.completed %}
+                                                        <span class="studied-badge">✓ Выучено</span>
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+                
+                                            {% if dayQuestions|length > maxQuestions %}
+                                                <div class="tooltip-more-items">
+                                                    + ещё {{ dayQuestions|length - maxQuestions }} вопросов
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>

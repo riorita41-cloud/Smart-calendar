@@ -36,6 +36,41 @@ class CalendarController extends AbstractController
             $examByDate[$dateKey] = $exam->getName();
         }
         
+        $studyQuestionsByDay = [];
+
+        foreach ($exams as $exam) {
+            $schedules = $exam->getStudySchedules();
+    
+            $allQuestions = [];
+            foreach ($exam->getMaterials() as $material) {
+                foreach ($material->getQuestions() as $question) {
+                    $allQuestions[$question->getId()] = $question;
+                }
+            }
+    
+            foreach ($schedules as $schedule) {
+                $dateKey = $schedule->getStudyDate()->format('Y-m-d');
+                $questionIds = $schedule->getQuestionIds() ?? [];
+        
+                if (!isset($studyQuestionsByDay[$dateKey])) {
+                    $studyQuestionsByDay[$dateKey] = [];
+                }
+        
+                foreach ($questionIds as $qId) {
+                    if (isset($allQuestions[$qId])) {
+                        $question = $allQuestions[$qId];
+                        $studyQuestionsByDay[$dateKey][] = [
+                            'id' => $question->getId(),
+                            'text' => $question->getText(),
+                            'answer' => $question->getAnswer(),
+                            'examName' => $exam->getName(),
+                            'completed' => $question->isStudied(),
+                        ];
+                    }
+                }
+            }
+        }
+        
         $monthNames = [
             1 => 'Январь', 2 => 'Февраль', 3 => 'Март', 4 => 'Апрель',
             5 => 'Май', 6 => 'Июнь', 7 => 'Июль', 8 => 'Август',
@@ -57,6 +92,7 @@ class CalendarController extends AbstractController
             'today'          => $today,
             'prevMonth'      => $currentMonth->modify('-1 month'),
             'nextMonth'      => $currentMonth->modify('+1 month'),
+            'studyQuestionsByDay' => $studyQuestionsByDay, 
         ]);
     }
 }
