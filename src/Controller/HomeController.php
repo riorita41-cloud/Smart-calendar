@@ -31,7 +31,21 @@ class HomeController extends AbstractController
             }
         }
         
-        $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
+        $totalQuestions = 0;
+        $studiedQuestions = 0;
+        
+        foreach ($exams as $exam) {
+            foreach ($exam->getMaterials() as $material) {
+                foreach ($material->getQuestions() as $question) {
+                    $totalQuestions++;
+                    if ($question->isStudied()) {
+                        $studiedQuestions++;
+                    }
+                }
+            }
+        }
+        
+        $progress = $totalQuestions > 0 ? round(($studiedQuestions / $totalQuestions) * 100) : 0;
         
         $nearestExam = null;
         $daysToExam = null;
@@ -62,6 +76,8 @@ class HomeController extends AbstractController
             'totalTasks' => $totalTasks,
             'completedTasks' => $completedTasks,
             'progress' => $progress,
+            'totalQuestions' => $totalQuestions,
+            'studiedQuestions' => $studiedQuestions,
             'nearestExam' => $nearestExam,
             'daysToExam' => $daysToExam,
             'todayTasks' => $todayTasks,

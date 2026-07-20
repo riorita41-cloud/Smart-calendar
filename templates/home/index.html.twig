@@ -18,7 +18,7 @@
 
 <div class="dashboard-grid">
     <div class="card task-of-day">
-        <h2 class="task-title">Задача дня</h2>
+        <h2 class="task-title">Задачи на сегодня</h2>
         {% if todayTasks|length > 0 %}
             <div class="task-list-container">
                 {% for task in todayTasks %}
@@ -27,13 +27,21 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="progress-container">
-                <div class="progress-bar"><div class="progress-fill" style="width: {{ progress }}%"></div></div>
-                <div class="progress-text">{{ progress }}% выполнено</div>
-            </div>
         {% else %}
             <div class="no-data">На сегодня задач нет</div>
         {% endif %}
+
+        <div class="progress-section">
+            {% if totalQuestions > 0 %}
+                <div class="progress-container">
+                    <div class="progress-bar"><div class="progress-fill" style="width: {{ progress }}%"></div></div>
+                    <div class="progress-text">{{ progress }}%</div>
+                </div>
+                <div class="progress-title">Прогресс изучения вопросов</div>
+            {% else %}
+                <div class="no-data" style="padding: 10px;">Добавьте вопросы к экзаменам</div>
+            {% endif %}
+        </div>
     </div>
 
     <div class="stats-row">
@@ -46,7 +54,6 @@
             
             <div class="timer-display" id="timer-display">25:00</div>
             
-            {# === ДОБАВЛЕНО: Точки прогресса цикла (4 сессии) === #}
             <div class="cycle-dots" id="cycle-dots">
                 <span class="cycle-dot active"></span>
                 <span class="cycle-dot"></span>
