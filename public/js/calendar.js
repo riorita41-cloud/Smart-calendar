@@ -5,14 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const titleInput = document.getElementById('taskTitle');
             const dateInput = document.getElementById('taskDate');
             const examSelect = document.getElementById('taskExam');
-            const csrfTokenInput = document.getElementById('csrf_token');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-            if (!titleInput || !dateInput || !csrfTokenInput) return;
+            if (!titleInput || !dateInput || !csrfToken) return;
 
             const title = titleInput.value.trim();
             const date = dateInput.value;
             const examId = examSelect ? examSelect.value : null;
-            const csrfToken = csrfTokenInput.value;
 
             if (!title) {
                 alert('Введите название задачи');
@@ -55,7 +54,7 @@ function openTaskModal(dateStr) {
 }
 
 function toggleTask(taskId) {
-    const csrfToken = document.getElementById('csrf_token')?.value;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     if (!csrfToken) {
         console.error('CSRF токен не найден');
         return;
@@ -92,7 +91,6 @@ function toggleDropdown(id) {
 }
 
 function toggleStudied(questionId, btn) {
-    // Получаем CSRF токен из meta-тега (как в base.html.twig)
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     
     if (!csrfToken) {
@@ -136,3 +134,32 @@ function toggleStudied(questionId, btn) {
         btn.disabled = false;
     });
 }
+
+let tooltipTimer;
+
+document.querySelectorAll('.day-cell').forEach(cell => {
+    const tooltip = cell.querySelector('.day-tooltip');
+    if (!tooltip) return;
+
+    cell.addEventListener('mouseenter', () => {
+        clearTimeout(tooltipTimer);
+        tooltip.style.visibility = 'visible';
+        tooltip.style.opacity = '1';
+    });
+
+    cell.addEventListener('mouseleave', () => {
+        tooltipTimer = setTimeout(() => {
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = '0';
+        }, 300);
+    });
+
+    tooltip.addEventListener('mouseenter', () => {
+        clearTimeout(tooltipTimer);
+    });
+
+    tooltip.addEventListener('mouseleave', () => {
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.opacity = '0';
+    });
+});

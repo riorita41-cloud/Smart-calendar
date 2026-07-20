@@ -251,7 +251,6 @@
     max-height: 350px;
     overflow-y: auto; 
     transition: opacity 0.25s, visibility 0.25s;
-    pointer-events: none;
 }
 
 .day-tooltip::-webkit-scrollbar {

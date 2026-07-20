@@ -63,6 +63,13 @@ class MaterialsController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
+            $token = $request->request->get('_token');
+            
+            if (!$this->isCsrfTokenValid('add_questions', $token)) {
+                $this->addFlash('error', 'Ошибка безопасности. Пожалуйста, обновите страницу и попробуйте снова.');
+                return $this->redirectToRoute('app_questions_add', ['id' => $material->getId()]);
+            }
+            
             $questionsText = $request->request->get('questions', '');
             
             $validationErrors = $this->validateQuestionsFormat($questionsText);
@@ -156,7 +163,7 @@ class MaterialsController extends AbstractController
     }
 
     #[Route('/api/question/{id}/toggle-studied', name: 'api_question_toggle_studied', methods: ['POST'])]
-    public function toggleStudied(int $id, EntityManagerInterface $entityManager): JsonResponse
+    public function toggleStudied(int $id, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $question = $entityManager->getRepository(Question::class)->find($id);
         
@@ -166,6 +173,12 @@ class MaterialsController extends AbstractController
         
         if ($question->getMaterial()->getUser() !== $this->getUser()) {
             return new JsonResponse(['status' => 'error', 'message' => 'Нет доступа'], 403);
+        }
+        
+        $token = $request->headers->get('X-CSRF-TOKEN');
+        
+        if (!$this->isCsrfTokenValid('question_toggle', $token)) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Недействительный токен безопасности'], 403);
         }
         
         $question->setStudied(!$question->isStudied());

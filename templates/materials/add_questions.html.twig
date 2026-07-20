@@ -53,7 +53,8 @@
     {% endfor %}
     
     <div class="questions-form-box">
-        <form method="post">
+        <form method="post" action="{{ path('app_questions_add', {id: material.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('add_questions') }}">
             <textarea name="questions" class="questions-textarea" placeholder="Вставьте ваши вопросы сюда...&#10;1. Первый вопрос? Ответ: Первый ответ&#10;2. Второй вопрос? | Второй ответ"></textarea>
             <button type="submit" class="questions-save-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
