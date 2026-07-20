@@ -9,10 +9,10 @@
 
 {% block body %}
 <div id="avatar-config" 
-     data-seed="{{ avatar.seed ?? app.user?.email ?? 'default@example.com' }}"
-     data-skin="{{ avatar.skinColor ?? 'edb98a' }}"
-     data-hair-color="{{ avatar.hairColor ?? '724133' }}"
-     data-hair-style="{{ avatar.hairStyle ?? 'long01' }}"
+     data-seed="{{ (avatar.seed ?? app.user?.email ?? 'default@example.com')|e('html_attr') }}"
+     data-skin="{{ (avatar.skinColor ?? 'edb98a')|e('html_attr') }}"
+     data-hair-color="{{ (avatar.hairColor ?? '724133')|e('html_attr') }}"
+     data-hair-style="{{ (avatar.hairStyle ?? 'long01')|e('html_attr') }}"
      style="display:none;">
 </div>
 

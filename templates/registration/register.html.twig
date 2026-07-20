@@ -17,19 +17,18 @@
         {% endfor %}
     {% endfor %}
     
-    {# ВАЖНО: выводим глобальные ошибки формы #}
     {{ form_errors(registrationForm) }}
     
     {{ form_start(registrationForm) }}
         <div class="form-group">
             {{ form_label(registrationForm.email, 'Email') }}
-            {{ form_widget(registrationForm.email, {'attr': {'autocomplete': 'email', 'class': 'form-control'}}) }}
+            {{ form_widget(registrationForm.email, {'attr': {'autocomplete': 'email', 'class': 'form-control', 'maxlength': '180'}}) }}
             {{ form_errors(registrationForm.email) }}
         </div>
         
         <div class="form-group">
             {{ form_label(registrationForm.plainPassword, 'Пароль') }}
-            {{ form_widget(registrationForm.plainPassword, {'attr': {'autocomplete': 'new-password', 'class': 'form-control'}}) }}
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'autocomplete': 'new-password', 'class': 'form-control', 'maxlength': '180'}}) }}
             {{ form_errors(registrationForm.plainPassword) }}
         </div>
 

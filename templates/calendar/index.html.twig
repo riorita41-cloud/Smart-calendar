@@ -41,7 +41,7 @@
                         {% set dayTasks = tasksByDay[dateStr] ?? [] %}
                         {% set dayQuestions = studyQuestionsByDay[dateStr] ?? [] %}
                         <div class="day-cell {% if today.format('Y-m-d') == dateStr %}today{% endif %} {% if dateStr in examDates %}exam-day{% endif %}" 
-                            onclick="openTaskModal('{{ dateStr }}')">
+                            onclick="openTaskModal('{{ dateStr|e('html_attr') }}')">
                             <span class="day-number">{{ day }}</span>
                             {% if dateStr in examDates %}
                                 <div class="exam-label">{{ examByDate[dateStr] }}</div>

@@ -13,7 +13,7 @@
     <h1 class="avatar-title">Настройка аватара</h1>
     
     <div id="avatar-data" 
-         data-seed="{{ avatar.seed ?? app.user.email }}" 
+         data-seed="{{ (avatar.seed ?? app.user.email)|e('html_attr') }}"
          style="display:none;">
     </div>
     
@@ -27,7 +27,7 @@
             <form method="post" action="{{ path('app_avatar_save') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('avatar_save') }}">
                 
-                <input type="hidden" name="seed" id="current-seed" value="{{ avatar.seed ?? app.user.email }}">
+                <input type="hidden" name="seed" id="current-seed" value="{{ (avatar.seed ?? app.user.email)|e('html_attr') }}">
                 
                 <button type="button" class="btn-random" onclick="generateRandomAvatar()">
                      Сгенерировать случайный аватар

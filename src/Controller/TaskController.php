@@ -94,6 +94,12 @@ class TaskController extends AbstractController
     #[Route('/api/task/quick-add', name: 'app_task_quick_add', methods: ['POST'])]
     public function quickAdd(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
+        $token = $request->headers->get('X-CSRF-TOKEN');
+        
+        if (!$token || !$this->isCsrfTokenValid('task_action', $token)) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Неверный токен безопасности'], 403);
+        }
+
         $data = json_decode($request->getContent(), true);
 
         if (empty($data['title'])) {
@@ -109,7 +115,7 @@ class TaskController extends AbstractController
         if (!empty($data['examId'])) {
             $exam = $entityManager->getRepository(Exam::class)->find($data['examId']);
             if (!$exam || $exam->getUser() !== $this->getUser()) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Экзамен не найден'], 404);
+                return new JsonResponse(['status' => 'error', 'message' => 'Экзамен не найден'], 404);
             }
             $task->setExam($exam);
         }

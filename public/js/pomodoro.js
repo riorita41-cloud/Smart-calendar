@@ -254,11 +254,14 @@ document.addEventListener('DOMContentLoaded', function() {
         messageBox.className = 'timer-message info';
         messageBox.style.display = 'block';
 
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
         fetch('/api/pomodoro/complete', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken
             },
             body: JSON.stringify({
                 isLongBreakBonus: currentCycle >= CYCLES_BEFORE_LONG_BREAK
@@ -267,7 +270,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // ВАШИ СООБЩЕНИЯ СОХРАНЕНЫ
                 if (data.xp.leveledUp) {
                     messageBox.innerHTML = ` <b>Поздравляем с повышением!</b><br>Вам присвоен титул «${data.xp.title}» (уровень ${data.xp.newLevel}).`;
                     messageBox.className = 'timer-message success level-up';

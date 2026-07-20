@@ -75,7 +75,7 @@ class MaterialsController extends AbstractController
             $validationErrors = $this->validateQuestionsFormat($questionsText);
             
             if (!empty($validationErrors)) {
-                $errorMessage = implode('<br>', $validationErrors);
+                $errorMessage = implode("\n", $validationErrors);
                 $this->addFlash('error', $errorMessage);
                 
                 return $this->redirectToRoute('app_questions_add', ['id' => $material->getId()]);

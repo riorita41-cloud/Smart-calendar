@@ -95,6 +95,12 @@ class HomeController extends AbstractController
             return new JsonResponse(['error' => 'Не авторизован'], 401);
         }
 
+        $token = $request->headers->get('X-CSRF-TOKEN');
+        
+        if (!$token || !$this->isCsrfTokenValid('task_action', $token)) {
+            return new JsonResponse(['error' => 'Неверный токен безопасности'], 403);
+        }
+
         $session = new StudySession();
         $session->setUser($user);
         $session->setDurationMinutes(25);
