@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\ExamMaterial;
 use App\Entity\Question;
 use App\Form\ExamMaterialType;
+use App\Repository\ExamMaterialRepository;
+use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,14 +17,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class MaterialsController extends AbstractController
 {
     #[Route('/materials', name: 'app_materials')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(ExamMaterialRepository $examMaterialRepository): Response
     {
         $user = $this->getUser();
         
-        $materials = $entityManager->getRepository(ExamMaterial::class)->findBy(
-            ['user' => $user],
-            ['uploadedAt' => 'DESC']
-        );
+        $materials = $examMaterialRepository->findByUserOrderedByUploadDate($user);
         
         return $this->render('materials/index.html.twig', [
             'materials' => $materials,
@@ -54,11 +53,11 @@ class MaterialsController extends AbstractController
     }
 
     #[Route('/materials/{id}/questions', name: 'app_questions_add')]
-    public function addQuestions(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function addQuestions(int $id, Request $request, EntityManagerInterface $entityManager, ExamMaterialRepository $examMaterialRepository): Response
     {
-        $material = $entityManager->getRepository(ExamMaterial::class)->find($id);
+        $material = $examMaterialRepository->findForUser($id, $this->getUser());
         
-        if (!$material || $material->getUser() !== $this->getUser()) {
+        if (!$material) {
             throw $this->createNotFoundException('Материал не найден');
         }
 
@@ -125,11 +124,11 @@ class MaterialsController extends AbstractController
     }
 
     #[Route('/materials/{id}/view', name: 'app_material_view')]
-    public function view(int $id, EntityManagerInterface $entityManager): Response
+    public function view(int $id, ExamMaterialRepository $examMaterialRepository): Response
     {
-        $material = $entityManager->getRepository(ExamMaterial::class)->find($id);
+        $material = $examMaterialRepository->findForUser($id, $this->getUser());
         
-        if (!$material || $material->getUser() !== $this->getUser()) {
+        if (!$material) {
             throw $this->createNotFoundException('Материал не найден');
         }
 
@@ -143,11 +142,11 @@ class MaterialsController extends AbstractController
     }
 
     #[Route('/materials/{id}/delete', name: 'app_material_delete', methods: ['POST'])]
-    public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function delete(int $id, Request $request, EntityManagerInterface $entityManager, ExamMaterialRepository $examMaterialRepository): Response
     {
-        $material = $entityManager->getRepository(ExamMaterial::class)->find($id);
+        $material = $examMaterialRepository->findForUser($id, $this->getUser());
         
-        if (!$material || $material->getUser() !== $this->getUser()) {
+        if (!$material) {
             throw $this->createNotFoundException('Материал не найден');
         }
 
@@ -163,16 +162,12 @@ class MaterialsController extends AbstractController
     }
 
     #[Route('/api/question/{id}/toggle-studied', name: 'api_question_toggle_studied', methods: ['POST'])]
-    public function toggleStudied(int $id, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function toggleStudied(int $id, Request $request, EntityManagerInterface $entityManager, QuestionRepository $questionRepository): JsonResponse
     {
-        $question = $entityManager->getRepository(Question::class)->find($id);
+        $question = $questionRepository->findForUser($id, $this->getUser());
         
         if (!$question) {
             return new JsonResponse(['status' => 'error', 'message' => 'Вопрос не найден'], 404);
-        }
-        
-        if ($question->getMaterial()->getUser() !== $this->getUser()) {
-            return new JsonResponse(['status' => 'error', 'message' => 'Нет доступа'], 403);
         }
         
         $token = $request->headers->get('X-CSRF-TOKEN');

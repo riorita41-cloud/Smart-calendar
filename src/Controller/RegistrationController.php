@@ -25,17 +25,6 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            // ВРЕМЕННАЯ ОТЛАДКА: выводим ошибки формы
-            if (!$form->isValid()) {
-                $errors = [];
-                foreach ($form->getErrors(true) as $error) {
-                    $errors[] = $error->getMessage();
-                }
-                $this->addFlash('error', 'Ошибки формы: ' . implode(', ', $errors));
-            }
-        }
-
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
 

@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const LONG_BREAK = 15 * 60;          
     const CYCLES_BEFORE_LONG_BREAK = 4;  
     
-    const TIMER_STORAGE_KEY = 'pomodoro_timer_state';
+    const userId = document.querySelector('meta[name="user-id"]')?.getAttribute('content') || 'anonymous';
+    const TIMER_STORAGE_KEY = 'pomodoro_timer_state_' + userId;
 
     let timeLeft = WORK_DURATION;
     let timerId = null;

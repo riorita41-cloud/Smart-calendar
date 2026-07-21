@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const widget = document.getElementById('global-timer-widget');
     const widgetTime = document.getElementById('global-timer-time');
-    const TIMER_STORAGE_KEY = 'pomodoro_timer_state';
+    
+    const userId = document.querySelector('meta[name="user-id"]')?.getAttribute('content') || 'anonymous';
+    const TIMER_STORAGE_KEY = 'pomodoro_timer_state_' + userId;
+    
     let widgetInterval = null;
 
     function updateGlobalWidget() {
@@ -41,6 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target.tagName !== 'A' && !e.target.closest('a')) {
                 window.location.href = '/home';
             }
+        });
+    }
+    
+    const logoutLink = document.querySelector('a[href*="logout"]');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', () => {
+            localStorage.removeItem(TIMER_STORAGE_KEY);
         });
     }
 });

@@ -6,6 +6,10 @@ use App\Entity\Exam;
 use App\Entity\Question;
 use App\Entity\StudySchedule;
 use App\Form\ExamType;
+use App\Repository\ExamMaterialRepository;
+use App\Repository\ExamRepository;
+use App\Repository\QuestionRepository;
+use App\Repository\StudyScheduleRepository;
 use App\Service\ScheduleGenerator;
 use App\Service\XpService; 
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,19 +21,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class ExamController extends AbstractController
 {
     #[Route('/exams', name: 'app_exams')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(ExamRepository $examRepository, ExamMaterialRepository $examMaterialRepository): Response
     {
         $user = $this->getUser();
         
-        $exams = $entityManager->getRepository(Exam::class)->findBy(
-            ['user' => $user],
-            ['examDate' => 'ASC']
-        );
-        
-        $materials = $entityManager->getRepository(\App\Entity\ExamMaterial::class)->findBy(
-            ['user' => $user],
-            ['uploadedAt' => 'DESC']
-        );
+        $exams = $examRepository->findByUserOrderedByDate($user);
+        $materials = $examMaterialRepository->findByUserOrderedByUploadDate($user);
         
         return $this->render('exams/index.html.twig', [
             'exams' => $exams,
@@ -64,11 +61,12 @@ class ExamController extends AbstractController
         int $id,
         Request $request,
         EntityManagerInterface $entityManager,
-        ScheduleGenerator $scheduleGenerator
+        ScheduleGenerator $scheduleGenerator,
+        ExamRepository $examRepository
     ): Response {
-        $exam = $entityManager->getRepository(Exam::class)->find($id);
+        $exam = $examRepository->findForUser($id, $this->getUser());
         
-        if (!$exam || $exam->getUser() !== $this->getUser()) {
+        if (!$exam) {
             throw $this->createNotFoundException('Экзамен не найден');
         }
         
@@ -93,18 +91,15 @@ class ExamController extends AbstractController
     }
 
     #[Route('/exam/{id}/schedule', name: 'app_exam_schedule')]
-    public function schedule(int $id, EntityManagerInterface $entityManager): Response
+    public function schedule(int $id, ExamRepository $examRepository, StudyScheduleRepository $scheduleRepository): Response
     {
-        $exam = $entityManager->getRepository(Exam::class)->find($id);
+        $exam = $examRepository->findForUser($id, $this->getUser());
         
-        if (!$exam || $exam->getUser() !== $this->getUser()) {
+        if (!$exam) {
             throw $this->createNotFoundException('Экзамен не найден');
         }
 
-        $schedules = $entityManager->getRepository(StudySchedule::class)->findBy(
-            ['exam' => $exam],
-            ['studyDate' => 'ASC']
-        );
+        $schedules = $scheduleRepository->findByExam($exam);
 
         $allQuestions = [];
         foreach ($exam->getMaterials() as $material) {
@@ -126,7 +121,8 @@ class ExamController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         StudySchedule $schedule,
-        XpService $xpService 
+        XpService $xpService,
+        QuestionRepository $questionRepository
     ): Response {
         if ($schedule->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('Доступ запрещён');
@@ -141,12 +137,9 @@ class ExamController extends AbstractController
         
         $questionIds = $schedule->getQuestionIds() ?? [];
         if (!empty($questionIds)) {
-            $questionRepo = $entityManager->getRepository(Question::class);
-            foreach ($questionIds as $qId) {
-                $question = $questionRepo->find($qId);
-                if ($question) {
-                    $question->setStudied(true);
-                }
+            $questions = $questionRepository->findByIds($questionIds);
+            foreach ($questions as $question) {
+                $question->setStudied(true);
             }
         }
         
@@ -169,7 +162,8 @@ class ExamController extends AbstractController
         int $id,
         Request $request,
         EntityManagerInterface $entityManager,
-        StudySchedule $schedule
+        StudySchedule $schedule,
+        QuestionRepository $questionRepository
     ): Response {
         if ($schedule->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('Доступ запрещён');
@@ -184,12 +178,9 @@ class ExamController extends AbstractController
         
         $questionIds = $schedule->getQuestionIds() ?? [];
         if (!empty($questionIds)) {
-            $questionRepo = $entityManager->getRepository(Question::class);
-            foreach ($questionIds as $qId) {
-                $question = $questionRepo->find($qId);
-                if ($question) {
-                    $question->setStudied(false);
-                }
+            $questions = $questionRepository->findByIds($questionIds);
+            foreach ($questions as $question) {
+                $question->setStudied(false);
             }
         }
         
@@ -200,11 +191,11 @@ class ExamController extends AbstractController
     }
 
     #[Route('/exam/{id}/delete', name: 'app_exam_delete', methods: ['POST'])]
-    public function delete(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    public function delete(int $id, Request $request, EntityManagerInterface $entityManager, ExamRepository $examRepository): Response
     {
-        $exam = $entityManager->getRepository(Exam::class)->find($id);
+        $exam = $examRepository->findForUser($id, $this->getUser());
         
-        if (!$exam || $exam->getUser() !== $this->getUser()) {
+        if (!$exam) {
             throw $this->createNotFoundException('Экзамен не найден');
         }
 

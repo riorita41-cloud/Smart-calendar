@@ -14,7 +14,26 @@ class StudyTaskRepository extends ServiceEntityRepository
         parent::__construct($registry, StudyTask::class);
     }
 
-    
+    public function findByUser(User $user): array
+    {
+        return $this->findBy(['user' => $user]);
+    }
+
+    public function findByUserOrderedByDate(User $user): array
+    {
+        return $this->findBy(['user' => $user], ['scheduledDate' => 'ASC']);
+    }
+
+    public function findForUser(int $id, User $user): ?StudyTask
+    {
+        return $this->findOneBy(['id' => $id, 'user' => $user]);
+    }
+
+    public function findByIdsForUser(array $ids, User $user): array
+    {
+        return $this->findBy(['id' => $ids, 'user' => $user]);
+    }
+
     public function findTasksGroupedByDate(User $user): array
     {
         $tasks = $this->findBy(['user' => $user], ['scheduledDate' => 'ASC']);

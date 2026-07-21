@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\StudyTask;
 use App\Entity\Exam;
 use App\Form\StudyTaskType;
+use App\Repository\ExamRepository;
+use App\Repository\StudyTaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,12 +17,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class TaskController extends AbstractController
 {
     #[Route('/tasks', name: 'app_tasks')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(StudyTaskRepository $studyTaskRepository): Response
     {
-        $tasks = $entityManager->getRepository(StudyTask::class)->findBy(
-            ['user' => $this->getUser()],
-            ['scheduledDate' => 'ASC']
-        );
+        $tasks = $studyTaskRepository->findByUserOrderedByDate($this->getUser());
 
         return $this->render('task/index.html.twig', [
             'tasks' => $tasks,
@@ -28,11 +27,11 @@ class TaskController extends AbstractController
     }
 
     #[Route('/api/task/{id}/toggle', name: 'app_task_toggle', methods: ['POST'])]
-    public function toggle(Request $request, int $id, EntityManagerInterface $entityManager): JsonResponse
+    public function toggle(Request $request, int $id, EntityManagerInterface $entityManager, StudyTaskRepository $studyTaskRepository): JsonResponse
     {
-        $task = $entityManager->getRepository(StudyTask::class)->find($id);
+        $task = $studyTaskRepository->findForUser($id, $this->getUser());
 
-        if (!$task || $task->getUser() !== $this->getUser()) {
+        if (!$task) {
             return new JsonResponse(['status' => 'error', 'message' => 'Задача не найдена'], 404);
         }
 
@@ -49,11 +48,11 @@ class TaskController extends AbstractController
     }
 
     #[Route('/task/{id}/delete', name: 'app_task_delete', methods: ['POST'])]
-    public function delete(Request $request, int $id, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, int $id, EntityManagerInterface $entityManager, StudyTaskRepository $studyTaskRepository): Response
     {
-        $task = $entityManager->getRepository(StudyTask::class)->find($id);
+        $task = $studyTaskRepository->findForUser($id, $this->getUser());
 
-        if (!$task || $task->getUser() !== $this->getUser()) {
+        if (!$task) {
             throw $this->createNotFoundException('Задача не найдена');
         }
 
@@ -92,7 +91,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/api/task/quick-add', name: 'app_task_quick_add', methods: ['POST'])]
-    public function quickAdd(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function quickAdd(Request $request, EntityManagerInterface $entityManager, ExamRepository $examRepository): JsonResponse
     {
         $token = $request->headers->get('X-CSRF-TOKEN');
         
@@ -113,8 +112,8 @@ class TaskController extends AbstractController
         $task->setIsCompleted(false);
 
         if (!empty($data['examId'])) {
-            $exam = $entityManager->getRepository(Exam::class)->find($data['examId']);
-            if (!$exam || $exam->getUser() !== $this->getUser()) {
+            $exam = $examRepository->findForUser($data['examId'], $this->getUser());
+            if (!$exam) {
                 return new JsonResponse(['status' => 'error', 'message' => 'Экзамен не найден'], 404);
             }
             $task->setExam($exam);
@@ -127,7 +126,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/api/tasks/delete-bulk', name: 'app_tasks_delete_bulk', methods: ['POST'])]
-    public function deleteBulk(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function deleteBulk(Request $request, EntityManagerInterface $entityManager, StudyTaskRepository $studyTaskRepository): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $taskIds = $data['taskIds'] ?? [];
@@ -141,10 +140,7 @@ class TaskController extends AbstractController
             return new JsonResponse(['status' => 'error', 'message' => 'Неверный токен безопасности'], 403);
         }
 
-        $tasks = $entityManager->getRepository(StudyTask::class)->findBy([
-            'id' => $taskIds,
-            'user' => $this->getUser()
-        ]);
+        $tasks = $studyTaskRepository->findByIdsForUser($taskIds, $this->getUser());
 
         foreach ($tasks as $task) {
             $entityManager->remove($task);

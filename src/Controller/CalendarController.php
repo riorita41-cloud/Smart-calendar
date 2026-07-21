@@ -16,7 +16,7 @@ class CalendarController extends AbstractController
     {
         $user = $this->getUser();
         
-        $exams = $examRepository->findBy(['user' => $user]);
+        $exams = $examRepository->findByUser($user);
         $tasksByDay = $studyTaskRepository->findTasksGroupedByDate($user);
         $stats = $studyTaskRepository->getTaskStats($user);
         

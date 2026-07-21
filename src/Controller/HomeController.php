@@ -20,8 +20,8 @@ class HomeController extends AbstractController
     {
         $user = $this->getUser();
         
-        $exams = $examRepository->findBy(['user' => $user]);
-        $tasks = $studyTaskRepository->findBy(['user' => $user]);
+        $exams = $examRepository->findByUser($user);
+        $tasks = $studyTaskRepository->findByUser($user);
         
         $totalTasks = count($tasks);
         $completedTasks = 0;
