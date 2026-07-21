@@ -6,6 +6,7 @@ use App\Entity\ExamMaterial;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ExamMaterialRepository extends ServiceEntityRepository
 {
@@ -28,4 +29,14 @@ class ExamMaterialRepository extends ServiceEntityRepository
     {
         return $this->findOneBy(['id' => $id, 'user' => $user]);
     }
+
+    public function findForUserOrThrow(int $id, User $user): ExamMaterial
+    {
+        $material = $this->findForUser($id, $user);
+        if (!$material) {
+            throw new NotFoundHttpException('Материал не найден или доступ запрещен');
+        }
+        return $material;
+    }
+
 }

@@ -199,9 +199,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateDisplay() {
-        const minutes = Math.max(0, Math.floor(timeLeft / 60));
-        const seconds = Math.max(0, timeLeft % 60);
-        display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        // ИСПОЛЬЗУЕМ formatTime из api-utils.js
+        display.textContent = formatTime(timeLeft);
     }
 
     function tick() {
@@ -255,21 +254,18 @@ document.addEventListener('DOMContentLoaded', function() {
         messageBox.className = 'timer-message info';
         messageBox.style.display = 'block';
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-        fetch('/api/pomodoro/complete', {
+        apiFetch('/api/pomodoro/complete', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': csrfToken
-            },
             body: JSON.stringify({
                 isLongBreakBonus: currentCycle >= CYCLES_BEFORE_LONG_BREAK
             })
-        })
-        .then(response => response.json())
-        .then(data => {
+        }).then(data => {
+            if (!data) {
+                messageBox.textContent = 'Ошибка сети. Проверьте подключение.';
+                messageBox.className = 'timer-message error';
+                return;
+            }
+
             if (data.success) {
                 if (data.xp.leveledUp) {
                     messageBox.innerHTML = ` <b>Поздравляем с повышением!</b><br>Вам присвоен титул «${data.xp.title}» (уровень ${data.xp.newLevel}).`;
@@ -315,11 +311,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageBox.textContent = 'Ошибка сохранения. Попробуйте еще раз.';
                 messageBox.className = 'timer-message error';
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            messageBox.textContent = 'Ошибка сети. Проверьте подключение.';
-            messageBox.className = 'timer-message error';
         });
     }
 

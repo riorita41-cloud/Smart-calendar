@@ -29,9 +29,9 @@ class TaskController extends AbstractController
     #[Route('/api/task/{id}/toggle', name: 'app_task_toggle', methods: ['POST'])]
     public function toggle(Request $request, int $id, EntityManagerInterface $entityManager, StudyTaskRepository $studyTaskRepository): JsonResponse
     {
-        $task = $studyTaskRepository->findForUser($id, $this->getUser());
-
-        if (!$task) {
+        try {
+            $task = $studyTaskRepository->findForUserOrThrow($id, $this->getUser());
+        } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
             return new JsonResponse(['status' => 'error', 'message' => 'Задача не найдена'], 404);
         }
 
@@ -50,11 +50,7 @@ class TaskController extends AbstractController
     #[Route('/task/{id}/delete', name: 'app_task_delete', methods: ['POST'])]
     public function delete(Request $request, int $id, EntityManagerInterface $entityManager, StudyTaskRepository $studyTaskRepository): Response
     {
-        $task = $studyTaskRepository->findForUser($id, $this->getUser());
-
-        if (!$task) {
-            throw $this->createNotFoundException('Задача не найдена');
-        }
+        $task = $studyTaskRepository->findForUserOrThrow($id, $this->getUser());
 
         $token = $request->request->get('_token');
         if (!$this->isCsrfTokenValid('delete_task_' . $id, $token)) {
@@ -74,7 +70,9 @@ class TaskController extends AbstractController
         $task->setUser($this->getUser());
         $task->setIsCompleted(false);
 
-        $form = $this->createForm(StudyTaskType::class, $task);
+        $form = $this->createForm(StudyTaskType::class, $task, [
+            'user' => $this->getUser(),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

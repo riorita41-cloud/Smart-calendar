@@ -6,6 +6,7 @@ use App\Entity\Exam;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ExamRepository extends ServiceEntityRepository
 {
@@ -27,5 +28,24 @@ class ExamRepository extends ServiceEntityRepository
     public function findForUser(int $id, User $user): ?Exam
     {
         return $this->findOneBy(['id' => $id, 'user' => $user]);
+    }
+
+        public function getAllQuestionsIndexed(Exam $exam): array
+    {
+        $questions = [];
+        foreach ($exam->getMaterials() as $material) {
+            foreach ($material->getQuestions() as $question) {
+                $questions[$question->getId()] = $question;
+            }
+        }
+        return $questions;
+    }
+    public function findForUserOrThrow(int $id, User $user): Exam
+    {
+        $exam = $this->findForUser($id, $user);
+        if (!$exam) {
+            throw new NotFoundHttpException('Экзамен не найден или доступ запрещен');
+        }
+        return $exam;
     }
 }

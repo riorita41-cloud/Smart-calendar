@@ -86,18 +86,20 @@
     });
     </script>
 
-<script src="{{ asset('js/global-timer.js') }}"></script>
-{% block javascripts %}{% endblock %}
+    <script src="{{ asset('js/api-utils.js') }}"></script>
+    
+    <script src="{{ asset('js/global-timer.js') }}"></script>
+    {% block javascripts %}{% endblock %}
 
-<div id="global-timer-widget" class="global-timer-widget" style="display: none;">
-    <span class="widget-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-    </span>
-    <span class="widget-time" id="global-timer-time">25:00</span>
-    <a href="{{ path('app_home') }}" class="widget-expand">Развернуть</a>
-</div>
+    <div id="global-timer-widget" class="global-timer-widget" style="display: none;">
+        <span class="widget-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+        </span>
+        <span class="widget-time" id="global-timer-time">25:00</span>
+        <a href="{{ path('app_home') }}" class="widget-expand">Развернуть</a>
+    </div>
 </body>
 </html>

@@ -1,72 +1,70 @@
 import { createAvatar } from 'https://esm.sh/@dicebear/core@9';
 import * as styles from 'https://esm.sh/@dicebear/collection@9';
 
-function getSelectedValue(name) {
-    var selected = document.querySelector('input[name="' + name + '"]:checked');
+const getSelectedValue = (name) => {
+    const selected = document.querySelector(`input[name="${name}"]:checked`);
     return selected ? selected.value : null;
-}
+};
 
-function generateRandomAvatar() {
-    var skinColors = ['ffdbb4', 'edb98a', 'd08b5b', 'ae5d29', '7c3c16'];
-    var hairColors = ['000000', '2c1b18', '724133', 'b58143', 'd9532f'];
-    var hairs = ['short01', 'short02', 'short03', 'short04', 'short05', 'long01', 'long02', 'long03', 'long04', 'long05', 'long06', 'long07', 'long08', 'long09', 'long10'];
+window.generateRandomAvatar = () => {
+    const skinColors = ['ffdbb4', 'edb98a', 'd08b5b', 'ae5d29', '7c3c16'];
+    const hairColors = ['000000', '2c1b18', '724133', 'b58143', 'd9532f'];
+    const hairs = ['short01', 'short02', 'short03', 'short04', 'short05', 'long01', 'long02', 'long03', 'long04', 'long05', 'long06', 'long07', 'long08', 'long09', 'long10'];
     
-    var randomSkin = skinColors[Math.floor(Math.random() * skinColors.length)];
-    var randomHairColor = hairColors[Math.floor(Math.random() * hairColors.length)];
-    var randomHair = hairs[Math.floor(Math.random() * hairs.length)];
-    var randomSeed = "user_" + Math.random().toString(36).substr(2, 9);
+    const randomSkin = skinColors[Math.floor(Math.random() * skinColors.length)];
+    const randomHairColor = hairColors[Math.floor(Math.random() * hairColors.length)];
+    const randomHair = hairs[Math.floor(Math.random() * hairs.length)];
+    const randomSeed = "user_" + Math.random().toString(36).substring(2, 9);
     
-    var seedInput = document.getElementById('current-seed');
+    const seedInput = document.getElementById('current-seed');
     if (seedInput) seedInput.value = randomSeed;
     
-    var seedElement = document.getElementById('avatar-data');
+    const seedElement = document.getElementById('avatar-data');
     if (seedElement) seedElement.setAttribute('data-seed', randomSeed);
     
-    updateAvatar(); 
-}
-
-function updateAvatar() {
-    var skinColor = getSelectedValue('skinColor');
-    var hairColor = getSelectedValue('hairColor');
-    var hair = getSelectedValue('hair');
-    
-    var seedElement = document.getElementById('avatar-data');
-    var seed = seedElement ? seedElement.getAttribute('data-seed') : "";
-    
-    var options = {
-        seed: seed, 
-        backgroundColor: ["b6e3f4"],
-        skinColor: skinColor ? [skinColor] : undefined,
-        hairColor: hairColor ? [hairColor] : undefined,
-        hair: hair ? [hair] : undefined
+    const setRadioChecked = (name, value) => {
+        const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+        if (radio) radio.checked = true;
     };
     
-    console.log("Updating avatar with:", options);
+    setRadioChecked('skinColor', randomSkin);
+    setRadioChecked('hairColor', randomHairColor);
+    setRadioChecked('hair', randomHair);
+    
+    updateAvatar(); 
+};
+
+const updateAvatar = () => {
+    const skinColor = getSelectedValue('skinColor');
+    const hairColor = getSelectedValue('hairColor');
+    const hair = getSelectedValue('hair');
+    
+    const seedElement = document.getElementById('avatar-data');
+    const seed = seedElement ? seedElement.getAttribute('data-seed') : "default_seed";
+    
+    const options = {
+        seed: seed, 
+        backgroundColor: ["b6e3f4"],
+        hair: hair ? [hair] : undefined,
+        skinColor: skinColor ? [skinColor] : undefined,
+        hairColor: hairColor ? [hairColor] : undefined,
+    };
     
     try {
         const avatar = createAvatar(styles.adventurer, options);
-        const svg = avatar.toString();
-        
-        var container = document.getElementById("avatar-img");
+        const container = document.getElementById("avatar-img");
         if (container) {
-            container.innerHTML = svg;
+            container.innerHTML = avatar.toString();
         }
     } catch (error) {
-        console.error("Error creating avatar:", error);
+        console.error("Ошибка создания аватара:", error);
     }
-}
+};
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("Page loaded, initializing avatar...");
+document.addEventListener('DOMContentLoaded', () => {
     updateAvatar();
     
-    var randomBtn = document.querySelector('.btn-random');
-    if (randomBtn) {
-        randomBtn.addEventListener('click', generateRandomAvatar);
-    }
-    
-    var radios = document.querySelectorAll('.avatar-option');
-    radios.forEach(function(radio) {
+    document.querySelectorAll('.avatar-option').forEach(radio => {
         radio.addEventListener('change', updateAvatar);
     });
 });

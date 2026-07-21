@@ -30,14 +30,16 @@ class MaterialsController extends AbstractController
 
     #[Route('/materials/new', name: 'app_material_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $material = new ExamMaterial();
-        $material->setUser($this->getUser());
-        $material->setFileType('manual');
-        $material->setUploadedAt(new \DateTime());
+{
+    $material = new ExamMaterial();
+    $material->setUser($this->getUser());
+    $material->setFileType('manual');
+    $material->setUploadedAt(new \DateTime());
 
-        $form = $this->createForm(ExamMaterialType::class, $material);
-        $form->handleRequest($request);
+    $form = $this->createForm(ExamMaterialType::class, $material, [
+        'user' => $this->getUser(),
+    ]);
+    $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($material);
@@ -55,11 +57,7 @@ class MaterialsController extends AbstractController
     #[Route('/materials/{id}/questions', name: 'app_questions_add')]
     public function addQuestions(int $id, Request $request, EntityManagerInterface $entityManager, ExamMaterialRepository $examMaterialRepository): Response
     {
-        $material = $examMaterialRepository->findForUser($id, $this->getUser());
-        
-        if (!$material) {
-            throw $this->createNotFoundException('Материал не найден');
-        }
+        $material = $examMaterialRepository->findForUserOrThrow($id, $this->getUser());
 
         if ($request->isMethod('POST')) {
             $token = $request->request->get('_token');
@@ -126,11 +124,7 @@ class MaterialsController extends AbstractController
     #[Route('/materials/{id}/view', name: 'app_material_view')]
     public function view(int $id, ExamMaterialRepository $examMaterialRepository): Response
     {
-        $material = $examMaterialRepository->findForUser($id, $this->getUser());
-        
-        if (!$material) {
-            throw $this->createNotFoundException('Материал не найден');
-        }
+        $material = $examMaterialRepository->findForUserOrThrow($id, $this->getUser());
 
         $questions = $material->getQuestions()->toArray();
         usort($questions, fn($a, $b) => $a->getOrderNumber() <=> $b->getOrderNumber());
@@ -144,11 +138,7 @@ class MaterialsController extends AbstractController
     #[Route('/materials/{id}/delete', name: 'app_material_delete', methods: ['POST'])]
     public function delete(int $id, Request $request, EntityManagerInterface $entityManager, ExamMaterialRepository $examMaterialRepository): Response
     {
-        $material = $examMaterialRepository->findForUser($id, $this->getUser());
-        
-        if (!$material) {
-            throw $this->createNotFoundException('Материал не найден');
-        }
+        $material = $examMaterialRepository->findForUserOrThrow($id, $this->getUser());
 
         if (!$this->isCsrfTokenValid('delete' . $material->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Неверный токен безопасности');

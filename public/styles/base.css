@@ -605,3 +605,26 @@ body {
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
+
+.btn-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 15px;
+    font-family: Georgia, serif;
+    transition: all 0.2s;
+}
+
+.btn-back-link:hover {
+    color: var(--color-primary);
+    transform: translateX(-4px); 
+}
+
+.btn-back-link svg {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+}

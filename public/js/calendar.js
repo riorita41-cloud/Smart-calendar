@@ -5,9 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const titleInput = document.getElementById('taskTitle');
             const dateInput = document.getElementById('taskDate');
             const examSelect = document.getElementById('taskExam');
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-            if (!titleInput || !dateInput || !csrfToken) return;
+            if (!titleInput || !dateInput) return;
 
             const title = titleInput.value.trim();
             const date = dateInput.value;
@@ -23,23 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            fetch('/api/task/quick-add', {
+            apiFetch('/api/task/quick-add', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken 
-                },
                 body: JSON.stringify({ title: title, date: date, examId: examId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
+            }).then(data => {
+                if (data && data.status === 'success') {
                     location.reload(); 
-                } else {
+                } else if (data) {
                     alert(data.message || 'Ошибка сохранения');
                 }
-            })
-            .catch(err => console.error('Error:', err));
+            });
         });
     }
 });
@@ -54,29 +46,14 @@ function openTaskModal(dateStr) {
 }
 
 function toggleTask(taskId) {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    if (!csrfToken) {
-        console.error('CSRF токен не найден');
-        return;
-    }
-
-    fetch('/api/task/' + taskId + '/toggle', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        }
-    })
-    .then(response => {
-        if (response.ok) {
+    apiFetch('/api/task/' + taskId + '/toggle', {
+        method: 'POST'
+    }).then(data => {
+        if (data && data.status === 'success') {
             location.reload();
         } else {
             alert('Ошибка при обновлении задачи');
         }
-    })
-    .catch(err => {
-        console.error('Error:', err);
-        alert('Ошибка соединения');
     });
 }
 
@@ -91,29 +68,16 @@ function toggleDropdown(id) {
 }
 
 function toggleStudied(questionId, btn) {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    
-    if (!csrfToken) {
-        alert('Ошибка безопасности: токен не найден');
-        return;
-    }
-    
     const originalText = btn.textContent;
     btn.textContent = '...';
     btn.disabled = true;
     
-    fetch('/api/question/' + questionId + '/toggle-studied', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+    apiFetch('/api/question/' + questionId + '/toggle-studied', {
+        method: 'POST'
+    }).then(data => {
         const item = btn.closest('.tooltip-study-item');
         
-        if (data.status === 'success') {
+        if (data && data.status === 'success') {
             if (data.studied) {
                 item.classList.add('studied');
                 btn.textContent = '✓ Выучено';
@@ -122,14 +86,11 @@ function toggleStudied(questionId, btn) {
                 btn.textContent = 'Отметить как выучено';
             }
         } else {
-            alert(data.message || 'Ошибка при обновлении');
+            alert(data?.message || 'Ошибка при обновлении');
             btn.textContent = originalText;
             btn.disabled = false;
         }
-    })
-    .catch(err => {
-        console.error('Error:', err);
-        alert('Ошибка соединения');
+    }).catch(() => {
         btn.textContent = originalText;
         btn.disabled = false;
     });

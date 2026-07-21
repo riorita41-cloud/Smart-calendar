@@ -25,10 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (timeLeft > 0 && data.isRunning && !isHomePage) {
             if (widget) widget.style.display = 'flex';
-            const minutes = Math.max(0, Math.floor(timeLeft / 60));
-            const seconds = Math.max(0, timeLeft % 60);
             if (widgetTime) {
-                widgetTime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                widgetTime.textContent = formatTime(timeLeft);
             }
         } else {
             if (widget) widget.style.display = 'none';

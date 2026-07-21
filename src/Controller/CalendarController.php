@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\Repository\ExamRepository;
+use App\Repository\ExamRepository; 
 use App\Repository\StudyTaskRepository;
+use App\Service\DashboardService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,25 +13,27 @@ use Symfony\Component\Routing\Attribute\Route;
 class CalendarController extends AbstractController
 {
     #[Route('/calendar', name: 'app_calendar')]
-    public function index(Request $request, ExamRepository $examRepository, StudyTaskRepository $studyTaskRepository): Response
-    {
+    public function index(
+        Request $request, 
+        DashboardService $dashboardService, 
+        StudyTaskRepository $studyTaskRepository,
+        ExamRepository $examRepository // <-- Добавлен в параметры
+    ): Response {
         $user = $this->getUser();
+        $data = $dashboardService->getDashboardData($user);
         
-        $exams = $examRepository->findByUser($user);
         $tasksByDay = $studyTaskRepository->findTasksGroupedByDate($user);
-        $stats = $studyTaskRepository->getTaskStats($user);
         
         $year = $request->query->getInt('year', (int)date('Y'));
         $month = $request->query->getInt('month', (int)date('n'));
         $currentMonth = new \DateTimeImmutable("$year-$month-01");
         
         $today = new \DateTimeImmutable();
-        
         $todayKey = $today->format('Y-m-d');
         
         $examDates = [];
         $examByDate = [];
-        foreach ($exams as $exam) {
+        foreach ($data['exams'] as $exam) {
             $dateKey = $exam->getExamDate()->format('Y-m-d');
             $examDates[] = $dateKey;
             $examByDate[$dateKey] = $exam->getName();
@@ -38,15 +41,10 @@ class CalendarController extends AbstractController
         
         $studyQuestionsByDay = [];
 
-        foreach ($exams as $exam) {
+        foreach ($data['exams'] as $exam) {
             $schedules = $exam->getStudySchedules();
     
-            $allQuestions = [];
-            foreach ($exam->getMaterials() as $material) {
-                foreach ($material->getQuestions() as $question) {
-                    $allQuestions[$question->getId()] = $question;
-                }
-            }
+            $allQuestions = $examRepository->getAllQuestionsIndexed($exam);
     
             foreach ($schedules as $schedule) {
                 $dateKey = $schedule->getStudyDate()->format('Y-m-d');
@@ -78,7 +76,7 @@ class CalendarController extends AbstractController
         ];
         
         return $this->render('calendar/index.html.twig', [
-            'exams'          => $exams,
+            'exams'          => $data['exams'],
             'examDates'      => $examDates,
             'examByDate'     => $examByDate,
             'tasksByDay'     => $tasksByDay,
@@ -87,8 +85,8 @@ class CalendarController extends AbstractController
             'monthTitle'     => $monthNames[(int)$currentMonth->format('n')] . ' ' . $currentMonth->format('Y'),
             'daysInMonth'    => (int)$currentMonth->format('t'),
             'firstDayOfWeek' => (int)$currentMonth->format('N'),
-            'progress'       => $stats['progress'],
-            'todayTasks'     => $tasksByDay[$todayKey] ?? [],
+            'progress'       => $data['progress'],
+            'todayTasks'     => $data['todayTasks'],
             'today'          => $today,
             'prevMonth'      => $currentMonth->modify('-1 month'),
             'nextMonth'      => $currentMonth->modify('+1 month'),

@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const titleInput = document.getElementById('taskTitle');
             const dateInput = document.getElementById('taskDate');
             const examSelect = document.getElementById('taskExam');
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
             if (!titleInput || !dateInput) return;
 
@@ -18,32 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-
-            if (!csrfToken) {
-                alert('Ошибка безопасности: токен не найден');
-                return;
-            }
-
-            fetch('/api/task/quick-add', {
+            apiFetch('/api/task/quick-add', {
                 method: 'POST',
                 credentials: 'include',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken 
-                },
                 body: JSON.stringify({ title: title, date: date, examId: examId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
+            }).then(data => {
+                if (data && data.status === 'success') {
                     location.reload(); 
-                } else {
+                } else if (data) {
                     alert(data.message || 'Ошибка сохранения');
                 }
-            })
-            .catch(err => {
-                console.error('Error:', err);
-                alert('Ошибка соединения');
             });
         });
     }
@@ -126,38 +109,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const checkedBoxes = document.querySelectorAll('.task-select-checkbox:not(#selectAllTasks):checked');
             const taskIds = Array.from(checkedBoxes).map(cb => cb.value);
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-            if (!csrfToken) {
-                alert('Ошибка безопасности: токен не найден');
-                return;
-            }
 
             bulkDeleteBtn.disabled = true;
             bulkDeleteBtn.textContent = 'Удаление...';
 
-            fetch('/api/tasks/delete-bulk', {
+            apiFetch('/api/tasks/delete-bulk', {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
                 body: JSON.stringify({ taskIds: taskIds })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
+            }).then(data => {
+                if (data && data.status === 'success') {
                     location.reload();
-                } else {
+                } else if (data) {
                     alert(data.message || 'Ошибка при удалении');
                     bulkDeleteBtn.disabled = false;
                     bulkDeleteBtn.innerHTML = 'Удалить выбранные (<span id="selectedCount">' + taskIds.length + '</span>)';
                 }
-            })
-            .catch(err => {
-                console.error('Error:', err);
-                alert('Ошибка соединения');
+            }).catch(() => {
                 bulkDeleteBtn.disabled = false;
             });
         });
@@ -174,33 +142,15 @@ function openTaskModal(dateStr) {
 }
 
 function toggleTask(taskId) {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-    
-    if (!csrfToken) {
-        console.error('CSRF токен не найден');
-        alert('Ошибка безопасности: токен не найден. Обновите страницу.');
-        return;
-    }
-
-    fetch('/api/task/' + taskId + '/toggle', {
+    apiFetch('/api/task/' + taskId + '/toggle', {
         method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
+        credentials: 'include'
+    }).then(data => {
+        if (data && data.status === 'success') {
             location.reload();
-        } else {
+        } else if (data) {
             alert(data.message || 'Ошибка при обновлении задачи');
         }
-    })
-    .catch(err => {
-        console.error('Error:', err);
-        alert('Ошибка соединения');
     });
 }
 

@@ -64,11 +64,7 @@ class ExamController extends AbstractController
         ScheduleGenerator $scheduleGenerator,
         ExamRepository $examRepository
     ): Response {
-        $exam = $examRepository->findForUser($id, $this->getUser());
-        
-        if (!$exam) {
-            throw $this->createNotFoundException('Экзамен не найден');
-        }
+        $exam = $examRepository->findForUserOrThrow($id, $this->getUser());
         
         if (!$this->isCsrfTokenValid('generate_schedule_' . $exam->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Неверный токен безопасности');
@@ -90,23 +86,13 @@ class ExamController extends AbstractController
         return $this->redirectToRoute('app_exams');
     }
 
-    #[Route('/exam/{id}/schedule', name: 'app_exam_schedule')]
+        #[Route('/exam/{id}/schedule', name: 'app_exam_schedule')]
     public function schedule(int $id, ExamRepository $examRepository, StudyScheduleRepository $scheduleRepository): Response
     {
-        $exam = $examRepository->findForUser($id, $this->getUser());
-        
-        if (!$exam) {
-            throw $this->createNotFoundException('Экзамен не найден');
-        }
+        $exam = $examRepository->findForUserOrThrow($id, $this->getUser());
 
         $schedules = $scheduleRepository->findByExam($exam);
-
-        $allQuestions = [];
-        foreach ($exam->getMaterials() as $material) {
-            foreach ($material->getQuestions() as $question) {
-                $allQuestions[$question->getId()] = $question;
-            }
-        }
+        $allQuestions = $examRepository->getAllQuestionsIndexed($exam); // <-- Изменено здесь
 
         return $this->render('exams/schedule.html.twig', [
             'exam' => $exam,
@@ -135,13 +121,7 @@ class ExamController extends AbstractController
 
         $schedule->setIsCompleted(true);
         
-        $questionIds = $schedule->getQuestionIds() ?? [];
-        if (!empty($questionIds)) {
-            $questions = $questionRepository->findByIds($questionIds);
-            foreach ($questions as $question) {
-                $question->setStudied(true);
-            }
-        }
+        $questionRepository->setStudiedStatusForIds($schedule->getQuestionIds(), true);
         
         $entityManager->flush();
 
@@ -176,13 +156,7 @@ class ExamController extends AbstractController
 
         $schedule->setIsCompleted(false);
         
-        $questionIds = $schedule->getQuestionIds() ?? [];
-        if (!empty($questionIds)) {
-            $questions = $questionRepository->findByIds($questionIds);
-            foreach ($questions as $question) {
-                $question->setStudied(false);
-            }
-        }
+        $questionRepository->setStudiedStatusForIds($schedule->getQuestionIds(), false);
         
         $entityManager->flush();
 
@@ -193,11 +167,7 @@ class ExamController extends AbstractController
     #[Route('/exam/{id}/delete', name: 'app_exam_delete', methods: ['POST'])]
     public function delete(int $id, Request $request, EntityManagerInterface $entityManager, ExamRepository $examRepository): Response
     {
-        $exam = $examRepository->findForUser($id, $this->getUser());
-        
-        if (!$exam) {
-            throw $this->createNotFoundException('Экзамен не найден');
-        }
+        $exam = $examRepository->findForUserOrThrow($id, $this->getUser());
 
         if (!$this->isCsrfTokenValid('delete_exam_' . $exam->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Неверный токен безопасности');

@@ -3,8 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\StudySession;
-use App\Repository\ExamRepository;
-use App\Repository\StudyTaskRepository;
+use App\Service\DashboardService;
 use App\Service\XpService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,71 +15,28 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route('/home', name: 'app_home')]
-    public function index(ExamRepository $examRepository, StudyTaskRepository $studyTaskRepository): Response
+    public function index(DashboardService $dashboardService): Response
     {
         $user = $this->getUser();
-        
-        $exams = $examRepository->findByUser($user);
-        $tasks = $studyTaskRepository->findByUser($user);
-        
-        $totalTasks = count($tasks);
-        $completedTasks = 0;
-        foreach ($tasks as $task) {
-            if ($task->isCompleted()) {
-                $completedTasks++;
-            }
-        }
-        
-        $totalQuestions = 0;
-        $studiedQuestions = 0;
-        
-        foreach ($exams as $exam) {
-            foreach ($exam->getMaterials() as $material) {
-                foreach ($material->getQuestions() as $question) {
-                    $totalQuestions++;
-                    if ($question->isStudied()) {
-                        $studiedQuestions++;
-                    }
-                }
-            }
-        }
-        
-        $progress = $totalQuestions > 0 ? round(($studiedQuestions / $totalQuestions) * 100) : 0;
-        
-        $nearestExam = null;
-        $daysToExam = null;
-        $today = new \DateTimeImmutable();
-        
-        foreach ($exams as $exam) {
-            if ($exam->getExamDate() > $today) {
-                $days = (int)(($exam->getExamDate()->getTimestamp() - $today->getTimestamp()) / 86400);
-                if ($nearestExam === null || $days < $daysToExam) {
-                    $nearestExam = $exam;
-                    $daysToExam = $days;
-                }
-            }
-        }
-        
-        $todayTasks = [];
-        foreach ($tasks as $task) {
-            if ($task->getScheduledDate() && $task->getScheduledDate()->format('Y-m-d') === $today->format('Y-m-d')) {
-                $todayTasks[] = $task;
-            }
-        }
+        $data = $dashboardService->getDashboardData($user);
         
         return $this->render('home/index.html.twig', [
             'user' => $user, 
             'avatar' => $user ? $user->getAvatar() : null,
-            'exams' => $exams,
-            'tasks' => $tasks,
-            'totalTasks' => $totalTasks,
-            'completedTasks' => $completedTasks,
-            'progress' => $progress,
-            'totalQuestions' => $totalQuestions,
-            'studiedQuestions' => $studiedQuestions,
-            'nearestExam' => $nearestExam,
-            'daysToExam' => $daysToExam,
-            'todayTasks' => $todayTasks,
+            'exams' => $data['exams'],
+            'tasks' => $data['tasks'],
+            'totalTasks' => $data['totalTasks'],
+            'completedTasks' => $data['completedTasks'],
+            'progress' => $data['progress'],
+            'totalQuestions' => $data['totalQuestions'],
+            'studiedQuestions' => $data['studiedQuestions'],
+            'nearestExam' => $data['nearestExam'],
+            'daysToExam' => $data['daysToExam'],
+            'todayTasks' => $data['todayTasks'],
+            'todaySessionsCount' => $data['todaySessionsCount'],
+            'currentTitle' => $data['currentTitle'],
+            'xpPercent' => $data['xpPercent'],
+            'nextLevelXp' => $data['nextLevelXp'],
         ]);
     }
 

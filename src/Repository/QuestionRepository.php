@@ -37,4 +37,16 @@ class QuestionRepository extends ServiceEntityRepository
         
         return $this->findBy(['id' => $ids]);
     }
+
+    public function setStudiedStatusForIds(?array $ids, bool $studied): void
+    {
+        if (empty($ids)) {
+            return;
+        }
+        
+        $questions = $this->findByIds($ids);
+        foreach ($questions as $question) {
+            $question->setStudied($studied);
+        }
+    }
 }

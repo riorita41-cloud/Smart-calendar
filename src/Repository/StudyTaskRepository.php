@@ -6,6 +6,7 @@ use App\Entity\StudyTask;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StudyTaskRepository extends ServiceEntityRepository
 {
@@ -62,5 +63,14 @@ class StudyTaskRepository extends ServiceEntityRepository
         return [
             'progress' => (int) round(($completed / $total) * 100)
         ];
+    }
+    
+    public function findForUserOrThrow(int $id, User $user): StudyTask
+    {
+        $task = $this->findForUser($id, $user);
+        if (!$task) {
+            throw new NotFoundHttpException('Задача не найдена или доступ запрещен');
+        }
+        return $task;
     }
 }

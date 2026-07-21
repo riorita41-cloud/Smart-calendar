@@ -7,6 +7,7 @@ use App\Entity\StudySchedule;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class StudyScheduleRepository extends ServiceEntityRepository
 {
@@ -44,4 +45,14 @@ class StudyScheduleRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
+
+    public function findForUserOrThrow(int $id, User $user): StudySchedule
+    {
+        $schedule = $this->findForUser($id, $user);
+        if (!$schedule) {
+            throw new NotFoundHttpException('Расписание не найдено или доступ запрещен');
+        }
+        return $schedule;
+    }
+
 }
