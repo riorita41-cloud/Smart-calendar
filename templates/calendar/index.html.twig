@@ -91,7 +91,7 @@
                                                 <div class="tooltip-study-item {% if question.completed %}studied{% endif %}">
                                                     <div class="study-question-text">{{ question.text|length > 50 ? question.text|slice(0, 50) ~ '...' : question.text }}</div>
                                                     {% if question.completed %}
-                                                        <span class="studied-badge">✓ Выучено</span>
+                                                        <span class="studied-badge"> Выучено</span>
                                                     {% endif %}
                                                 </div>
                                             {% endfor %}

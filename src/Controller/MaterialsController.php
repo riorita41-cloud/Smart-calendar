@@ -30,16 +30,16 @@ class MaterialsController extends AbstractController
 
     #[Route('/materials/new', name: 'app_material_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $material = new ExamMaterial();
-    $material->setUser($this->getUser());
-    $material->setFileType('manual');
-    $material->setUploadedAt(new \DateTime());
+    {
+        $material = new ExamMaterial();
+        $material->setUser($this->getUser());
+        $material->setFileType('manual');
+        $material->setUploadedAt(new \DateTime());
 
-    $form = $this->createForm(ExamMaterialType::class, $material, [
-        'user' => $this->getUser(),
-    ]);
-    $form->handleRequest($request);
+        $form = $this->createForm(ExamMaterialType::class, $material, [
+            'user' => $this->getUser(),
+        ]);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($material);

@@ -76,7 +76,7 @@ class ExamController extends AbstractController
             $this->addFlash('error', $result['error']);
         } else {
             $this->addFlash('success', 
-                "✅ Расписание успешно создано! " .
+                " Расписание успешно создано! " .
                 "Всего вопросов: {$result['totalQuestions']}, " .
                 "Дней подготовки: {$result['availableDaysCount']}, " .
                 "Вопросов в день: {$result['questionsPerDay']}"
