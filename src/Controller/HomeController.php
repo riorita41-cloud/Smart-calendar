@@ -37,6 +37,7 @@ class HomeController extends AbstractController
             'currentTitle' => $data['currentTitle'],
             'xpPercent' => $data['xpPercent'],
             'nextLevelXp' => $data['nextLevelXp'],
+            'recentXpLogs' => $data['recentXpLogs'],
         ]);
     }
 

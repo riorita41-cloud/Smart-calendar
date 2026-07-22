@@ -17,11 +17,11 @@ class XpLog
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column]
-    private int $amount = 0;
+    #[ORM\Column(nullable: true)]
+    private ?int $amount = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $reason = null; 
+    private ?string $reason = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
@@ -47,12 +47,12 @@ class XpLog
         return $this;
     }
 
-    public function getAmount(): int
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
-    public function setAmount(int $amount): static
+    public function setAmount(?int $amount): static
     {
         $this->amount = $amount;
         return $this;
@@ -72,5 +72,19 @@ class XpLog
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function getReasonText(): string
+    {
+        $reasons = [
+            'pomodoro_session' => 'Завершена сессия Pomodoro',
+            'pomodoro_full_cycle' => 'Завершён полный цикл Pomodoro',
+            'task_completed' => 'Выполнена задача',
+            'schedule_day_completed' => 'Выполнен день по расписанию',
+            'question_studied' => 'Изучен вопрос',
+            'daily_bonus' => 'Ежедневный бонус',
+        ];
+        
+        return $reasons[$this->reason] ?? ucfirst(str_replace('_', ' ', $this->reason));
     }
 }

@@ -30,22 +30,22 @@ class XpService
 
     public function awardXp(User $user, int $amount, string $reason): array
     {
-        $oldXp = $user->getXp();
-        $user->addXp($amount);
-        
         $oldLevel = $user->getLevel();
+        
+        $user->addXp($amount);
         $newLevel = $this->calculateLevel($user->getXp());
-        $leveledUp = false;
+        $leveledUp = $newLevel > $oldLevel;
 
-        if ($newLevel > $oldLevel) {
+        if ($leveledUp) {
             $user->setLevel($newLevel);
-            $leveledUp = true;
         }
 
         $log = new XpLog();
         $log->setUser($user);
         $log->setAmount($amount);
         $log->setReason($reason);
+        
+        $user->addXpLog($log);
         $this->em->persist($log);
 
         $this->updateStreak($user);
@@ -81,8 +81,17 @@ class XpService
 
     public function getXpForNextLevel(int $currentLevel): int
     {
+        if ($currentLevel >= 10) {
+            return $this->calculateTotalXpForLevel(10); 
+        }
+        
         $nextLevel = $currentLevel + 1;
-        return (int) pow($nextLevel - 1, 2) * 100;
+        return $this->calculateTotalXpForLevel($nextLevel);
+    }
+
+    private function calculateTotalXpForLevel(int $level): int
+    {
+        return (int) pow($level - 1, 2) * 100;
     }
 
     private function updateStreak(User $user): void

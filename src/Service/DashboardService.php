@@ -4,19 +4,23 @@ namespace App\Service;
 
 use App\Repository\ExamRepository;
 use App\Repository\StudyTaskRepository;
+use App\Repository\XpLogRepository; 
 use App\Entity\User;
 
 class DashboardService
 {
     private ExamRepository $examRepository;
     private StudyTaskRepository $taskRepository;
+    private XpLogRepository $xpLogRepository; 
 
     public function __construct(
         ExamRepository $examRepository,
-        StudyTaskRepository $taskRepository
+        StudyTaskRepository $taskRepository,
+        XpLogRepository $xpLogRepository 
     ) {
         $this->examRepository = $examRepository;
         $this->taskRepository = $taskRepository;
+        $this->xpLogRepository = $xpLogRepository; 
     }
 
     public function getDashboardData(User $user): array
@@ -91,6 +95,8 @@ class DashboardService
         $currentLevelXp = $user->getXp() - $prevLevelXp;
         $xpPercent = $levelRange > 0 ? (int)round(($currentLevelXp / $levelRange) * 100) : 100;
 
+        $recentXpLogs = $this->xpLogRepository->findLatestByUser($user, 3);
+
         return [
             'exams' => $exams,
             'tasks' => $tasks,
@@ -106,6 +112,7 @@ class DashboardService
             'currentTitle' => $currentTitle,
             'xpPercent' => $xpPercent,
             'nextLevelXp' => $nextLevelXp,
+            'recentXpLogs' => $recentXpLogs, 
         ];
     }
 }

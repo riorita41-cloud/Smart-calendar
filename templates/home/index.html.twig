@@ -46,7 +46,7 @@
 
     <div class="stats-row">
         <div class="card timer-card">
-            <h3 class="timer-title"> Pomodoro Таймер</h3>
+            <h3 class="timer-title">Pomodoro Таймер</h3>
             
             <div class="timer-mode work" id="timer-mode">
                 <span class="mode-text">Режим: Работа</span>
@@ -70,10 +70,7 @@
             
             <div class="timer-stats">
                 <span>Сегодня завершено сессий: </span>
-                {% set todayStr = 'now'|date('Y-m-d') %}
-                <strong id="sessions-count">
-                    {{ user.studySessions|filter(s => s.finishedAt is not null and s.finishedAt.format('Y-m-d') == todayStr and s.isCompleted)|length }}
-                </strong>
+                <strong id="sessions-count">{{ todaySessionsCount }}</strong>
             </div>
             
             <div id="timer-message" class="timer-message" style="display: none;"></div>
@@ -95,24 +92,30 @@
         <div class="avatar-circle" id="user-avatar"></div>
         
         <div class="level-info">
-            {% set titles = {1: 'Новичок', 2: 'Ученик', 3: 'Старательный', 4: 'Знающий', 5: 'Подготовленный', 6: 'Уверенный', 7: 'Эксперт', 8: 'Мастер', 9: 'Гуру', 10: 'Легенда'} %}
-            {% set currentTitle = titles[user.level] ?? 'Легенда' %}
-            
-            {% set prevLevelXp = ((user.level - 1) ** 2) * 100 %}
-            {% set nextLevelXp = (user.level ** 2) * 100 %}
-            {% set levelRange = nextLevelXp - prevLevelXp %}
-            {% set currentLevelXp = user.xp - prevLevelXp %}
-            {% set xpPercent = levelRange > 0 ? (currentLevelXp / levelRange * 100) : 100 %}
-            
             <div class="level-text">Уровень {{ user.level }} — {{ currentTitle }}</div>
             <div class="xp-text">{{ user.xp }} / {{ nextLevelXp }} XP</div>
             <div class="xp-bar">
                 <div class="xp-fill" style="width: {{ xpPercent }}%"></div>
             </div>
-            <div class="streak-text"> Серия дней: {{ user.streakDays }}</div>
+            <div class="streak-text">Серия дней: {{ user.streakDays }}</div>
         </div>
-        
+
         <a href="{{ path('app_avatar') }}" class="btn-configure-avatar">Настроить аватар</a>
+
+        {# БЛОК ИСТОРИИ АКТИВНОСТИ ТЕПЕРЬ НИЖЕ КНОПКИ #}
+        {% if recentXpLogs is defined and recentXpLogs|length > 0 %}
+            <div class="xp-history">
+                <h4 class="xp-history-title">Последняя активность</h4>
+                <div class="xp-history-list">
+                    {% for log in recentXpLogs %}
+                        <div class="xp-history-item">
+                            <span class="xp-history-reason">{{ log.reasonText }}</span>
+                            <span class="xp-history-amount">+{{ log.amount }} XP</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
@@ -120,6 +123,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="module" src="{{ asset('js/dashboard.js') }}"></script>
-    
     <script src="{{ asset('js/pomodoro.js') }}"></script>
 {% endblock %}
