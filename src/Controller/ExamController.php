@@ -86,13 +86,13 @@ class ExamController extends AbstractController
         return $this->redirectToRoute('app_exams');
     }
 
-        #[Route('/exam/{id}/schedule', name: 'app_exam_schedule')]
+    #[Route('/exam/{id}/schedule', name: 'app_exam_schedule')]
     public function schedule(int $id, ExamRepository $examRepository, StudyScheduleRepository $scheduleRepository): Response
     {
         $exam = $examRepository->findForUserOrThrow($id, $this->getUser());
 
         $schedules = $scheduleRepository->findByExam($exam);
-        $allQuestions = $examRepository->getAllQuestionsIndexed($exam); // <-- Изменено здесь
+        $allQuestions = $examRepository->getAllQuestionsIndexed($exam);
 
         return $this->render('exams/schedule.html.twig', [
             'exam' => $exam,
@@ -101,7 +101,7 @@ class ExamController extends AbstractController
         ]);
     }
 
-    #[Route('/schedule/{id}/complete', name: 'app_schedule_complete', methods: ['POST'])]
+        #[Route('/schedule/{id}/complete', name: 'app_schedule_complete', methods: ['POST'])]
     public function completeSchedule(
         int $id,
         Request $request,
@@ -120,18 +120,24 @@ class ExamController extends AbstractController
         }
 
         $schedule->setIsCompleted(true);
-        
         $questionRepository->setStudiedStatusForIds($schedule->getQuestionIds(), true);
-        
-        $entityManager->flush();
 
         $user = $this->getUser();
-        $xpResult = $xpService->awardXp($user, 30, 'schedule_day_completed');
-        
-        if ($xpResult['leveledUp']) {
-            $this->addFlash('success', "🎉 Поздравляем! Вы достигли уровня {$xpResult['newLevel']} ({$xpResult['title']}) и получили +{$xpResult['xpAdded']} XP!");
+
+        if (!$schedule->isXpAwarded()) {
+            $schedule->setXpAwarded(true);
+            $xpResult = $xpService->awardXp($user, 30, 'schedule_day_completed');
+            
+            $entityManager->flush(); 
+
+            if ($xpResult['leveledUp']) {
+                $this->addFlash('success', "🎉 Поздравляем! Вы достигли уровня {$xpResult['newLevel']} ({$xpResult['title']}) и получили +{$xpResult['xpAdded']} XP!");
+            } else {
+                $this->addFlash('success', "Занятие и все его вопросы отмечены как выученные! +{$xpResult['xpAdded']} XP (Всего: {$xpResult['xp']} XP)");
+            }
         } else {
-            $this->addFlash('success', "Занятие и все его вопросы отмечены как выученные! +{$xpResult['xpAdded']} XP (Всего: {$xpResult['xp']} XP)");
+            $entityManager->flush();
+            $this->addFlash('info', 'Занятие отмечено как выполненное. (XP за него был начислен ранее и повторно не начисляется)');
         }
 
         return $this->redirectToRoute('app_exam_schedule', ['id' => $schedule->getExam()->getId()]);
@@ -160,7 +166,7 @@ class ExamController extends AbstractController
         
         $entityManager->flush();
 
-        $this->addFlash('success', 'Занятие возвращено в невыполненные');
+        $this->addFlash('success', 'Занятие возвращено в невыполненные (но XP за него остается начисленным)');
         return $this->redirectToRoute('app_exam_schedule', ['id' => $schedule->getExam()->getId()]);
     }
 

@@ -80,8 +80,7 @@ class XpLog
             'pomodoro_session' => 'Завершена сессия Pomodoro',
             'pomodoro_full_cycle' => 'Завершён полный цикл Pomodoro',
             'task_completed' => 'Выполнена задача',
-            'schedule_day_completed' => 'Выполнен день по расписанию',
-            'question_studied' => 'Изучен вопрос',
+            'schedule_day_completed' => 'Расписание на день выполнено',
             'daily_bonus' => 'Ежедневный бонус',
         ];
         

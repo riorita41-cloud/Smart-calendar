@@ -33,6 +33,9 @@ class StudyTask
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\Column(options: ['default' => false])]
+    private bool $xpAwarded = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -101,6 +104,17 @@ class StudyTask
     public function setUser(?User $user): static
     {
         $this->user = $user;
+        return $this;
+    }
+
+    public function isXpAwarded(): bool
+    {
+        return $this->xpAwarded;
+    }
+
+    public function setXpAwarded(bool $xpAwarded): static
+    {
+        $this->xpAwarded = $xpAwarded;
         return $this;
     }
 }

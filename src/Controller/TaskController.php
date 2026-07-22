@@ -7,6 +7,7 @@ use App\Entity\Exam;
 use App\Form\StudyTaskType;
 use App\Repository\ExamRepository;
 use App\Repository\StudyTaskRepository;
+use App\Service\XpService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,13 @@ class TaskController extends AbstractController
     }
 
     #[Route('/api/task/{id}/toggle', name: 'app_task_toggle', methods: ['POST'])]
-    public function toggle(Request $request, int $id, EntityManagerInterface $entityManager, StudyTaskRepository $studyTaskRepository): JsonResponse
+    public function toggle(
+        Request $request, 
+        int $id, 
+        EntityManagerInterface $entityManager, 
+        StudyTaskRepository $studyTaskRepository,
+        XpService $xpService 
+    ): JsonResponse
     {
         try {
             $task = $studyTaskRepository->findForUserOrThrow($id, $this->getUser());
@@ -42,9 +49,31 @@ class TaskController extends AbstractController
         }
 
         $task->setIsCompleted(!$task->isCompleted());
-        $entityManager->flush();
+        
+        $response = [
+            'status' => 'success', 
+            'isCompleted' => $task->isCompleted()
+        ];
 
-        return new JsonResponse(['status' => 'success']);
+        if ($task->isCompleted() && !$task->isXpAwarded()) {
+            $user = $this->getUser();
+            $xpResult = $xpService->awardXp($user, 10, 'task_completed');
+            
+            $task->setXpAwarded(true);
+            
+            $entityManager->flush(); 
+
+            $response['xp'] = $xpResult;
+            $response['message'] = "Задача выполнена! +{$xpResult['xpAdded']} XP";
+        } else {
+            $entityManager->flush(); 
+            
+            if ($task->isCompleted()) {
+                $response['message'] = 'Задача отмечена как выполненная (XP уже был начислен ранее)';
+            }
+        }
+
+        return new JsonResponse($response);
     }
 
     #[Route('/task/{id}/delete', name: 'app_task_delete', methods: ['POST'])]

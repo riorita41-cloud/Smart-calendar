@@ -39,6 +39,9 @@ class StudySchedule
     #[ORM\Column]
     private bool $isCompleted = false;
 
+    #[ORM\Column(options: ['default' => false])]
+    private bool $xpAwarded = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -129,6 +132,17 @@ class StudySchedule
     public function setIsCompleted(bool $isCompleted): static
     {
         $this->isCompleted = $isCompleted;
+        return $this;
+    }
+
+    public function isXpAwarded(): bool
+    {
+        return $this->xpAwarded;
+    }
+
+    public function setXpAwarded(bool $xpAwarded): static
+    {
+        $this->xpAwarded = $xpAwarded;
         return $this;
     }
 }
