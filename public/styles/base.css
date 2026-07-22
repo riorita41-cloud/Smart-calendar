@@ -122,7 +122,6 @@ body {
     font-size: 15px;
 }
 
-/* ИСПРАВЛЕНИЕ: Чекбокс и текст на одном уровне */
 .form-group.remember-me {
     display: flex;
     align-items: center;
@@ -148,7 +147,6 @@ body {
     color: var(--color-text-secondary);
 }
 
-/* ИСПРАВЛЕНИЕ: Ссылка "Войти/Зарегистрироваться" в стиле сайта */
 .login-link,
 .register-link {
     text-align: center;
@@ -680,7 +678,6 @@ body {
     height: 18px;
 }
 
-/* Усиленные стили для ссылки "Войти" */
 .register-container .login-link {
     text-align: center;
     margin-top: 25px;
