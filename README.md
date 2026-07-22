@@ -1,4 +1,4 @@
-![Главная страница]<img width="1881" height="973" alt="1" src="https://github.com/user-attachments/assets/5a7bb9a3-9b39-48f4-9a1b-8039c17a36b0" />
+<img width="1881" height="973" alt="1" src="https://github.com/user-attachments/assets/5a7bb9a3-9b39-48f4-9a1b-8039c17a36b0" />
 Умный Календарь — приложение для эффективной подготовки к экзаменам с Pomodoro-таймером, системой опыта (XP) и автоматическим расписанием. Идеально подходит для студентов и тех, кто готовится к сертификациям.
 🌟 Основные функции
 Pomodoro-таймер с отслеживанием сессий и статистикой
@@ -18,3 +18,56 @@ Web-сервер (Nginx/Apache) или Symfony Web Server
 ```powershell
 git clone https://github.com/riorita41-cloud/Smart-calendar.git
 cd Smart-calendar
+```
+
+### 2. Установка зависимостей
+
+```powershell
+composer install
+```
+
+### 3. Настройка окружения
+
+```powershell
+# Для Windows
+copy .env.example .env
+
+# Для Linux/macOS
+cp .env.example .env
+```
+Отредактируйте файл .env, указав параметры вашей базы данных:
+```powershell
+DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=8.0"
+```
+
+### 4. Выполнение миграций
+
+```powershell
+php bin/console doctrine:migrations:migrate
+```
+
+### 5. Запуск приложения
+
+```powershell
+php bin/console server:run
+```
+
+## 📁 Структура проекта
+├── src/ # Основной код приложения
+│ ├── Controller/ # Контроллеры (логика маршрутов)
+│ ├── Entity/ # Сущности базы данных (ORM)
+│ ├── Repository/ # Репозитории (работа с БД)
+│ └── Service/ # Сервисы (бизнес-логика)
+── templates/ # Twig-шаблоны (HTML-страницы)
+├── public/ # Публичные файлы (CSS, JS, изображения)
+├── migrations/ # Миграции базы данных
+├── config/ # Конфигурационные файлы
+── .env.example # Пример переменных окружения
+
+💡 Особенности системы XP
++5 XP за изучение вопроса
++10 XP за выполнение задачи
++30 XP за завершение дня по расписанию
++25 XP за завершение Pomodoro-сессии
++30 XP за ежедневный бонус
+Система гарантирует, что XP начисляется только один раз за каждое действие, даже если пользователь отменяет и повторяет действие.
