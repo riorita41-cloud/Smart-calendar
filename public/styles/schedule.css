@@ -271,13 +271,3 @@
 .badge-icon {
     color: var(--color-primary);
 }
-
-@media (max-width: 640px) {
-    .schedule-summary {
-        gap: 20px;
-    }
-    
-    .summary-number {
-        font-size: 24px;
-    }
-}

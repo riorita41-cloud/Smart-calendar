@@ -568,29 +568,6 @@ body {
     to { transform: translateX(450px); opacity: 0; }
 }
 
-@media (max-width: 768px) {
-    .tasks-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-    }
-    
-    .tasks-title {
-        text-align: center;
-        font-size: 28px;
-    }
-    
-    .header-actions {
-        justify-content: center;
-    }
-    
-    .header-actions button,
-    .header-actions .btn-add {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
 .global-timer-widget {
     position: fixed;
     bottom: 30px;

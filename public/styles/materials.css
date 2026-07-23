@@ -715,20 +715,3 @@ select.form-control:focus {
     color: var(--color-primary-dark);
     transform: translateX(3px);
 }
-
-@media (max-width: 768px) {
-    .upload-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .material-stats {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .stats-bar {
-        flex-direction: column;
-        align-items: stretch;
-        text-align: center;
-    }
-}

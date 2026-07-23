@@ -266,21 +266,6 @@
     scrollbar-color: var(--color-accent) var(--color-bg-secondary);
 }
 
-@media (max-width: 900px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .avatar-card {
-        grid-column: 1;
-        grid-row: 3;
-    }
-    
-    .stats-row {
-        flex-direction: column;
-    }
-}
-
 .timer-display {
     font-size: 56px;
     font-weight: bold;
