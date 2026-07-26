@@ -7,6 +7,7 @@
 /public/bundles/
 /var/
 /vendor/
+C:\Users\riori\Projects\smart-calendar\uploads
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
@@ -18,3 +19,6 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+
+   /public/uploads/

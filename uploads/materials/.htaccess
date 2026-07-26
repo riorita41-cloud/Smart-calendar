@@ -1,4 +1,0 @@
-<Files *>
-    SetHandler none
-    php_flag engine off
-</Files>
