@@ -46,7 +46,6 @@
                 </div>
                 
                 <div class="task-actions normal-mode">
-                    {# ИСПРАВЛЕНО: убран onsubmit="return confirm(...)", добавлен класс delete-task-form #}
                     <form method="post" action="{{ path('app_task_delete', {id: task.id}) }}" class="delete-task-form">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_task_' ~ task.id) }}">
                         <button type="submit" class="btn-outline-neutral">Удалить</button>

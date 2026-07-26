@@ -66,7 +66,6 @@
                     </div>
 
                     <div class="exam-actions">
-                        {# ИСПРАВЛЕНО: убран onclick="return confirm(...)", добавлен класс generate-schedule-form #}
                         <form method="post" action="{{ path('app_exam_generate_schedule', {id: exam.id}) }}" class="inline-form generate-schedule-form">
                             <input type="hidden" name="_token" value="{{ csrf_token('generate_schedule_' ~ exam.id) }}">
                             <button type="submit" class="btn-generate-schedule">
@@ -77,7 +76,6 @@
                             </button>
                         </form>
                         
-                        {# ИСПРАВЛЕНО: убран onsubmit="return confirm(...)", добавлен класс delete-exam-form #}
                         <form method="post" action="{{ path('app_exam_delete', {id: exam.id}) }}" class="inline-form delete-exam-form">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete_exam_' ~ exam.id) }}">
                             <button type="submit" class="btn-delete-exam">
@@ -105,7 +103,6 @@
 </div>
 {% endblock %}
 
-{# ДОБАВЛЕНО: подключение JS файла с обработкой модальных окон #}
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/exams.js') }}"></script>

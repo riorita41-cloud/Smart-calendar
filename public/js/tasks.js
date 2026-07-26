@@ -103,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // === ОБРАБОТКА МАССОВОГО УДАЛЕНИЯ (с красивым модальным окном) ===
     if (bulkDeleteBtn) {
         bulkDeleteBtn.addEventListener('click', async function() {
             const confirmed = await CustomModal.confirm(
@@ -137,10 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === НОВОЕ: ОБРАБОТКА ОДИНОЧНОГО УДАЛЕНИЯ (с красивым модальным окном) ===
     document.querySelectorAll('.delete-task-form').forEach(form => {
         form.addEventListener('submit', async function(e) {
-            e.preventDefault(); // Останавливаем стандартную отправку формы
+            e.preventDefault(); 
             
             const confirmed = await CustomModal.confirm(
                 'Удалить эту задачу? Это действие нельзя отменить.',
@@ -148,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             );
             
             if (confirmed) {
-                this.submit(); // Отправляем форму, если пользователь подтвердил
+                this.submit(); 
             }
         });
     });

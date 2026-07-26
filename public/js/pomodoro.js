@@ -199,7 +199,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateDisplay() {
-        // ИСПОЛЬЗУЕМ formatTime из api-utils.js
         display.textContent = formatTime(timeLeft);
     }
 
