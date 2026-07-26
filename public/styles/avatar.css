@@ -7,7 +7,7 @@
 
 .avatar-title {
     color: var(--color-primary);
-    font-size: 32px;
+    font-size: clamp(24px, 4vw, 32px);
     margin-bottom: 30px;
     text-align: center;
 }
@@ -27,8 +27,9 @@
 }
 
 .avatar-dicebear {
-    width: 300px;
-    height: 300px;
+    width: min(300px, 80%);
+    height: min(300px, 80%);
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     background: var(--color-bg-light);
     padding: 20px;
@@ -149,4 +150,85 @@
 .btn-random:hover,
 .btn-save:hover {
     background: var(--color-primary-dark);
+}
+
+@media (max-width: 900px) {
+    .avatar-container {
+        grid-template-columns: 1fr; 
+        gap: 25px;
+    }
+    
+    .avatar-preview {
+        padding: 30px;
+    }
+    
+    .avatar-form {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .avatar-page {
+        padding: 20px 15px;
+    }
+    
+    .avatar-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    .avatar-preview {
+        padding: 25px 20px;
+    }
+    
+    .avatar-dicebear {
+        width: min(250px, 85%);
+        height: min(250px, 85%);
+        padding: 15px;
+    }
+    
+    .avatar-form {
+        padding: 20px 15px;
+    }
+    
+    .form-section h3 {
+        font-size: 16px;
+    }
+    
+    .option-group {
+        grid-template-columns: 1fr;
+    }
+    
+    .option-item label {
+        padding: 14px; 
+        font-size: 15px;
+    }
+    
+    .color-circle {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .btn-random,
+    .btn-save {
+        padding: 14px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 360px) {
+    .avatar-page {
+        padding: 15px 10px;
+    }
+    
+    .avatar-dicebear {
+        width: min(200px, 90%);
+        height: min(200px, 90%);
+        padding: 10px;
+    }
+    
+    .avatar-preview,
+    .avatar-form {
+        padding: 15px 12px;
+    }
 }

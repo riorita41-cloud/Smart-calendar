@@ -1,3 +1,6 @@
+/* ============================================
+   ОСНОВНАЯ СЕТКА И КАРТОЧКИ
+   ============================================ */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr 300px;
@@ -16,6 +19,9 @@
     border: 1px solid var(--color-border);
 }
 
+/* ============================================
+   ЗАДАЧИ НА СЕГОДНЯ
+   ============================================ */
 .task-of-day {
     grid-column: 1;
     grid-row: 1;
@@ -36,167 +42,6 @@
     text-align: center;
 }
 
-.stats-row {
-    grid-column: 1;
-    grid-row: 2;
-    display: flex;
-    gap: 25px;
-}
-
-.timer-card, .days-card {
-    flex: 1;
-    text-align: center;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.timer-title, .days-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: var(--color-primary);
-    margin-bottom: 20px;
-}
-
-.timer-circle {
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 20px;
-    position: relative;
-}
-
-.timer-circle svg {
-    transform: rotate(-90deg);
-}
-
-.timer-circle circle {
-    fill: none;
-    stroke-width: 8;
-}
-
-.timer-circle .bg {
-    stroke: var(--color-bg-secondary);
-}
-
-.timer-circle .fill {
-    stroke: var(--color-primary);
-    stroke-linecap: round;
-}
-
-.timer-display {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 32px;
-    font-weight: bold;
-    color: var(--color-primary);
-}
-
-.btn-start {
-    background: var(--color-primary);
-    color: var(--color-bg-light);
-    border: none;
-    padding: 12px 30px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.2s;
-    font-family: Georgia, serif;
-}
-
-.btn-start:hover {
-    background: var(--color-primary-dark);
-}
-
-.days-circle {
-    width: 150px;
-    height: 150px;
-    margin: 0 auto;
-    border: 4px solid var(--color-accent);
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-bg-light);
-    flex-shrink: 0;
-}
-
-.days-number {
-    font-size: 48px;
-    font-weight: bold;
-    color: var(--color-primary);
-}
-
-.avatar-card {
-    grid-column: 2;
-    grid-row: 1 / 3;
-    text-align: center;
-}
-
-.avatar-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: var(--color-primary);
-    margin-bottom: 20px;
-}
-
-.avatar-circle {
-    width: 150px;
-    height: 150px;
-    background: var(--color-bg-secondary);
-    border-radius: 50%;
-    margin: 0 auto 20px;
-    border: 3px solid var(--color-accent);
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.avatar-circle svg {
-    width: 100%;
-    height: 100%;
-}
-
-.level-info {
-    margin-bottom: 20px;
-}
-
-.level-text {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--color-primary);
-    margin-bottom: 5px;
-}
-
-.xp-text {
-    font-size: 14px;
-    color: var(--color-text-secondary);
-    margin-bottom: 10px;
-}
-
-.xp-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--color-bg-secondary);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.xp-fill {
-    height: 100%;
-    background: var(--color-accent);
-}
-
-.time-info {
-    font-size: 14px;
-    color: var(--color-text-secondary);
-}
-
 .no-data {
     text-align: center;
     color: var(--color-text-muted);
@@ -212,6 +57,26 @@
     background: var(--color-bg-light);
     border-radius: 8px;
     border: 1px solid var(--color-border);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-accent) var(--color-bg-secondary);
+}
+
+.task-list-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.task-list-container::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+    border-radius: 4px;
+}
+
+.task-list-container::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 4px;
+}
+
+.task-list-container::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
 }
 
 .task-list-item {
@@ -243,129 +108,100 @@
     margin-bottom: 0;
 }
 
-.task-list-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.task-list-container::-webkit-scrollbar-track {
-    background: var(--color-bg-secondary);
-    border-radius: 4px;
-}
-
-.task-list-container::-webkit-scrollbar-thumb {
-    background: var(--color-accent);
-    border-radius: 4px;
-}
-
-.task-list-container::-webkit-scrollbar-thumb:hover {
-    background: var(--color-primary);
-}
-
-.task-list-container {
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-accent) var(--color-bg-secondary);
-}
-
-.timer-display {
-    font-size: 56px;
-    font-weight: bold;
-    color: var(--color-text);
-    font-family: 'Courier New', monospace; 
-    margin-bottom: 24px;
-    letter-spacing: 2px;
-    position: static; 
-    transform: none;
-}
-
-.timer-controls {
+/* ============================================
+   СТАТИСТИКА (ДНИ ДО ЭКЗАМЕНА)
+   ============================================ */
+.stats-row {
+    grid-column: 1;
+    grid-row: 2;
     display: flex;
-    justify-content: center;
-    gap: 12px;
+    gap: 25px;
+    justify-content: center; /* Центрируем, так как таймер удален */
+}
+
+.days-card {
+    flex: 1;
+    max-width: 350px; /* Ограничиваем ширину для красоты */
+    text-align: center;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.days-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--color-primary);
     margin-bottom: 20px;
 }
 
-.btn-start, .btn-pause, .btn-reset {
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-    font-family: Georgia, serif;
+.days-circle {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    border: 4px solid var(--color-accent);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-light);
+    flex-shrink: 0;
 }
 
-.btn-start {
-    background: var(--color-primary);
-    color: var(--color-bg-light);
-}
-.btn-start:hover {
-    background: var(--color-primary-dark);
-    transform: translateY(-2px);
-}
-
-.btn-pause {
-    background: var(--color-accent);
-    color: white;
-}
-.btn-pause:hover {
-    background: #B8984F;
-    transform: translateY(-2px);
-}
-
-.btn-reset {
-    background: transparent;
-    border: 2px solid var(--color-border);
-    color: var(--color-text-secondary);
-}
-.btn-reset:hover {
-    border-color: var(--color-error);
-    color: var(--color-error);
-    transform: translateY(-2px);
-}
-
-.timer-stats {
-    font-size: 14px;
-    color: var(--color-text-secondary);
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid var(--color-border);
-}
-
-.timer-stats strong {
+.days-number {
+    font-size: 48px;
+    font-weight: bold;
     color: var(--color-primary);
-    font-size: 18px;
 }
 
-.timer-message {
-    margin-top: 16px;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 14px;
+.days-exam-name {
+    margin-top: 15px;
+    font-size: 15px;
+    color: var(--color-text);
+    font-weight: 600;
     font-family: Georgia, serif;
-    animation: fadeIn 0.3s ease;
+    text-align: center;
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    padding: 0 10px;
 }
 
-.timer-message.success {
-    background: rgba(144, 204, 116, 0.2);
-    color: #2d6a24;
-    border: 1px solid #90cc74;
+/* ============================================
+   АВАТАР И УРОВЕНЬ
+   ============================================ */
+.avatar-card {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    text-align: center;
 }
 
-.timer-message.error {
-    background: var(--color-error-light);
-    color: #991b1b;
-    border: 1px solid var(--color-error-lighter);
+.avatar-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 20px;
 }
 
-.timer-message.info {
+.avatar-circle {
+    width: 150px;
+    height: 150px;
     background: var(--color-bg-secondary);
-    color: var(--color-text-secondary);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    border: 3px solid var(--color-accent);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+.avatar-circle svg {
+    width: 100%;
+    height: 100%;
 }
 
 .level-info {
@@ -401,18 +237,6 @@
     transition: width 0.5s ease;
 }
 
-.streak-text {
-    font-size: 15px;
-    color: var(--color-accent);
-    font-weight: bold;
-    font-family: Georgia, serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 8px;
-}
-
 .btn-configure-avatar {
     display: inline-flex;
     align-items: center;
@@ -434,118 +258,9 @@
     transform: translateY(-2px);
 }
 
-.timer-mode {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin: 0 auto 15px;
-    padding: 8px 16px;
-    background: var(--color-bg-secondary);
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-text);
-    transition: all 0.3s;
-    font-family: Georgia, serif;
-    width: fit-content;
-}
-
-.timer-mode.work {
-    background: rgba(74, 93, 58, 0.15);
-    color: var(--color-primary);
-}
-
-.timer-mode.short-break {
-    background: rgba(100, 149, 237, 0.15);
-    color: #4a6fa5;
-}
-
-.timer-mode.long-break {
-    background: rgba(201, 169, 97, 0.2);
-    color: #7a5f15;
-}
-
-.timer-mode svg {
-    flex-shrink: 0;
-}
-
-.mode-text {
-    white-space: nowrap;
-}
-
-.cycle-dots {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 15px 0 8px;
-}
-
-.cycle-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--color-bg-secondary);
-    border: 2px solid var(--color-border);
-    transition: all 0.3s;
-}
-
-.cycle-dot.active {
-    background: var(--color-primary);
-    border-color: var(--color-primary);
-    transform: scale(1.2);
-}
-
-.cycle-dot.completed {
-    background: var(--color-success);
-    border-color: var(--color-success);
-}
-
-.cycle-info {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    text-align: center;
-    font-family: Georgia, serif;
-    margin-bottom: 15px;
-}
-
-.timer-card.break-mode .timer-display {
-    color: #4a6fa5;
-}
-
-.timer-card.long-break-mode .timer-display {
-    color: #7a5f15;
-}
-
-.timer-message.level-up {
-    background: rgba(201, 169, 97, 0.15);
-    color: #7a5f15;
-    border: 2px solid var(--color-accent);
-    font-weight: bold;
-    text-align: center;
-    animation: levelUpPulse 1.5s ease-in-out;
-}
-
-@keyframes levelUpPulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 rgba(201, 169, 97, 0); }
-    50% { transform: scale(1.03); box-shadow: 0 0 15px rgba(201, 169, 97, 0.4); }
-    100% { transform: scale(1); box-shadow: 0 0 0 rgba(201, 169, 97, 0); }
-}
-
-.days-exam-name {
-    margin-top: 15px;
-    font-size: 15px;
-    color: var(--color-text);
-    font-weight: 600;
-    font-family: Georgia, serif;
-    text-align: center;
-    width: 100%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    line-height: 1.4;
-    padding: 0 10px;
-}
-
+/* ============================================
+   ПРОГРЕСС ИЗУЧЕНИЯ
+   ============================================ */
 .progress-section {
     margin-top: 25px;
     padding-top: 20px;
@@ -591,6 +306,9 @@
     text-align: right;
 }
 
+/* ============================================
+   ИСТОРИЯ ОПЫТА (XP)
+   ============================================ */
 .xp-history {
     margin: 20px 0;
     padding: 15px;
@@ -642,3 +360,124 @@
     font-size: 14px;
 }
 
+/* ============================================
+   СТРИКИ (СЕРИЯ ДНЕЙ)
+   ============================================ */
+.streak-section {
+    margin: 15px 0 10px 0;
+    padding: 10px 8px;
+    background: #FAFBFC;
+    border-radius: 8px;
+    border: 1px solid #E8ECF0;
+}
+
+.streak-slots {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 0;
+    flex-wrap: nowrap;
+}
+
+.streak-slot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.streak-slot.completed.fire {
+    background: linear-gradient(135deg, #FFB5B5 0%, #FFC4C4 100%);
+    box-shadow: 0 2px 4px rgba(255, 181, 181, 0.3);
+}
+.streak-slot.active.fire {
+    background: linear-gradient(135deg, #FF9A9A 0%, #FFB5B5 100%);
+    box-shadow: 0 2px 6px rgba(255, 154, 154, 0.4);
+}
+
+.streak-slot.completed.star {
+    background: linear-gradient(135deg, #FFE5A3 0%, #FFEEB8 100%);
+    box-shadow: 0 2px 4px rgba(255, 229, 163, 0.3);
+}
+.streak-slot.active.star {
+    background: linear-gradient(135deg, #FFD985 0%, #FFE5A3 100%);
+    box-shadow: 0 2px 6px rgba(255, 217, 133, 0.4);
+}
+
+.streak-slot.completed.heart {
+    background: linear-gradient(135deg, #FFB5D9 0%, #FFC4E0 100%);
+    box-shadow: 0 2px 4px rgba(255, 181, 217, 0.3);
+}
+.streak-slot.active.heart {
+    background: linear-gradient(135deg, #FF9ACC 0%, #FFB5D9 100%);
+    box-shadow: 0 2px 6px rgba(255, 154, 204, 0.4);
+}
+
+.streak-slot.completed.fox {
+    background: linear-gradient(135deg, #FFC9A3 0%, #FFD4B3 100%);
+    box-shadow: 0 2px 4px rgba(255, 201, 163, 0.3);
+}
+.streak-slot.active.fox {
+    background: linear-gradient(135deg, #FFB885 0%, #FFC9A3 100%);
+    box-shadow: 0 2px 6px rgba(255, 184, 133, 0.4);
+}
+
+.streak-slot.locked {
+    background: #E8ECF0;
+}
+
+.streak-icon {
+    width: 18px;
+    height: 18px;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05));
+    transition: transform 0.3s ease;
+}
+
+.streak-slot.completed:hover .streak-icon,
+.streak-slot.active:hover .streak-icon {
+    transform: scale(1.15);
+}
+
+.streak-slot.locked .streak-icon {
+    opacity: 0.4;
+}
+
+.streak-week-info {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.week-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #F0F4F8 0%, #E8ECF0 100%);
+    color: #6B7280;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.badge-icon {
+    opacity: 0.7;
+}
+
+.streak-slot.active {
+    animation: gentlePulse 2s infinite;
+}
+
+@keyframes gentlePulse {
+    0%, 100% { 
+        transform: scale(1.05);
+        box-shadow: inherit;
+    }
+    50% { 
+        transform: scale(1.1);
+    }
+}

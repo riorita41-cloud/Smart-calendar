@@ -51,7 +51,7 @@ class ExamController extends AbstractController
             return $this->redirectToRoute('app_exams');
         }
         
-        return $this->render('exam/new.html.twig', [
+        return $this->render('exams/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }

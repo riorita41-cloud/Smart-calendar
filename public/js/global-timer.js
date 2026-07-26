@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let widgetInterval = null;
 
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
     function updateGlobalWidget() {
         const savedData = localStorage.getItem(TIMER_STORAGE_KEY);
         if (!savedData) {
@@ -20,13 +26,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const remainingMs = data.endTime - now;
         const timeLeft = Math.ceil(remainingMs / 1000);
 
-        const currentPath = window.location.pathname;
-        const isHomePage = currentPath === '/home' || currentPath === '/';
-
-        if (timeLeft > 0 && data.isRunning && !isHomePage) {
+        if (timeLeft > 0 && data.isRunning) {
             if (widget) widget.style.display = 'flex';
             if (widgetTime) {
                 widgetTime.textContent = formatTime(timeLeft);
+                
+                if (timeLeft <= 60) {
+                    widgetTime.style.color = '#DC2626';
+                } else {
+                    widgetTime.style.color = '';
+                }
             }
         } else {
             if (widget) widget.style.display = 'none';
@@ -40,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         widget.addEventListener('click', (e) => {
             if (e.target.tagName !== 'A' && !e.target.closest('a')) {
-                window.location.href = '/home';
+                window.location.href = '/pomodoro';
             }
         });
     }

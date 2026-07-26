@@ -103,9 +103,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // === ОБРАБОТКА МАССОВОГО УДАЛЕНИЯ (с красивым модальным окном) ===
     if (bulkDeleteBtn) {
-        bulkDeleteBtn.addEventListener('click', function() {
-            if (!confirm('Удалить выбранные задачи? Это действие нельзя отменить.')) return;
+        bulkDeleteBtn.addEventListener('click', async function() {
+            const confirmed = await CustomModal.confirm(
+                'Удалить выбранные задачи? Это действие нельзя отменить.',
+                'Подтверждение удаления'
+            );
+            
+            if (!confirmed) return;
 
             const checkedBoxes = document.querySelectorAll('.task-select-checkbox:not(#selectAllTasks):checked');
             const taskIds = Array.from(checkedBoxes).map(cb => cb.value);
@@ -130,6 +136,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // === НОВОЕ: ОБРАБОТКА ОДИНОЧНОГО УДАЛЕНИЯ (с красивым модальным окном) ===
+    document.querySelectorAll('.delete-task-form').forEach(form => {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); // Останавливаем стандартную отправку формы
+            
+            const confirmed = await CustomModal.confirm(
+                'Удалить эту задачу? Это действие нельзя отменить.',
+                'Подтверждение удаления'
+            );
+            
+            if (confirmed) {
+                this.submit(); // Отправляем форму, если пользователь подтвердил
+            }
+        });
+    });
 });
 
 function openTaskModal(dateStr) {

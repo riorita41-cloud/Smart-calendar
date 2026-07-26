@@ -8,6 +8,11 @@
     <title>{% block title %}Умный Календарь{% endblock %}</title>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('styles/base.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/navigation.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/components.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/responsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/modal.css') }}"> {# ← ДОБАВЛЕНО #}
+    
     {% block stylesheets %}{% endblock %}
 </head>
 
@@ -43,6 +48,13 @@
                         <span class="nav-icon"></span> Материалы
                     </a>
                 </li>
+                
+                <li class="nav-item">
+                    <a href="{{ path('app_pomodoro') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_pomodoro' %}active{% endif %}">
+                        <span class="nav-icon"></span> Таймер
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a href="{{ path('app_avatar') }}" class="nav-link {% if app.request.attributes.get('_route') == 'app_avatar' %}active{% endif %}">
                         <span class="nav-icon"></span> Аватар
@@ -88,18 +100,25 @@
 
     <script src="{{ asset('js/api-utils.js') }}"></script>
     
-    <script src="{{ asset('js/global-timer.js') }}"></script>
+    {% if app.request.attributes.get('_route') != 'app_pomodoro' %}
+        <script src="{{ asset('js/global-timer.js') }}"></script>
+    {% endif %}
+    
+    <script src="{{ asset('js/modal.js') }}"></script> {# ← ДОБАВЛЕНО #}
+    
     {% block javascripts %}{% endblock %}
 
-    <div id="global-timer-widget" class="global-timer-widget" style="display: none;">
-        <span class="widget-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-        </span>
-        <span class="widget-time" id="global-timer-time">25:00</span>
-        <a href="{{ path('app_home') }}" class="widget-expand">Развернуть</a>
-    </div>
+    {% if app.request.attributes.get('_route') != 'app_pomodoro' %}
+        <div id="global-timer-widget" class="global-timer-widget" style="display: none;">
+            <span class="widget-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </span>
+            <span class="widget-time" id="global-timer-time">25:00</span>
+            <a href="{{ path('app_pomodoro') }}" class="widget-expand">Развернуть</a>
+        </div>
+    {% endif %}
 </body>
 </html>

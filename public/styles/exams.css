@@ -82,3 +82,127 @@
     margin-right: auto;
     border-left: 4px solid var(--color-accent);
 }
+
+@media (max-width: 768px) {
+    .exams-page {
+        padding: 30px 15px;
+    }
+    
+    .exams-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    
+    .exams-title {
+        font-size: 28px;
+    }
+    
+    .exam-card {
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .exam-info h3 {
+        font-size: 20px;
+    }
+    
+    .exam-meta {
+        font-size: 14px;
+    }
+    
+    .empty-state {
+        padding: 40px 15px;
+    }
+    
+    .empty-state .icon {
+        font-size: 52px;
+    }
+    
+    .flash-success {
+        padding: 12px 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .exams-page {
+        padding: 20px 10px;
+    }
+    
+    .exams-header {
+        margin-bottom: 20px;
+    }
+    
+    .exams-title {
+        font-size: 24px;
+    }
+    
+    .exam-card {
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .exam-info h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+    
+    .exam-meta {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    
+    .exam-meta .icon {
+        margin-right: 6px;
+    }
+    
+    .empty-state {
+        padding: 30px 15px;
+        border-radius: 10px;
+    }
+    
+    .empty-state .icon {
+        font-size: 44px;
+        margin-bottom: 15px;
+    }
+    
+    .empty-state p {
+        font-size: 14px;
+    }
+    
+    .flash-success {
+        padding: 10px 15px;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 360px) {
+    .exams-page {
+        padding: 15px 8px;
+    }
+    
+    .exams-title {
+        font-size: 22px;
+    }
+    
+    .exam-card {
+        padding: 12px;
+    }
+    
+    .exam-info h3 {
+        font-size: 17px;
+    }
+    
+    .exam-meta {
+        font-size: 12px;
+    }
+    
+    .empty-state .icon {
+        font-size: 38px;
+    }
+}

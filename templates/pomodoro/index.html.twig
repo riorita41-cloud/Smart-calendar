@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pomodoro Таймер - Умный Календарь{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/pomodoro.css') }}">
+{% endblock %}
+
+{% block body_class %}pomodoro-page{% endblock %}
+
+{% block body %}
+<div class="pomodoro-wrapper">
+    <div class="pomodoro-header">
+        <h1 class="pomodoro-title">Pomodoro Таймер</h1>
+        <p class="pomodoro-subtitle">Фокусируйтесь на учебе с умом</p>
+    </div>
+
+    <div class="pomodoro-card">
+        <div class="timer-mode work" id="timer-mode">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span class="mode-text" id="mode-text">Режим: Работа</span>
+        </div>
+
+        <div class="timer-display" id="timer-display">25:00</div>
+
+        <div class="cycle-dots" id="cycle-dots">
+            <span class="cycle-dot active"></span>
+            <span class="cycle-dot"></span>
+            <span class="cycle-dot"></span>
+            <span class="cycle-dot"></span>
+        </div>
+        <div class="cycle-info" id="cycle-info">Сессия 1 из 4</div>
+
+        <div class="timer-controls">
+            <button id="start-btn" class="btn btn-start">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <span>Старт</span>
+            </button>
+            <button id="pause-btn" class="btn btn-pause" style="display: none;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                </svg>
+                <span>Пауза</span>
+            </button>
+            <button id="reset-btn" class="btn btn-reset">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                </svg>
+                <span>Сброс</span>
+            </button>
+        </div>
+
+        <div class="timer-stats">
+            <div class="stats-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <div class="stats-text">
+                <span class="stats-label">Сегодня завершено сессий:</span>
+                <strong class="stats-count" id="sessions-count">{{ todaySessionsCount }}</strong>
+            </div>
+        </div>
+
+        <div id="timer-message" class="timer-message" style="display: none;"></div>
+    </div>
+
+    <div class="pomodoro-info-card">
+        <h3 class="info-title">Как работает метод Pomodoro?</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-icon work-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                </div>
+                <div class="info-content">
+                    <strong>25 минут</strong>
+                    <span>фокусированной работы</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon break-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                    </svg>
+                </div>
+                <div class="info-content">
+                    <strong>5 минут</strong>
+                    <span>короткого отдыха</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon long-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+                <div class="info-content">
+                    <strong>15 минут</strong>
+                    <span>длинный перерыв после 4 сессий</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/pomodoro.js') }}"></script>
+{% endblock %}

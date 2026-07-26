@@ -33,7 +33,6 @@ class HomeController extends AbstractController
             'nearestExam' => $data['nearestExam'],
             'daysToExam' => $data['daysToExam'],
             'todayTasks' => $data['todayTasks'],
-            'todaySessionsCount' => $data['todaySessionsCount'],
             'currentTitle' => $data['currentTitle'],
             'xpPercent' => $data['xpPercent'],
             'nextLevelXp' => $data['nextLevelXp'],

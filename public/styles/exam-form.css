@@ -203,3 +203,135 @@
     justify-content: center;
     gap: 10px;
 }
+
+@media (max-width: 768px) {
+    .form-page {
+        padding: 30px 15px;
+    }
+    
+    .form-container {
+        padding: 30px 25px;
+    }
+    
+    .form-title {
+        font-size: 24px;
+        margin-bottom: 25px;
+    }
+    
+    .days-selector {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 8px;
+    }
+    
+    .days-selector label {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+    
+    .time-selector {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .time-separator {
+        display: none; 
+    }
+    
+    .time-input-wrapper {
+        width: 100%;
+    }
+    
+    .form-actions {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    
+    .btn-back {
+        grid-column: 1;
+        justify-self: center;
+        order: 2; 
+    }
+    
+    .btn-submit {
+        grid-column: 1;
+        justify-self: center;
+        max-width: 100%;
+        order: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-page {
+        padding: 20px 10px;
+    }
+    
+    .form-container {
+        padding: 25px 15px;
+        border-radius: 12px;
+    }
+    
+    .form-title {
+        font-size: 22px;
+        margin-bottom: 20px;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .form-title svg {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .days-selector {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 8px;
+    }
+    
+    .days-selector label {
+        padding: 12px 10px;
+        font-size: 14px; 
+    }
+    
+    .time-section-title {
+        font-size: 14px;
+    }
+    
+    .time-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .time-input-wrapper input[type="time"] {
+        padding: 12px;
+        font-size: 16px; 
+    }
+    
+    .form-actions {
+        margin-top: 25px;
+        gap: 12px;
+    }
+    
+    .btn-submit {
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 360px) {
+    .form-container {
+        padding: 20px 12px;
+    }
+    
+    .form-title {
+        font-size: 20px;
+    }
+    
+    .days-selector {
+        grid-template-columns: 1fr;
+    }
+    
+    .days-selector label {
+        padding: 14px;
+    }
+}

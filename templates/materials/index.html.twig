@@ -11,7 +11,6 @@
 <div class="materials-page">
     <div class="page-header">
         <h1 class="page-title">
-            <!-- ИСПРАВЛЕНО: stroke="#4A5D3A" вместо #667eea -->
             <svg class="icon-svg icon-title-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="#4A5D3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="#4A5D3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -57,7 +56,8 @@
                             </svg>
                             Просмотр
                         </a>
-                        <form method="post" action="{{ path('app_material_delete', {id: material.id}) }}" style="display: inline;" onsubmit="return confirm('Удалить материал и все его вопросы?');">
+                        
+                        <form method="post" action="{{ path('app_material_delete', {id: material.id}) }}" class="delete-material-form" style="display: inline;">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ material.id) }}">
                             <button type="submit" class="btn-outline-danger">
                                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,4 +87,9 @@
         </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/materials.js') }}"></script>
 {% endblock %}

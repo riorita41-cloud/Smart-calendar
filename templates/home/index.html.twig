@@ -45,36 +45,6 @@
     </div>
 
     <div class="stats-row">
-        <div class="card timer-card">
-            <h3 class="timer-title">Pomodoro Таймер</h3>
-            
-            <div class="timer-mode work" id="timer-mode">
-                <span class="mode-text">Режим: Работа</span>
-            </div>
-            
-            <div class="timer-display" id="timer-display">25:00</div>
-            
-            <div class="cycle-dots" id="cycle-dots">
-                <span class="cycle-dot active"></span>
-                <span class="cycle-dot"></span>
-                <span class="cycle-dot"></span>
-                <span class="cycle-dot"></span>
-            </div>
-            <div class="cycle-info" id="cycle-info">Сессия 1 из 4</div>
-            
-            <div class="timer-controls">
-                <button id="start-btn" class="btn-start">Старт</button>
-                <button id="pause-btn" class="btn-pause" style="display: none;">Пауза</button>
-                <button id="reset-btn" class="btn-reset">Сброс</button>
-            </div>
-            
-            <div class="timer-stats">
-                <span>Сегодня завершено сессий: </span>
-                <strong id="sessions-count">{{ todaySessionsCount }}</strong>
-            </div>
-            
-            <div id="timer-message" class="timer-message" style="display: none;"></div>
-        </div>
         
         <div class="card days-card">
             <h3 class="days-title">Дней до экзамена</h3>
@@ -97,7 +67,64 @@
             <div class="xp-bar">
                 <div class="xp-fill" style="width: {{ xpPercent }}%"></div>
             </div>
-            <div class="streak-text">Серия дней: {{ user.streakDays }}</div>
+            
+            <div class="streak-section">
+                <div class="streak-slots">
+                    {% set dayInWeek = user.streakDays % 7 %}
+                    {% if dayInWeek == 0 and user.streakDays > 0 %}
+                        {% set dayInWeek = 7 %}
+                    {% endif %}
+                    
+                    {% set weekNumber = (user.streakDays / 7)|round(0, 'floor') %}
+                    {% set iconType = weekNumber % 4 %}
+                    
+                    {% if iconType == 0 %}
+                        {% set streakIcon = 'fire.svg' %}
+                        {% set iconClass = 'fire' %}
+                    {% elseif iconType == 1 %}
+                        {% set streakIcon = 'star.svg' %}
+                        {% set iconClass = 'star' %}
+                    {% elseif iconType == 2 %}
+                        {% set streakIcon = 'heart.svg' %}
+                        {% set iconClass = 'heart' %}
+                    {% else %}
+                        {% set streakIcon = 'fox.svg' %}
+                        {% set iconClass = 'fox' %}
+                    {% endif %}
+                    
+                    {% for i in 1..7 %}
+                        <div class="streak-slot {% if i < dayInWeek %}completed {{ iconClass }}{% elseif i == dayInWeek %}active {{ iconClass }}{% else %}locked{% endif %}">
+                            {% if i <= dayInWeek %}
+                                <img src="{{ asset('images/' ~ streakIcon) }}" 
+                                     class="streak-icon" 
+                                     width="20" 
+                                     height="20" 
+                                     alt="">
+                            {% else %}
+                                <img src="{{ asset('images/locked.svg') }}" 
+                                     class="streak-icon locked" 
+                                     width="20" 
+                                     height="20" 
+                                     alt="">
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {% if user.streakDays >= 1 %}
+                    <div class="streak-week-info">
+                        <span class="week-badge week-{{ iconType }}">
+                            <img src="{{ asset('images/' ~ streakIcon) }}" 
+                                 class="badge-icon" 
+                                 width="14" 
+                                 height="14" 
+                                 alt="">
+                            Неделя {{ weekNumber + 1 }}
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+
         </div>
 
         <a href="{{ path('app_avatar') }}" class="btn-configure-avatar">Настроить аватар</a>
@@ -122,5 +149,4 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="module" src="{{ asset('js/dashboard.js') }}"></script>
-    <script src="{{ asset('js/pomodoro.js') }}"></script>
 {% endblock %}
