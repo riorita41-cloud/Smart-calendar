@@ -51,8 +51,18 @@
                                     {% if dayTasks is not empty %}
                                         <div class="task-dot" title="Есть задачи"></div>
                                     {% endif %}
+        
                                     {% if dayQuestions is not empty %}
-                                        <div class="question-dot" title="Есть вопросы для изучения"></div>
+                                        {% set allStudied = true %}
+                                        {% for q in dayQuestions %}
+                                            {% if not q.completed %}
+                                                {% set allStudied = false %}
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        <div class="question-dot {% if not allStudied %}question-dot-unstudied{% endif %}" 
+                                            title="{% if allStudied %}Все вопросы выучены{% else %}Есть невыученные вопросы{% endif %}">
+                                        </div>
                                     {% endif %}
                                 </div>
                             {% endif %}

@@ -223,14 +223,19 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--color-accent);
+    background: var(--color-accent); 
 }
 
 .question-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--color-primary);
+    background: var(--color-success); 
+}
+
+.question-dot-unstudied {
+    background: #e74c3c !important; 
+    box-shadow: 0 0 4px rgba(231, 76, 60, 0.6);
 }
 
 .day-tooltip {
