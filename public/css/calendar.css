@@ -246,11 +246,17 @@
     padding: 12px 15px;
     box-shadow: 0 6px 16px var(--shadow-dark);
     z-index: 1000;
-    min-width: 220px;
-    max-width: 320px;
     max-height: 350px;
     overflow-y: auto; 
     transition: opacity 0.25s, visibility 0.25s;
+    pointer-events: none;
+}
+
+@media (min-width: 769px) {
+    .day-cell.active .day-tooltip {
+        min-width: 220px;
+        max-width: 320px;
+    }
 }
 
 .day-tooltip::-webkit-scrollbar {
@@ -274,13 +280,7 @@
 .day-cell.active .day-tooltip {
     visibility: visible;
     opacity: 1;
-}
-
-.day-tooltip {
-    pointer-events: none; 
-}
-.day-cell.active .day-tooltip {
-    pointer-events: auto; 
+    pointer-events: auto;
 }
 
 .tooltip-title {
@@ -574,6 +574,39 @@
     margin-top: 4px;
 }
 
+.tooltip-create-btn {
+    display: block;
+    margin-top: 12px;
+    background: #9CAF7E; 
+    color: #2C3E1F; 
+    text-align: center;
+    padding: 12px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s;
+    border: 2px solid #5C6B45; 
+    width: 100%;
+    box-sizing: border-box;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 5px rgba(92, 107, 69, 0.2);
+}
+
+.tooltip-create-btn:hover {
+    background: #B5C494; 
+    border-color: #4A5736;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(92, 107, 69, 0.35);
+}
+
+.tooltip-create-btn:active {
+    transform: translateY(0);
+    background: #8FA06A;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
 @media (max-width: 1024px) {
     .calendar-page {
         padding: 30px 15px;
@@ -615,6 +648,7 @@
 @media (max-width: 768px) {
     .calendar-page {
         padding: 20px 10px;
+        overflow-x: hidden !important;
     }
     
     .calendar-title {
@@ -719,11 +753,52 @@
     .task-name {
         font-size: 14px;
     }
+    
+    
+    .day-tooltip {
+        pointer-events: auto !important;
+    }
+
+    .day-cell.active .day-tooltip {
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 5vw !important;      
+        right: 5vw !important;     
+        width: 90vw !important;    
+        min-width: auto !important;
+        max-width: none !important;
+        max-height: 50vh !important;
+        border-radius: 20px 20px 0 0 !important;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3) !important;
+        padding: 20px !important;
+        z-index: 9999 !important;
+        border: 2px solid var(--color-primary) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        background: var(--color-bg-light) !important;
+        box-sizing: border-box !important;
+        animation: slideUp 0.3s ease-out !important;
+        transform: none !important;
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .day-cell.active .tooltip-create-btn {
+        margin-top: 15px !important;
+        padding: 15px 20px !important;
+        font-size: 16px !important;
+    }
 }
 
 @media (max-width: 480px) {
     .calendar-page {
         padding: 15px 8px;
+        overflow-x: hidden !important;
     }
     
     .calendar-title {
@@ -797,69 +872,6 @@
         height: 5px;
     }
     
-    .day-tooltip {
-        position: fixed;
-        bottom: 10px;
-        left: 10px;
-        right: 10px;
-        top: auto;
-        transform: none;
-        max-height: 50vh;
-        z-index: 1001;
-    }
-    
-.day-cell:hover .day-tooltip {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.day-cell.active .day-tooltip {
-    visibility: visible;
-    opacity: 1;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: auto;
-    transform: none;
-    max-height: 60vh;
-    width: auto;
-    min-width: auto;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    z-index: 1001;
-    animation: slideUp 0.3s ease-out;
-    border: 2px solid var(--color-primary);
-}
-
-@keyframes slideUp {
-    from { 
-        transform: translateY(100%);
-        opacity: 0;
-    }
-    to { 
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.day-cell.active::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    pointer-events: auto;
-}
-
-.day-cell.active .day-tooltip {
-    z-index: 1002;
-}
-    
     .btn-adjust {
         padding: 12px 20px;
         font-size: 15px;
@@ -915,6 +927,14 @@
     .tooltip-study-title {
         font-size: 12px;
     }
+    
+    .day-cell.active .day-tooltip {
+        left: 2.5% !important;    
+        right: 2.5% !important;
+        width: auto !important;
+        padding: 15px !important;
+        border-radius: 15px 15px 0 0 !important;
+    }
 }
 
 @media (max-width: 360px) {
@@ -963,37 +983,4 @@
     .day-cell.exam-day .day-number {
         font-size: 12px;
     }
-}
-
-.tooltip-create-btn {
-    display: block;
-    margin-top: 12px;
-    background: #9CAF7E; 
-    color: #2C3E1F; 
-    text-align: center;
-    padding: 12px 16px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-family: Georgia, serif;
-    font-size: 14px;
-    font-weight: bold;
-    transition: all 0.2s;
-    border: 2px solid #5C6B45; 
-    width: 100%;
-    box-sizing: border-box;
-    letter-spacing: 0.3px;
-    box-shadow: 0 2px 5px rgba(92, 107, 69, 0.2);
-}
-
-.tooltip-create-btn:hover {
-    background: #B5C494; 
-    border-color: #4A5736;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(92, 107, 69, 0.35);
-}
-
-.tooltip-create-btn:active {
-    transform: translateY(0);
-    background: #8FA06A;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
