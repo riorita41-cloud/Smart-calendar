@@ -150,7 +150,55 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    const dayCells = document.querySelectorAll('.day-cell:not(.empty)');
+    
+    dayCells.forEach(cell => {
+        cell.addEventListener('click', function(event) {
+            if (event.target.closest('.tooltip-create-btn')) {
+                return;
+            }
+            
+            if (event.target.closest('.task-checkbox')) {
+                return;
+            }
+            
+            if (event.target.closest('.day-tooltip a')) {
+                return;
+            }
+            
+            event.stopPropagation();
+            
+            if (this.classList.contains('active')) {
+                this.classList.remove('active');
+                return;
+            }
+            
+            dayCells.forEach(c => c.classList.remove('active'));
+            
+            this.classList.add('active');
+        });
+    });
+    
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.day-tooltip') && !event.target.closest('.day-cell')) {
+            dayCells.forEach(cell => cell.classList.remove('active'));
+        }
+    });
+    
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            dayCells.forEach(cell => cell.classList.remove('active'));
+        }
+    });
 });
+
+
+function openTaskModalFromTooltip(event, dateStr) {
+    event.preventDefault();
+    event.stopPropagation();
+    openTaskModal(dateStr);
+}
 
 function openTaskModal(dateStr) {
     const modal = document.getElementById('taskModal');

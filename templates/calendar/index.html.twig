@@ -41,7 +41,7 @@
                         {% set dayTasks = tasksByDay[dateStr] ?? [] %}
                         {% set dayQuestions = studyQuestionsByDay[dateStr] ?? [] %}
                         <div class="day-cell {% if today.format('Y-m-d') == dateStr %}today{% endif %} {% if dateStr in examDates %}exam-day{% endif %}" 
-                            onclick="openTaskModal('{{ dateStr|e('html_attr') }}')">
+                            data-date="{{ dateStr }}">
                             <span class="day-number">{{ day }}</span>
                             {% if dateStr in examDates %}
                                 <div class="exam-label">{{ examByDate[dateStr] }}</div>
@@ -104,6 +104,10 @@
                                         </div>
                                     {% endif %}
                                 {% endif %}
+                                
+                                <a href="#" class="tooltip-create-btn" onclick="openTaskModalFromTooltip(event, '{{ dateStr|e('js') }}')">
+                                    Создать задачу 
+                                </a>
                             </div>
                         </div>
                     {% endfor %}
