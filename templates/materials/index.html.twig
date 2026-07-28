@@ -4,7 +4,11 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('styles/materials.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/materials/materials-layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/materials/materials-cards.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/materials/materials-forms.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/materials/materials-view.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/materials/materials-responsive.css') }}">
 {% endblock %}
 
 {% block body %}

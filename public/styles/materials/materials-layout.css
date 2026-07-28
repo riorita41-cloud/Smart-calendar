@@ -1,0 +1,72 @@
+.materials-page,
+.material-view,
+.question-view-page,
+.material-form-page,
+.add-questions-page {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px 20px;
+}
+
+.page-header,
+.question-page-header,
+.questions-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.page-title,
+.form-page-title,
+.questions-page-title {
+    font-size: 28px;
+    color: var(--color-primary);
+    font-family: Georgia, serif;
+    margin: 0;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.materials-list h2 {
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    font-family: Georgia, serif;
+}
+
+.flash-messages {
+    margin-bottom: 20px;
+}
+
+.icon-svg,
+.icon-title-svg,
+.icon {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    flex-shrink: 0 !important;
+}
+
+.icon-svg,
+.icon {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.icon-title-svg {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+.btn svg,
+.btn-outline-danger svg,
+.back-link svg,
+.question-back-link svg,
+.material-actions svg {
+    width: 18px !important;
+    height: 18px !important;
+    vertical-align: middle !important;
+}
