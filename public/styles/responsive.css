@@ -1,3 +1,20 @@
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    position: relative !important;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box !important;
+}
+
+img, video, svg {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+
 @media (max-width: 1024px) {
     .sidebar {
         width: 200px;
@@ -24,6 +41,12 @@
 }
 
 @media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+        width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    
     .sidebar {
         width: 100%;
         height: auto;
@@ -31,6 +54,7 @@
         border-right: none;
         border-bottom: 2px solid var(--color-border);
         padding: 20px;
+        overflow-x: hidden !important;
     }
     
     .sidebar-title {
@@ -52,15 +76,201 @@
     
     .main-content {
         margin-left: 0;
-        padding: 20px;
+        padding: 15px !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
     }
     
-    .layout {
-        flex-direction: column;
+    .dashboard-grid,
+    .home-grid,
+    .main-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        width: 100% !important;
     }
     
-    .card-container, .form-container, .login-container, .register-container {
-        padding: 30px 20px;
+    .dashboard-grid .avatar-card {
+        order: 1 !important;
+    }
+    
+    .dashboard-grid .task-of-day {
+        order: 2 !important;
+    }
+    
+    .dashboard-grid .days-card,
+    .dashboard-grid .stats-row {
+        order: 3 !important;
+    }
+    
+    .dashboard-grid .card,
+    .dashboard-grid .task-of-day,
+    .dashboard-grid .stats-row,
+    .dashboard-grid .days-card,
+    .dashboard-grid .avatar-card,
+    .card-container,
+    .form-container,
+    .login-container,
+    .register-container,
+    .dashboard-card,
+    .home-card,
+    .stats-card,
+    .info-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 15px !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+    
+    .task-title,
+    .days-title,
+    .avatar-title,
+    .card-title,
+    .section-title,
+    .widget-title,
+    .dashboard-grid h2,
+    .dashboard-grid h3 {
+        font-size: 14px !important;
+        text-align: center !important;
+        margin-bottom: 10px !important;
+        word-wrap: break-word !important;
+    }
+    
+    .task-list-container {
+        max-height: 80px !important;
+        overflow-y: auto !important;
+    }
+    
+    .task-list-item {
+        font-size: 12px !important;
+        padding: 6px 8px !important;
+    }
+    
+    .no-data {
+        font-size: 12px !important;
+        padding: 10px !important;
+        text-align: center !important;
+    }
+    
+    .progress-section {
+        margin-top: 10px !important;
+    }
+    
+    .progress-container,
+    .progress-bar {
+        width: 100% !important;
+    }
+    
+    .progress-text,
+    .progress-title {
+        font-size: 11px !important;
+        text-align: center !important;
+    }
+    
+    .days-card {
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    
+    .days-circle {
+        width: 80px !important;
+        height: 80px !important;
+        margin: 10px auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 3px solid var(--color-accent, #d4af37) !important;
+        border-radius: 50% !important;
+    }
+    
+    .days-number {
+        font-size: 24px !important;
+        font-weight: bold !important;
+    }
+    
+    .days-exam-name {
+        font-size: 11px !important;
+        margin-top: 10px !important;
+        word-wrap: break-word !important;
+    }
+    
+    .avatar-circle {
+        width: 60px !important;
+        height: 60px !important;
+        margin: 0 auto 10px !important;
+    }
+    
+    .level-info {
+        font-size: 11px !important;
+    }
+    
+    .level-text,
+    .xp-text {
+        font-size: 11px !important;
+        text-align: center !important;
+    }
+    
+    .xp-bar {
+        width: 100% !important;
+        margin: 5px 0 !important;
+    }
+    
+    .streak-section {
+        margin-top: 10px !important;
+    }
+    
+    .streak-slots {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 4px !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .streak-slot {
+        width: 20px !important;
+        height: 20px !important;
+    }
+    
+    .streak-icon {
+        width: 14px !important;
+        height: 14px !important;
+    }
+    
+    .xp-history {
+        margin-top: 10px !important;
+        font-size: 10px !important;
+    }
+    
+    .xp-history-title {
+        font-size: 12px !important;
+        text-align: center !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .xp-history-item {
+        font-size: 10px !important;
+        margin-bottom: 4px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        gap: 5px !important;
+    }
+    
+    .btn-configure-avatar,
+    .dashboard-grid .btn,
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-add {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 8px 10px !important;
+        font-size: 12px !important;
+        margin-top: 10px !important;
     }
     
     .tasks-header {
@@ -76,6 +286,7 @@
     .task-card {
         padding: 15px;
         gap: 12px;
+        width: 100% !important;
     }
     
     .flash-success, .flash-error {
@@ -85,15 +296,38 @@
     }
     
     .global-timer-widget {
-        bottom: 20px;
-        right: 20px;
-        padding: 8px 16px 8px 12px;
+        position: fixed !important;
+        top: 10px !important;
+        right: 10px !important;
+        bottom: auto !important;
+        left: auto !important;
+        max-width: 130px !important;
+        padding: 8px 12px !important;
+        border-radius: 25px !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+        z-index: 9999 !important;
     }
     
-    .widget-time {
-        font-size: 16px;
+    .global-timer-widget:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    }
+    
+    .global-timer-widget .widget-icon svg {
+        width: 16px !important;
+        height: 16px !important;
+    }
+    
+    .global-timer-widget .widget-time {
+        font-size: 14px !important;
+        min-width: 45px !important;
+    }
+    
+    .global-timer-widget .widget-expand {
+        display: none !important;
     }
 }
+
 
 @media (max-width: 480px) {
     .sidebar {
@@ -121,12 +355,25 @@
     }
     
     .main-content {
-        padding: 15px;
+        padding: 10px !important;
     }
     
-    .card-container, .form-container, .login-container, .register-container {
-        padding: 25px 15px;
+    .dashboard-grid,
+    .home-grid,
+    .main-grid {
+        gap: 10px !important;
+    }
+    
+    .card-container, .form-container, .login-container, .register-container,
+    .dashboard-card, .home-card, .stats-card, .info-card {
+        padding: 20px 15px !important;
         border-radius: 12px;
+    }
+    
+    .dashboard-grid .card,
+    .dashboard-grid .task-of-day,
+    .dashboard-grid .avatar-card {
+        padding: 20px 15px !important;
     }
     
     .form-group {
@@ -147,7 +394,6 @@
     .btn-primary, .btn-submit, .btn-login, .btn-register {
         padding: 12px 20px;
         font-size: 15px;
-        width: 100%;
     }
     
     .btn-secondary, .btn-outline-primary, .btn-outline-danger, 
@@ -186,11 +432,9 @@
     }
     
     .global-timer-widget {
-        bottom: 15px;
-        right: 15px;
-        left: 15px;
-        justify-content: center;
-        padding: 10px 15px;
+        top: 10px !important;
+        right: 10px !important;
+        max-width: 120px !important;
     }
     
     .widget-expand {
@@ -199,6 +443,31 @@
     
     .btn-back-link {
         font-size: 14px;
+    }
+    
+    .card-title,
+    .section-title {
+        font-size: 16px !important;
+    }
+    
+    .task-item,
+    .task-title,
+    .stat-value {
+        font-size: 14px !important;
+    }
+    
+    .days-circle {
+        width: 70px !important;
+        height: 70px !important;
+        border-width: 2px !important;
+    }
+    
+    .days-number {
+        font-size: 20px !important;
+    }
+    
+    .days-title {
+        font-size: 12px !important;
     }
 }
 
@@ -217,11 +486,18 @@
     }
     
     .main-content {
-        padding: 12px;
+        padding: 8px !important;
     }
     
-    .card-container, .form-container, .login-container, .register-container {
-        padding: 20px 12px;
+    .dashboard-grid,
+    .home-grid,
+    .main-grid {
+        gap: 8px !important;
+    }
+    
+    .card-container, .form-container, .login-container, .register-container,
+    .dashboard-card, .home-card, .stats-card, .info-card {
+        padding: 15px 10px !important;
     }
     
     .tasks-title {
@@ -230,5 +506,10 @@
     
     .task-card {
         padding: 12px;
+    }
+    
+    .card-title,
+    .section-title {
+        font-size: 13px !important;
     }
 }
