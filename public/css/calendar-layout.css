@@ -273,3 +273,272 @@
 .question-dot-unstudied {
     background: #DC2626 !important; 
 }
+
+/* ============================================ */
+/* АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ (до 1024px) */
+/* ============================================ */
+@media (max-width: 1024px) {
+    .calendar-page {
+        padding: 30px 15px;
+    }
+    
+    .calendar-title {
+        font-size: 26px;
+        margin-bottom: 24px;
+    }
+    
+    .calendar-container {
+        gap: 20px;
+    }
+    
+    .calendar-sidebar {
+        width: 300px;
+    }
+    
+    .calendar-card {
+        padding: 24px;
+    }
+    
+    .day-cell {
+        min-height: 60px;
+        height: 60px;
+        font-size: 16px;
+    }
+    
+    .day-cell.empty {
+        min-height: 60px;
+    }
+    
+    .weekday {
+        font-size: 13px;
+        padding: 8px 4px;
+    }
+}
+
+/* ============================================ */
+/* АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ (до 768px) */
+/* ============================================ */
+@media (max-width: 768px) {
+    .calendar-page {
+        padding: 15px 8px;
+        overflow-x: hidden;
+    }
+    
+    .calendar-title {
+        font-size: 22px;
+        margin-bottom: 16px;
+    }
+    
+    .calendar-container {
+        flex-direction: column;
+        gap: 20px;
+        max-width: 100%;
+    }
+    
+    .calendar-sidebar {
+        width: 100%;
+        order: 2; 
+    }
+    
+    .calendar-main {
+        width: 100%;
+        order: 1;
+    }
+    
+    .calendar-card {
+        padding: 16px;
+        margin-bottom: 15px;
+    }
+    
+    .month-header {
+        gap: 8px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .month-year-selector {
+        gap: 8px;
+    }
+    
+    .selector-btn {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+    
+    .month-nav {
+        padding: 8px 12px;
+        font-size: 15px;
+        min-width: 38px;
+    }
+    
+    .weekday {
+        font-size: 11px;
+        padding: 4px 2px;
+    }
+    
+    .weekdays,
+    .days-grid {
+        gap: 4px;
+        margin-bottom: 16px;
+    }
+    
+    .day-cell {
+        min-height: 42px;
+        height: 42px;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+    
+    .day-cell.empty {
+        min-height: 42px;
+    }
+    
+    .day-cell.exam-day {
+        padding: 4px;
+    }
+    
+    .exam-label {
+        font-size: 8px;
+    }
+    
+    .day-indicators {
+        bottom: 4px;
+        gap: 3px;
+    }
+    
+    .task-dot,
+    .question-dot {
+        width: 5px;
+        height: 5px;
+    }
+    
+    .btn-adjust {
+        padding: 10px 20px;
+        font-size: 15px;
+    }
+    
+    .sidebar-title {
+        font-size: 17px;
+    }
+    
+    .today-task {
+        padding: 10px 8px;
+    }
+    
+    .task-name {
+        font-size: 14px;
+    }
+    
+    .day-tooltip {
+        pointer-events: auto;
+    }
+
+    .day-cell.active .day-tooltip {
+        visibility: visible;
+        opacity: 1;
+        position: fixed;
+        bottom: 0;
+        left: 0;      
+        right: 0;     
+        width: 100%;    
+        min-width: auto;
+        max-width: none;
+        max-height: 50vh;
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+        padding: 20px;
+        z-index: 9999;
+        border: none;
+        border-top: 1px solid var(--color-border);
+        overflow-y: auto;
+        background: var(--color-bg-light);
+        box-sizing: border-box;
+        animation: slideUp 0.2s ease-out;
+        transform: none;
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .day-cell.active .tooltip-create-btn {
+        margin-top: 12px;
+        padding: 12px 16px;
+        font-size: 15px;
+    }
+}
+
+/* ============================================ */
+/* АДАПТАЦИЯ ДЛЯ МАЛЕНЬКИХ МОБИЛЬНЫХ (до 480px) */
+/* ============================================ */
+@media (max-width: 480px) {
+    .calendar-page {
+        padding: 10px 4px;
+    }
+    
+    .calendar-title {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+    
+    .calendar-card {
+        padding: 10px;
+        border-radius: 8px;
+    }
+    
+    .month-header {
+        gap: 5px;
+        margin-bottom: 16px;
+    }
+    
+    .month-year-selector {
+        gap: 5px;
+    }
+    
+    .selector-btn {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+    
+    .month-nav {
+        padding: 6px 10px;
+        font-size: 14px;
+        min-width: 34px;
+    }
+    
+    .weekday {
+        font-size: 10px;
+        padding: 3px 1px;
+    }
+    
+    .weekdays,
+    .days-grid {
+        gap: 3px;
+    }
+    
+    .day-cell {
+        min-height: 36px;
+        height: 36px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+    
+    .day-cell.empty {
+        min-height: 36px;
+    }
+    
+    .exam-label {
+        font-size: 7px;
+    }
+    
+    .day-cell.exam-day .day-number {
+        font-size: 12px;
+    }
+    
+    .task-dot,
+    .question-dot {
+        width: 4px;
+        height: 4px;
+    }
+}

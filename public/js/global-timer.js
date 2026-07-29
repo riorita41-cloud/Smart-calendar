@@ -15,30 +15,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateGlobalWidget() {
         const savedData = localStorage.getItem(TIMER_STORAGE_KEY);
+        
         if (!savedData) {
-            if (widget) widget.style.display = 'none';
+            if (widget) {
+                widget.style.display = 'none';
+                widget.classList.remove('is-running');
+            }
             if (widgetInterval) clearInterval(widgetInterval);
             return;
         }
 
-        const data = JSON.parse(savedData);
+        let data;
+        try {
+            data = JSON.parse(savedData);
+        } catch (e) {
+            localStorage.removeItem(TIMER_STORAGE_KEY);
+            if (widget) {
+                widget.style.display = 'none';
+                widget.classList.remove('is-running');
+            }
+            return;
+        }
+
+        if (!data.endTime || !data.isRunning) {
+            localStorage.removeItem(TIMER_STORAGE_KEY);
+            if (widget) {
+                widget.style.display = 'none';
+                widget.classList.remove('is-running');
+            }
+            return;
+        }
+
         const now = Date.now();
         const remainingMs = data.endTime - now;
         const timeLeft = Math.ceil(remainingMs / 1000);
 
         if (timeLeft > 0 && data.isRunning) {
-            if (widget) widget.style.display = 'flex';
+            if (widget) {
+                widget.style.display = 'flex';
+                widget.classList.add('is-running');
+            }
             if (widgetTime) {
                 widgetTime.textContent = formatTime(timeLeft);
-                
-                if (timeLeft <= 60) {
-                    widgetTime.style.color = '#DC2626';
-                } else {
-                    widgetTime.style.color = '';
-                }
+                widgetTime.style.color = timeLeft <= 60 ? '#DC2626' : '';
             }
         } else {
-            if (widget) widget.style.display = 'none';
+            localStorage.removeItem(TIMER_STORAGE_KEY);
+            if (widget) {
+                widget.style.display = 'none';
+                widget.classList.remove('is-running');
+            }
             if (widgetInterval) clearInterval(widgetInterval);
         }
     }
