@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Security\AppAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -17,7 +19,9 @@ class RegistrationController extends AbstractController
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        UserAuthenticatorInterface $userAuthenticator,
+        AppAuthenticator $authenticator
     ): Response {
         $user = new User();
         $user->setCreatedAt(new \DateTimeImmutable());
@@ -35,8 +39,11 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Регистрация прошла успешно! Теперь войдите в аккаунт.');
-            return $this->redirectToRoute('app_login');
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );
         }
 
         return $this->render('registration/register.html.twig', [
