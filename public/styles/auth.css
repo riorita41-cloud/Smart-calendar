@@ -1,231 +1,227 @@
-.auth-page * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.avatar-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 0;
 }
 
-.auth-page body {
-    font-family: 'Inter', sans-serif;
+.avatar-title {
+    color: var(--color-text);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    letter-spacing: -0.02em;
+}
+
+.avatar-layout-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Верхняя секция: слева аватар, справа панель цветов */
+.avatar-top-section {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: stretch;
+}
+
+.avatar-preview,
+.avatar-colors-panel,
+.avatar-form-bottom {
+    background: var(--color-bg-light);
+    /* Уходим от слишком скругленных «иишных» карточек к более строгим и аккуратным */
+    border-radius: 12px;
+    padding: 28px;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-light);
+}
+
+.avatar-preview {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Благородная аватарка с тонкой рамкой в тон интерфейса */
+.avatar-dicebear {
+    width: min(180px, 90%);
+    height: min(180px, 90%);
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
     background: var(--color-bg);
-    min-height: 100vh;
+    padding: 8px;
+    margin: 0 auto 20px auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-}
-
-.login-container,
-.register-container {
-    background: var(--color-bg-light);
-    border-radius: 16px;
-    padding: clamp(30px, 5vw, 50px) clamp(20px, 4vw, 40px);
-    box-shadow: 0 4px 20px var(--shadow-light);
+    overflow: hidden;
     border: 1px solid var(--color-border);
+}
+
+.avatar-dicebear svg {
     width: 100%;
-    max-width: 450px;
-    margin: 0 auto;
+    height: 100%;
 }
 
-.login-header,
-.register-header {
-    text-align: center;
-    margin-bottom: clamp(25px, 4vw, 40px);
+.avatar-colors-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.login-icon,
-.register-icon {
-    font-size: clamp(36px, 8vw, 48px);
-    margin-bottom: 15px;
-    color: var(--color-primary);
+.form-section {
+    margin-bottom: 18px;
 }
 
-.login-title,
-.register-title {
-    color: var(--color-primary);
-    font-size: clamp(24px, 5vw, 32px);
-    font-weight: 600;
-    font-family: 'Inter', sans-serif;
+.form-section:last-child {
+    margin-bottom: 0;
 }
 
-.form-group {
-    margin-bottom: clamp(18px, 3vw, 25px);
-}
-
-.form-group label {
-    display: block;
-    color: var(--color-text-secondary);
-    font-weight: 600;
-    margin-bottom: 8px;
-    font-size: clamp(14px, 2.5vw, 16px);
-    font-family: 'Inter', sans-serif;
-}
-
-.form-group input[type="email"],
-.form-group input[type="password"],
-.form-group input[type="text"] {
-    width: 100%;
-    padding: clamp(12px, 2vw, 14px) clamp(14px, 2.5vw, 16px);
-    border: 2px solid var(--color-border);
-    border-radius: 8px;
-    font-size: clamp(14px, 2.5vw, 16px);
-    font-family: 'Inter', sans-serif;
-    background: var(--color-bg);
+/* Заголовки секций в едином стиле без лишней зелени */
+.form-section h3 {
     color: var(--color-text);
-    transition: border-color 0.2s;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 8px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
 }
 
-.form-group input:focus {
-    outline: none;
+/* Сетка причёсок */
+.option-group-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    max-height: 240px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.option-group-grid::-webkit-scrollbar {
+    width: 5px;
+}
+.option-group-grid::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+.option-item input[type="radio"] {
+    display: none;
+}
+
+/* Опции причёсок: строгие, плоские, с живым откликом */
+.option-item label {
+    display: block;
+    padding: 10px 6px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.option-item label:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.option-item input[type="radio"]:checked + label {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Палитра цветов кожи и волос */
+.color-picker {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.color-option input[type="radio"] {
+    display: none;
+}
+
+.color-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: block;
+    cursor: pointer;
+    border: 2px solid var(--color-border);
+    transition: all 0.15s ease;
+}
+
+.color-circle:hover {
+    transform: scale(1.08);
     border-color: var(--color-primary);
 }
 
-.remember-me {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: clamp(18px, 3vw, 25px);
+/* Выбранный цвет выделяется четким кольцом primary-цвета */
+.color-option input[type="radio"]:checked + .color-circle {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-bg-light), 0 0 0 4px var(--color-primary);
 }
 
-.remember-me input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: var(--color-primary);
-    cursor: pointer;
-}
-
-.remember-me label {
-    color: var(--color-text-secondary);
-    font-size: clamp(13px, 2.5vw, 15px);
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-}
-
-.btn-login,
-.btn-register {
+/* Кнопки в стиле приложения */
+.btn-random,
+.btn-save {
     width: 100%;
-    background: var(--color-primary);
-    color: var(--color-bg-light);
     border: none;
-    padding: clamp(14px, 2.5vw, 16px);
+    padding: 12px 18px;
     border-radius: 8px;
-    font-size: clamp(16px, 3vw, 18px);
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    transition: background 0.2s;
+    transition: all 0.15s ease;
+    letter-spacing: -0.01em;
 }
 
-.btn-login:hover,
-.btn-register:hover {
+.btn-random {
+    background: var(--color-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+.btn-random:hover {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-text-secondary);
+}
+
+.btn-save {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    margin-top: 24px;
+}
+
+.btn-save:hover {
     background: var(--color-primary-dark);
 }
 
-.login-link,
-.register-link {
-    text-align: center;
-    margin-top: clamp(18px, 3vw, 25px);
-    color: var(--color-text-secondary);
-    font-size: clamp(13px, 2.5vw, 15px);
-    font-family: 'Inter', sans-serif;
-}
-
-.login-link a,
-.register-link a {
-    color: var(--color-primary);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.login-link a:hover,
-.register-link a:hover {
-    text-decoration: underline;
-}
-
-.alert-error {
-    background: #8B4513;
-    color: var(--color-bg-light);
-    padding: clamp(12px, 2vw, 15px) clamp(15px, 2.5vw, 20px);
-    border-radius: 8px;
-    margin-bottom: clamp(18px, 3vw, 25px);
-    border-left: 4px solid var(--color-accent);
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(13px, 2.5vw, 15px);
-    word-wrap: break-word;
-}
-
-.alert-success {
-    background: var(--color-primary);
-    color: var(--color-bg-light);
-    padding: clamp(12px, 2vw, 15px) clamp(15px, 2.5vw, 20px);
-    border-radius: 8px;
-    margin-bottom: clamp(18px, 3vw, 25px);
-    border-left: 4px solid var(--color-accent);
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(13px, 2.5vw, 15px);
-    word-wrap: break-word;
-}
-
+/* Адаптивность */
 @media (max-width: 768px) {
-    .auth-page body {
-        padding: 15px;
+    .avatar-top-section {
+        grid-template-columns: 1fr;
     }
-    
-    .login-container,
-    .register-container {
-        max-width: 400px;
-        padding: 35px 25px;
+    .option-group-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 480px) {
-    .auth-page body {
-        padding: 10px;
-        align-items: flex-start; 
-        padding-top: 40px;
-    }
-    
-    .login-container,
-    .register-container {
-        max-width: 100%;
-        padding: 30px 20px;
-        border-radius: 12px;
-    }
-    
-    .login-title,
-    .register-title {
-        font-size: 24px;
-    }
-    
-    .form-group input[type="email"],
-    .form-group input[type="password"],
-    .form-group input[type="text"] {
-        padding: 12px 14px;
-        font-size: 16px;
-    }
-    
-    .btn-login,
-    .btn-register {
-        padding: 14px;
-        font-size: 16px;
-    }
-    
-    .remember-me {
-        flex-wrap: wrap; 
-    }
-}
-
-@media (max-width: 360px) {
-    .login-container,
-    .register-container {
-        padding: 25px 15px;
-    }
-    
-    .login-title,
-    .register-title {
-        font-size: 22px;
-    }
-    
-    .form-group label {
-        font-size: 14px;
+    .option-group-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

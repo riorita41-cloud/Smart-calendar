@@ -1,6 +1,5 @@
 .avatar-page {
-    font-family: 'Inter', sans-serif;
-    max-width: 1200px;
+    max-width: 950px;
     margin: 0 auto;
     padding: 40px 20px;
 }
@@ -10,35 +9,53 @@
     font-size: clamp(24px, 4vw, 32px);
     margin-bottom: 30px;
     text-align: center;
+    font-weight: 600;
 }
 
-.avatar-container {
+.avatar-layout-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.avatar-top-section {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    grid-template-columns: 320px 1fr;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.avatar-preview,
+.avatar-colors-panel,
+.avatar-form-bottom {
+    background: var(--color-bg-light);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-light);
 }
 
 .avatar-preview {
-    background: var(--color-bg-light);
-    border-radius: 16px;
-    padding: 40px;
     text-align: center;
-    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .avatar-dicebear {
-    width: min(300px, 80%);
-    height: min(300px, 80%);
+    width: min(190px, 90%);
+    height: min(190px, 90%);
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     background: var(--color-bg-light);
-    padding: 20px;
-    box-shadow: 0 4px 12px var(--shadow-light);
-    margin: 0 auto;
+    padding: 12px;
+    box-shadow: var(--shadow-light);
+    margin: 0 auto 16px auto;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    border: 1px solid var(--color-border);
 }
 
 .avatar-dicebear svg {
@@ -46,30 +63,44 @@
     height: 100%;
 }
 
-.avatar-form {
-    background: var(--color-bg-light);
-    border-radius: 16px;
-    padding: 30px;
-    border: 1px solid var(--color-border);
+.avatar-colors-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .form-section {
-    margin-bottom: 25px;
+    margin-bottom: 16px;
+}
+
+.form-section:last-child {
+    margin-bottom: 0;
 }
 
 .form-section h3 {
     color: var(--color-primary);
-    font-size: 18px;
-    margin-bottom: 15px;
-    border-bottom: 2px solid var(--color-border);
-    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 6px;
 }
 
-.option-group {
+.option-group-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 15px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.option-group-grid::-webkit-scrollbar {
+    width: 6px;
+}
+.option-group-grid::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
 }
 
 .option-item input[type="radio"] {
@@ -78,15 +109,19 @@
 
 .option-item label {
     display: block;
-    padding: 12px;
-    background: var(--color-bg);
-    border: 2px solid var(--color-border);
+    padding: 10px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
-    font-size: 14px;
-    font-family: 'Inter', sans-serif;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.option-item label:hover {
+    border-color: var(--color-primary);
 }
 
 .option-item input[type="radio"]:checked + label {
@@ -106,22 +141,23 @@
 }
 
 .color-circle {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     display: block;
     cursor: pointer;
-    border: 3px solid transparent;
-    transition: all 0.2s;
+    border: 2px solid transparent;
+    transition: border-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
 }
 
 .color-circle:hover {
-    transform: scale(1.1);
+    opacity: 0.85;
+    transform: scale(1.08);
 }
 
 .color-option input[type="radio"]:checked + .color-circle {
     border-color: var(--color-primary);
-    transform: scale(1.1);
+    box-shadow: 0 0 0 2px var(--color-bg-light), 0 0 0 4px var(--color-primary);
 }
 
 .btn-random,
@@ -130,105 +166,43 @@
     background: var(--color-primary);
     color: var(--color-bg-light);
     border: none;
-    padding: 16px;
+    padding: 12px 16px;
     border-radius: 8px;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    transition: background 0.2s;
+    transition: background-color 0.15s ease;
 }
 
 .btn-random {
-    margin-bottom: 20px;
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+.btn-random:hover {
+    background: var(--color-border);
 }
 
 .btn-save {
     margin-top: 20px;
 }
 
-.btn-random:hover,
 .btn-save:hover {
     background: var(--color-primary-dark);
 }
 
-@media (max-width: 900px) {
-    .avatar-container {
-        grid-template-columns: 1fr; 
-        gap: 25px;
+@media (max-width: 768px) {
+    .avatar-top-section {
+        grid-template-columns: 1fr;
     }
-    
-    .avatar-preview {
-        padding: 30px;
-    }
-    
-    .avatar-form {
-        padding: 25px;
+    .option-group-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
 @media (max-width: 480px) {
-    .avatar-page {
-        padding: 20px 15px;
-    }
-    
-    .avatar-title {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-    
-    .avatar-preview {
-        padding: 25px 20px;
-    }
-    
-    .avatar-dicebear {
-        width: min(250px, 85%);
-        height: min(250px, 85%);
-        padding: 15px;
-    }
-    
-    .avatar-form {
-        padding: 20px 15px;
-    }
-    
-    .form-section h3 {
-        font-size: 16px;
-    }
-    
-    .option-group {
-        grid-template-columns: 1fr;
-    }
-    
-    .option-item label {
-        padding: 14px; 
-        font-size: 15px;
-    }
-    
-    .color-circle {
-        width: 44px;
-        height: 44px;
-    }
-    
-    .btn-random,
-    .btn-save {
-        padding: 14px;
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 360px) {
-    .avatar-page {
-        padding: 15px 10px;
-    }
-    
-    .avatar-dicebear {
-        width: min(200px, 90%);
-        height: min(200px, 90%);
-        padding: 10px;
-    }
-    
-    .avatar-preview,
-    .avatar-form {
-        padding: 15px 12px;
+    .option-group-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

@@ -17,37 +17,50 @@
          style="display:none;">
     </div>
     
-    <div class="avatar-container">
-        <div class="avatar-preview">
-            <div id="avatar-img" class="avatar-dicebear">Загрузка...</div>
-            <p style="color: #6B6B5E; margin-top: 15px;">DiceBear Adventurer</p>
-        </div>
-        
-        <div class="avatar-form">
-            <form method="post" action="{{ path('app_avatar_save') }}">
-                <input type="hidden" name="_token" value="{{ csrf_token('avatar_save') }}">
-                
-                <input type="hidden" name="seed" id="current-seed" value="{{ (avatar.seed ?? app.user.email)|e('html_attr') }}">
-                
-                <button type="button" class="btn-random" onclick="generateRandomAvatar()">
-                     Сгенерировать случайный аватар
-                </button>
-                
-                <div class="form-section">
-                    <h3>Цвет кожи</h3>
-                    <div class="color-picker">
-                        {% for color in ['ffdbb4', 'edb98a', 'd08b5b', 'ae5d29', '7c3c16'] %}
-                            <label class="color-option">
-                                <input type="radio" name="skinColor" value="{{ color }}" class="avatar-option" {% if (avatar.skinColor ?? 'edb98a') == color %}checked{% endif %}>
-                                <span class="color-circle" style="background: #{{ color }};"></span>
-                            </label>
-                        {% endfor %}
-                    </div>
+    <form method="post" action="{{ path('app_avatar_save') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('avatar_save') }}">
+        <input type="hidden" name="seed" id="current-seed" value="{{ (avatar.seed ?? app.user.email)|e('html_attr') }}">
+
+        <div class="avatar-layout-container">
+            <div class="avatar-top-section">
+                <div class="avatar-preview">
+                    <div id="avatar-img" class="avatar-dicebear">Загрузка...</div>
+                    <button type="button" class="btn-random" onclick="generateRandomAvatar()">
+                        Случайный аватар
+                    </button>
                 </div>
                 
+                <div class="avatar-colors-panel">
+                    <div class="form-section">
+                        <h3>Цвет кожи</h3>
+                        <div class="color-picker">
+                            {% for color in ['ffdbb4', 'f8d5b8', 'edb98a', 'e3a171', 'd08b5b', 'b5693c', 'ae5d29', '8d4318', '7c3c16', '54260c'] %}
+                                <label class="color-option">
+                                    <input type="radio" name="skinColor" value="{{ color }}" class="avatar-option" {% if (avatar.skinColor ?? 'edb98a') == color %}checked{% endif %}>
+                                    <span class="color-circle" style="background: #{{ color }};"></span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Цвет волос</h3>
+                        <div class="color-picker">
+                            {% for color in ['000000', '2c1b18', '4a2e2b', '724133', '9e5b32', 'b58143', 'd99b5b', 'e5c185', 'd9532f', 'b83b1d', '8b1e0b', '412234'] %}
+                                <label class="color-option">
+                                    <input type="radio" name="hairColor" value="{{ color }}" class="avatar-option" {% if (avatar.hairColor ?? '724133') == color %}checked{% endif %}>
+                                    <span class="color-circle" style="background: #{{ color }};"></span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="avatar-form-bottom">
                 <div class="form-section">
                     <h3>Причёска</h3>
-                    <div class="option-group">
+                    <div class="option-group-grid">
                         {% for i in 1..5 %}
                             <div class="option-item">
                                 <input type="radio" name="hair" id="sh{{ i }}" value="short0{{ i }}" class="avatar-option" {% if (avatar.hairStyle ?? 'long01') == 'short0'~i %}checked{% endif %}>
@@ -62,23 +75,11 @@
                         {% endfor %}
                     </div>
                 </div>
-                
-                <div class="form-section">
-                    <h3>Цвет волос</h3>
-                    <div class="color-picker">
-                        {% for color in ['000000', '2c1b18', '724133', 'b58143', 'd9532f'] %}
-                            <label class="color-option">
-                                <input type="radio" name="hairColor" value="{{ color }}" class="avatar-option" {% if (avatar.hairColor ?? '724133') == color %}checked{% endif %}>
-                                <span class="color-circle" style="background: #{{ color }};"></span>
-                            </label>
-                        {% endfor %}
-                    </div>
-                </div>
-                
+
                 <button type="submit" class="btn-save">Сохранить аватар</button>
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 
 {% endblock %}

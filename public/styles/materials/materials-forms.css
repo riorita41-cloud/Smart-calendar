@@ -19,6 +19,7 @@
     align-items: center;
     justify-content: center;
     gap: 15px;
+    word-break: break-word;
 }
 
 .manual-form {
@@ -62,7 +63,7 @@ select.form-control {
     box-sizing: border-box;
     background: var(--color-bg-light);
     color: var(--color-text);
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
 .form-control:focus,
@@ -95,7 +96,7 @@ select.form-control:focus {
     text-decoration: none;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     padding: 8px;
 }
 
@@ -157,7 +158,7 @@ select.form-control:focus {
     box-sizing: border-box;
     background: var(--color-bg-light);
     color: var(--color-text);
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
 .questions-textarea:focus {
@@ -187,7 +188,7 @@ select.form-control:focus {
     font-weight: 600;
     cursor: pointer;
     margin: 20px auto 0;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
 .questions-save-btn:hover {
@@ -226,11 +227,28 @@ select.form-control:focus {
     text-decoration: none;
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     margin-top: 10px;
 }
 
 .view-questions-link:hover {
     color: var(--color-primary-dark);
     transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+    .material-form-page,
+    .questions-form-box,
+    .manual-form {
+        padding: 20px 15px;
+        margin: 20px 10px;
+    }
+    
+    .form-page-title {
+        font-size: 22px;
+    }
+    
+    .questions-save-btn {
+        width: 100%;
+    }
 }

@@ -4,8 +4,8 @@
     }
     
     .calendar-title {
-        font-size: 28px;
-        margin-bottom: 25px;
+        font-size: 26px;
+        margin-bottom: 24px;
     }
     
     .calendar-container {
@@ -17,13 +17,13 @@
     }
     
     .calendar-card {
-        padding: 25px;
+        padding: 24px;
     }
     
     .day-cell {
         min-height: 60px;
         height: 60px;
-        font-size: 18px;
+        font-size: 16px;
     }
     
     .day-cell.empty {
@@ -31,8 +31,8 @@
     }
     
     .weekday {
-        font-size: 14px;
-        padding: 10px 6px;
+        font-size: 13px;
+        padding: 8px 4px;
     }
 }
 
@@ -43,8 +43,8 @@
     }
     
     .calendar-title {
-        font-size: 24px;
-        margin-bottom: 20px;
+        font-size: 22px;
+        margin-bottom: 16px;
     }
     
     .calendar-container {
@@ -71,29 +71,29 @@
     }
     
     .selector-btn {
-        padding: 10px 18px;
-        font-size: 16px;
+        padding: 8px 16px;
+        font-size: 15px;
     }
     
     .month-nav {
-        padding: 10px 16px;
-        font-size: 18px;
-        min-width: 45px;
+        padding: 8px 14px;
+        font-size: 16px;
+        min-width: 40px;
     }
     
     .day-cell {
-        min-height: 50px;
-        height: 50px;
-        font-size: 16px;
-        border-radius: 8px;
+        min-height: 48px;
+        height: 48px;
+        font-size: 15px;
+        border-radius: 6px;
     }
     
     .day-cell.empty {
-        min-height: 50px;
+        min-height: 48px;
     }
     
     .day-cell.exam-day {
-        padding: 6px 4px;
+        padding: 4px;
     }
     
     .exam-label {
@@ -101,8 +101,8 @@
     }
     
     .weekday {
-        font-size: 13px;
-        padding: 8px 4px;
+        font-size: 12px;
+        padding: 6px 2px;
     }
     
     .weekdays,
@@ -117,28 +117,28 @@
     
     .task-dot,
     .question-dot {
-        width: 6px;
-        height: 6px;
+        width: 5px;
+        height: 5px;
     }
     
     .modal-content {
         width: 90%;
         max-width: 400px;
         margin: 15% auto;
-        padding: 25px;
+        padding: 24px;
     }
     
     .btn-adjust {
-        padding: 14px 24px;
-        font-size: 16px;
+        padding: 10px 20px;
+        font-size: 15px;
     }
     
     .sidebar-title {
-        font-size: 20px;
+        font-size: 17px;
     }
     
     .today-task {
-        padding: 12px 10px;
+        padding: 10px 8px;
     }
     
     .task-name {
@@ -154,22 +154,23 @@
         opacity: 1 !important;
         position: fixed !important;
         bottom: 0 !important;
-        left: 5vw !important;      
-        right: 5vw !important;     
-        width: 90vw !important;    
+        left: 0 !important;      
+        right: 0 !important;     
+        width: 100% !important;    
         min-width: auto !important;
         max-width: none !important;
         max-height: 50vh !important;
-        border-radius: 20px 20px 0 0 !important;
-        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3) !important;
-        padding: 20px !important;
+        border-radius: 16px 16px 0 0 !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15) !important;
+        padding: 20px 20px 30px 20px !important;
         z-index: 9999 !important;
-        border: 2px solid var(--color-primary) !important;
+        border: none !important;
+        border-top: 1px solid var(--color-border) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         background: var(--color-bg-light) !important;
         box-sizing: border-box !important;
-        animation: slideUp 0.3s ease-out !important;
+        animation: slideUp 0.2s ease-out !important;
         transform: none !important;
     }
 
@@ -179,165 +180,30 @@
     }
 
     .day-cell.active .tooltip-create-btn {
-        margin-top: 15px !important;
-        padding: 15px 20px !important;
-        font-size: 16px !important;
+        margin-top: 12px !important;
+        padding: 12px 16px !important;
+        font-size: 15px !important;
     }
 }
 
 @media (max-width: 480px) {
     .calendar-page {
-        padding: 15px 8px;
-        overflow-x: hidden !important;
-    }
-    
-    .calendar-title {
-        font-size: 22px;
-        margin-bottom: 15px;
-    }
-    
-    .calendar-card {
-        padding: 15px;
-        border-radius: 10px;
-    }
-    
-    .month-header {
-        gap: 8px;
-        margin-bottom: 15px;
-    }
-    
-    .selector-btn {
-        padding: 8px 14px;
-        font-size: 14px;
-    }
-    
-    .month-nav {
-        padding: 8px 12px;
-        font-size: 16px;
-        min-width: 40px;
-    }
-    
-    .weekday {
-        font-size: 11px;
-        padding: 6px 2px;
-    }
-    
-    .weekdays,
-    .days-grid {
-        gap: 4px;
-    }
-    
-    .day-cell {
-        min-height: 40px;
-        height: 40px;
-        font-size: 14px;
-        border-radius: 6px;
-    }
-    
-    .day-cell.empty {
-        min-height: 40px;
-    }
-    
-    .day-cell.exam-day {
-        padding: 4px 2px;
-    }
-    
-    .exam-label {
-        font-size: 7px;
-        margin-top: 1px;
-    }
-    
-    .day-cell.exam-day .day-number {
-        font-size: 14px;
-    }
-    
-    .day-indicators {
-        bottom: 3px;
-        gap: 2px;
-    }
-    
-    .task-dot,
-    .question-dot {
-        width: 5px;
-        height: 5px;
-    }
-    
-    .btn-adjust {
-        padding: 12px 20px;
-        font-size: 15px;
-    }
-    
-    .sidebar-title {
-        font-size: 18px;
-        margin-bottom: 15px;
-    }
-    
-    .today-task {
-        padding: 10px 8px;
-        gap: 10px;
-    }
-    
-    .task-checkbox {
-        width: 18px;
-        height: 18px;
-    }
-    
-    .task-name {
-        font-size: 13px;
-    }
-    
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-        padding: 20px;
-    }
-    
-    .modal input, .modal select {
-        padding: 10px;
-        font-size: 14px;
-    }
-    
-    .modal button {
-        padding: 10px;
-        font-size: 14px;
-    }
-    
-    .tooltip-title {
-        font-size: 13px;
-    }
-    
-    .tooltip-task-item {
-        font-size: 13px;
-    }
-    
-    .study-question-text {
-        font-size: 12px;
-    }
-    
-    .tooltip-study-title {
-        font-size: 12px;
-    }
-    
-    .day-cell.active .day-tooltip {
-        left: 2.5% !important;    
-        right: 2.5% !important;
-        width: auto !important;
-        padding: 15px !important;
-        border-radius: 15px 15px 0 0 !important;
-    }
-}
-
-@media (max-width: 360px) {
-    .calendar-page {
-        padding: 10px 5px;
+        padding: 12px 6px;
     }
     
     .calendar-title {
         font-size: 20px;
+        margin-bottom: 12px;
     }
     
     .calendar-card {
-        padding: 12px;
+        padding: 14px;
+        border-radius: 8px;
+    }
+    
+    .month-header {
+        gap: 6px;
+        margin-bottom: 12px;
     }
     
     .selector-btn {
@@ -348,29 +214,45 @@
     .month-nav {
         padding: 6px 10px;
         font-size: 14px;
-        min-width: 35px;
+        min-width: 36px;
     }
     
     .weekday {
-        font-size: 10px;
-        padding: 4px 2px;
+        font-size: 11px;
+        padding: 4px 1px;
+    }
+    
+    .weekdays,
+    .days-grid {
+        gap: 4px;
     }
     
     .day-cell {
-        min-height: 35px;
-        height: 35px;
-        font-size: 12px;
+        min-height: 40px;
+        height: 40px;
+        font-size: 13px;
+        border-radius: 6px;
     }
     
     .day-cell.empty {
-        min-height: 35px;
+        min-height: 40px;
     }
     
     .exam-label {
-        font-size: 6px;
+        font-size: 7px;
     }
     
     .day-cell.exam-day .day-number {
-        font-size: 12px;
+        font-size: 13px;
+    }
+    
+    .modal-content {
+        width: 94%;
+        padding: 16px;
+    }
+    
+    .modal input, .modal select, .modal button {
+        padding: 8px 12px;
+        font-size: 14px;
     }
 }

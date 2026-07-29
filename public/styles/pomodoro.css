@@ -185,18 +185,18 @@
     flex-shrink: 0;
 }
 
+/* Исправлено направление флекса: текст и цифра теперь идут друг под другом или аккуратно в строку */
 .stats-text {
     display: flex;
-    flex-direction: row;
-    align-items: baseline; 
-    gap: 8px; 
+    flex-direction: column;
+    align-items: flex-start; 
+    gap: 2px; 
 }
 
 .stats-label {
     font-family: 'Inter', sans-serif;
     font-size: 13px;
     color: #8B8B8B;
-    margin-bottom: 2px;
 }
 
 .stats-count {

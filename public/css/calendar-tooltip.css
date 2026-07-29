@@ -7,19 +7,19 @@
     transform: translateX(-50%);
     background: var(--color-bg-light);
     border: 1px solid var(--color-border);
-    border-radius: 10px;
-    padding: 12px 15px;
-    box-shadow: 0 6px 16px var(--shadow-dark);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: var(--shadow-modal);
     z-index: 1000;
     max-height: 350px;
     overflow-y: auto; 
-    transition: opacity 0.25s, visibility 0.25s;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
     pointer-events: none;
 }
 
 @media (min-width: 769px) {
     .day-cell.active .day-tooltip {
-        min-width: 220px;
+        min-width: 240px;
         max-width: 320px;
     }
 }
@@ -49,28 +49,25 @@
 }
 
 .tooltip-title {
-    margin: 0 0 10px 0;
+    margin: 0 0 12px 0;
     color: var(--color-primary);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    font-family: 'Inter', sans-serif;
     border-bottom: 1px solid var(--color-border);
     padding-bottom: 8px;
 }
 
 .tooltip-empty {
     color: var(--color-text-muted);
-    font-size: 13px;
-    font-family: 'Inter', sans-serif;
+    font-size: 14px;
     text-align: center;
     padding: 8px 0;
 }
 
 .tooltip-task-item {
-    padding: 6px 0;
+    padding: 8px 0;
     font-size: 14px;
     color: var(--color-text);
-    font-family: 'Inter', sans-serif;
     border-bottom: 1px solid var(--color-bg-secondary);
     line-height: 1.4;
 }
@@ -85,16 +82,15 @@
 }
 
 .tooltip-study-section {
-    margin-top: 12px;
-    padding-top: 10px;
-    border-top: 2px solid var(--color-accent);
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border);
 }
 
 .tooltip-study-title {
     color: var(--color-accent);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
-    font-family: 'Inter', sans-serif;
     margin-bottom: 8px;
     display: flex;
     align-items: center;
@@ -102,12 +98,12 @@
 }
 
 .tooltip-study-item {
-    padding: 8px 10px;
-    margin-bottom: 6px;
-    background: var(--color-bg);
-    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: var(--color-bg-secondary);
+    border-radius: 8px;
     border-left: 3px solid var(--color-accent);
-    transition: all 0.2s;
+    transition: background-color 0.15s ease;
 }
 
 .tooltip-study-item:last-child {
@@ -115,15 +111,14 @@
 }
 
 .tooltip-study-item.studied {
-    opacity: 0.7;
+    opacity: 0.75;
     border-left-color: var(--color-success);
-    background: rgba(144, 204, 116, 0.1); 
+    background: var(--color-bg);
 }
 
 .study-question-text {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--color-text);
-    font-family: 'Inter', sans-serif;
     margin-bottom: 6px;
     line-height: 1.4;
 }
@@ -134,13 +129,12 @@
 }
 
 .tooltip-more-items {
-    padding: 6px 10px;
-    margin-top: 4px;
+    padding: 8px 10px;
+    margin-top: 6px;
     background: var(--color-bg-secondary);
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--color-text-secondary);
-    font-family: 'Inter', sans-serif;
     font-style: italic;
     text-align: center;
 }
@@ -151,40 +145,36 @@
     color: white;
     padding: 2px 8px;
     border-radius: 4px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     margin-top: 4px;
 }
 
 .tooltip-create-btn {
     display: block;
-    margin-top: 12px;
-    background: #9CAF7E; 
-    color: #2C3E1F; 
+    margin-top: 14px;
+    background: var(--color-primary); 
+    color: var(--color-bg-light); 
     text-align: center;
-    padding: 12px 16px;
+    padding: 10px 16px;
     border-radius: 8px;
     text-decoration: none;
-    font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 600;
-    transition: all 0.2s;
-    border: 2px solid #5C6B45; 
+    transition: background-color 0.15s ease;
+    border: none;
     width: 100%;
     box-sizing: border-box;
-    letter-spacing: 0.3px;
-    box-shadow: 0 2px 5px rgba(92, 107, 69, 0.2);
 }
 
 .tooltip-create-btn:hover {
-    background: #B5C494; 
-    border-color: #4A5736;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(92, 107, 69, 0.35);
+    background: var(--color-primary-dark); 
+    transform: none;
+    box-shadow: none;
 }
 
 .tooltip-create-btn:active {
-    transform: translateY(0);
-    background: #8FA06A;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transform: none;
+    background: var(--color-primary-dark);
+    box-shadow: none;
 }
