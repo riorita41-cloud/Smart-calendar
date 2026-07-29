@@ -48,7 +48,6 @@ img, video, svg {
         overflow-x: hidden !important;
         box-sizing: border-box !important;
     }
-}
     
     .sidebar {
         width: 100%;
@@ -130,18 +129,21 @@ img, video, svg {
 
     /* Аккуратные размеры элементов прогресса и кругов */
     .days-circle {
-        width: 90px !important;
-        height: 90px !important;
-        margin: 10px auto !important;
+        width: 120px !important;
+        height: 120px !important;
+        min-width: 120px !important;
+        min-height: 120px !important;
+        flex: 0 0 120px !important;
+        margin: 15px auto !important;
+        border-radius: 50% !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         border: 3px solid var(--color-accent, #d4af37) !important;
-        border-radius: 50% !important;
     }
     
     .days-number {
-        font-size: 26px !important;
+        font-size: 36px !important;
         font-weight: bold !important;
     }
     
@@ -196,10 +198,29 @@ img, video, svg {
         border-radius: 25px !important;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
         z-index: 9999 !important;
+        display: none !important;
+    }
+    
+    .global-timer-widget.is-running {
+        display: flex !important;
     }
     
     .global-timer-widget .widget-expand {
         display: none !important;
+    }
+
+    p, span, h1, h2, h3, h4, h5, h6, a {
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .days-card, .dashboard-exam-block {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 }
 
@@ -237,7 +258,7 @@ img, video, svg {
     .form-group textarea,
     .form-group select {
         padding: 10px 12px;
-        font-size: 16px; /* Предотвращает зум на iOS при фокусе */
+        font-size: 16px;
     }
     
     .tasks-title {
@@ -273,49 +294,5 @@ img, video, svg {
     
     .main-content {
         padding: 8px !important;
-    }
-}
-
-@media (max-width: 768px) {
-    #global-timer-widget {
-        display: none !important;
-    }
-    
-    #global-timer-widget.is-running {
-        display: flex !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .days-circle {
-        width: 120px !important;
-        height: 120px !important;
-        min-width: 120px !important;
-        min-height: 120px !important;
-        flex: 0 0 120px !important;
-        margin: 15px auto !important;
-        border-radius: 50% !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-    
-    .days-number {
-        font-size: 36px !important;
-        font-weight: bold !important;
-    }
-
-    p, span, h1, h2, h3, h4, h5, h6, a {
-        word-break: break-word;
-        overflow-wrap: break-word;
-    }
-
-    .days-card, .dashboard-exam-block {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        text-align: center !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
     }
 }
