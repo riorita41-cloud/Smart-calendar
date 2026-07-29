@@ -30,7 +30,6 @@
     color: var(--color-primary);
 }
 
-/* Общие стили для меток полей (название, предмет, дата и т.д.) */
 .form-container label,
 .time-input-wrapper label {
     display: block;
@@ -40,7 +39,6 @@
     margin-bottom: 8px;
 }
 
-/* Выбор дней недели */
 .days-selector {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -69,7 +67,7 @@
     color: var(--color-text-secondary);
     transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
     user-select: none;
-    margin-bottom: 0; /* сбрасываем отступ для кнопок дней */
+    margin-bottom: 0; 
 }
 
 .days-selector label:hover {
@@ -89,7 +87,6 @@
     margin-top: 8px;
 }
 
-/* Секция времени */
 .time-section-title {
     display: flex;
     align-items: center;
@@ -154,7 +151,6 @@
     padding-bottom: 10px;
 }
 
-/* Кнопки управления */
 .form-actions {
     display: flex;
     justify-content: space-between;
@@ -185,7 +181,6 @@
     gap: 8px;
 }
 
-/* Адаптивность */
 @media (max-width: 600px) {
     .form-page {
         padding: 16px 12px;

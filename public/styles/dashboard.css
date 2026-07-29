@@ -8,7 +8,6 @@
     align-items: start;
 }
 
-/* Обертка для левой колонки, чтобы блоки шли плотно друг за другом */
 .left-column {
     display: flex;
     flex-direction: column;
@@ -461,7 +460,6 @@
     }
 }
 
-/* Адаптивность для мобильных экранов */
 @media (max-width: 900px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
@@ -475,10 +473,9 @@
     .left-column {
         grid-column: 1;
         order: 2;
-        width: 100%; /* Растягиваем колонку на всю ширину */
+        width: 100%; 
     }
 
-    /* Гарантируем, что карточки внутри левой колонки занимают всю ширину */
     .left-column .card {
         width: 100%;
         box-sizing: border-box;

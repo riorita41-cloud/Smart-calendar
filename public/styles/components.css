@@ -85,7 +85,6 @@
     margin: 0 auto;
 }
 
-/* Уходим от плавниковых CSS-градиентов к благородным плоским цветам */
 .btn-primary, .btn-submit, .btn-login, .btn-register {
     display: inline-flex;
     align-items: center;

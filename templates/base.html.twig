@@ -18,9 +18,7 @@
     
     {% block stylesheets %}{% endblock %}
 
-    <!-- Временные стили для мобильного гамбургер-меню и оверлея (можно перенести в navigation.css) -->
     <style>
-        /* Мобильная шапка (скрыта на ПК) */
         .mobile-header {
             display: none;
             align-items: center;
@@ -48,7 +46,6 @@
             color: #2c3e2d;
             text-decoration: none;
         }
-        /* Затемнение фона при открытой шторке */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -64,7 +61,6 @@
             display: block;
         }
 
-        /* Адаптивность для экранов меньше 768px */
         @media (max-width: 768px) {
             .mobile-header {
                 display: flex;
@@ -75,7 +71,7 @@
             .sidebar {
                 position: fixed;
                 top: 0;
-                left: -280px; /* Спрятано за экраном слева */
+                left: -280px; 
                 width: 260px;
                 height: 100%;
                 z-index: 102;
@@ -83,10 +79,10 @@
                 box-shadow: 4px 0 15px rgba(0,0,0,0.1);
             }
             .sidebar.mobile-open {
-                transform: translateX(280px); /* Выезжает на экран */
+                transform: translateX(280px); 
             }
             .sidebar-title {
-                display: block; /* Показываем заголовок внутри шторки */
+                display: block; 
             }
         }
     </style>
@@ -94,7 +90,6 @@
 
 <body class="{% block body_class %}{% endblock %}">
     
-    <!-- Мобильная шапка с кнопкой бургер-меню -->
     <div class="mobile-header">
         <button class="mobile-menu-toggle" id="sidebarToggle" aria-label="Открыть меню">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -104,10 +99,9 @@
             </svg>
         </button>
         <a href="{{ path('app_home') }}" class="mobile-brand">Умный Календарь</a>
-        <div style="width: 24px;"></div> <!-- Пустой блок для выравнивания по центру -->
+        <div style="width: 24px;"></div> 
     </div>
 
-    <!-- Затемнение фона -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="layout">
@@ -209,7 +203,6 @@
         </main>
     </div>
 
-    <!-- Скрипт для управления выдвижной шторкой -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const toggleBtn = document.getElementById('sidebarToggle');
@@ -228,7 +221,6 @@
             overlay.addEventListener('click', toggleMenu);
         }
 
-        // Автоматически закрывать шторку при клике на любой пункт меню на мобилках
         const navLinks = sidebar.querySelectorAll('.nav-link');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -239,7 +231,6 @@
             });
         });
 
-        // Обработка flash-сообщений
         const flashes = document.querySelectorAll('.flash-success, .flash-error');
         flashes.forEach(flash => {
             setTimeout(() => {

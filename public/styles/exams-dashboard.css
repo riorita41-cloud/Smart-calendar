@@ -216,7 +216,6 @@
     font-size: 15px;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     .exams-container {
         padding: 20px 16px;

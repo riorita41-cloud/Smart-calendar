@@ -15,7 +15,6 @@
     --color-error-lighter: #FECACA;
     --color-success: #90CC74;
     
-    /* Сделали тени чуть менее "пластиковыми" и более глубокими */
     --shadow-light: 0 2px 8px rgba(74, 93, 58, 0.04);
     --shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.06);
     --shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -29,7 +28,6 @@
 }
 
 body {
-    /* Уходим от стерильного Inter в пользу более теплой и живой типографики */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background: var(--color-bg);
     min-height: 100vh;
@@ -69,7 +67,6 @@ p {
     margin-bottom: 16px;
 }
 
-/* Сделали выделения текста менее «кричащими» */
 strong, b {
     font-weight: 600;
     color: var(--color-text); 
@@ -97,7 +94,6 @@ strong, b {
     color: var(--color-primary);
     margin-bottom: 32px;
     padding-bottom: 16px;
-    /* Убрали излишне толстую рамку, сделав дизайн аккуратнее */
     border-bottom: 1px solid var(--color-border);
     letter-spacing: -0.02em;
     line-height: 1.2;
@@ -123,7 +119,6 @@ strong, b {
     text-align: center;
     padding: 56px 32px;
     background: var(--color-bg-light); 
-    /* Смягчили скругление и бордер, чтобы уйти от эффекта "сгенерированной карточки" */
     border-radius: 12px; 
     border: 1px solid var(--color-border);
 }

@@ -18,7 +18,6 @@
     gap: 24px;
 }
 
-/* Верхняя секция: слева аватар, справа панель цветов */
 .avatar-top-section {
     display: grid;
     grid-template-columns: 320px 1fr;
@@ -30,7 +29,6 @@
 .avatar-colors-panel,
 .avatar-form-bottom {
     background: var(--color-bg-light);
-    /* Уходим от слишком скругленных «иишных» карточек к более строгим и аккуратным */
     border-radius: 12px;
     padding: 28px;
     border: 1px solid var(--color-border);
@@ -44,7 +42,6 @@
     justify-content: space-between;
 }
 
-/* Благородная аватарка с тонкой рамкой в тон интерфейса */
 .avatar-dicebear {
     width: min(180px, 90%);
     height: min(180px, 90%);
@@ -79,7 +76,6 @@
     margin-bottom: 0;
 }
 
-/* Заголовки секций в едином стиле без лишней зелени */
 .form-section h3 {
     color: var(--color-text);
     font-size: 14px;
@@ -94,7 +90,6 @@
     color: var(--color-text-secondary);
 }
 
-/* Сетка причёсок */
 .option-group-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -116,7 +111,6 @@
     display: none;
 }
 
-/* Опции причёсок: строгие, плоские, с живым откликом */
 .option-item label {
     display: block;
     padding: 10px 6px;
@@ -143,7 +137,6 @@
     font-weight: 600;
 }
 
-/* Палитра цветов кожи и волос */
 .color-picker {
     display: flex;
     gap: 10px;
@@ -169,13 +162,11 @@
     border-color: var(--color-primary);
 }
 
-/* Выбранный цвет выделяется четким кольцом primary-цвета */
 .color-option input[type="radio"]:checked + .color-circle {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 2px var(--color-bg-light), 0 0 0 4px var(--color-primary);
 }
 
-/* Кнопки в стиле приложения */
 .btn-random,
 .btn-save {
     width: 100%;
@@ -210,7 +201,6 @@
     background: var(--color-primary-dark);
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     .avatar-top-section {
         grid-template-columns: 1fr;

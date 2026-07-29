@@ -599,7 +599,6 @@ select.form-control:focus {
     color: var(--color-primary-dark);
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     .materials-page,
     .material-view,

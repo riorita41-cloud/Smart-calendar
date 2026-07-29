@@ -93,7 +93,6 @@ img, video, svg {
         width: 100% !important;
     }
     
-    /* Сохраняем порядок блоков в дашборде */
     .dashboard-grid .avatar-card {
         order: 1 !important;
     }
@@ -127,7 +126,6 @@ img, video, svg {
         box-sizing: border-box !important;
     }
 
-    /* Аккуратные размеры элементов прогресса и кругов */
     .days-circle {
         width: 120px !important;
         height: 120px !important;
