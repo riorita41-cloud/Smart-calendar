@@ -41,10 +41,14 @@ img, video, svg {
 
 @media (max-width: 768px) {
     .layout {
-        flex-direction: column;
+        display: flex !important;
+        flex-direction: column !important;
         width: 100% !important;
+        max-width: 100% !important;
         overflow-x: hidden !important;
+        box-sizing: border-box !important;
     }
+}
     
     .sidebar {
         width: 100%;
@@ -272,7 +276,6 @@ img, video, svg {
     }
 }
 
-/* Логика отображения глобального таймера */
 @media (max-width: 768px) {
     #global-timer-widget {
         display: none !important;
@@ -280,5 +283,39 @@ img, video, svg {
     
     #global-timer-widget.is-running {
         display: flex !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .days-circle {
+        width: 120px !important;
+        height: 120px !important;
+        min-width: 120px !important;
+        min-height: 120px !important;
+        flex: 0 0 120px !important;
+        margin: 15px auto !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .days-number {
+        font-size: 36px !important;
+        font-weight: bold !important;
+    }
+
+    p, span, h1, h2, h3, h4, h5, h6, a {
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .days-card, .dashboard-exam-block {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 }
