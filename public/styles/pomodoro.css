@@ -16,16 +16,16 @@
 }
 
 .pomodoro-title {
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: clamp(28px, 5vw, 36px);
-    font-weight: bold;
+    font-weight: 600;
     color: #4A5D3A;
     margin: 0 0 8px 0;
     line-height: 1.2;
 }
 
 .pomodoro-subtitle {
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: clamp(14px, 2.5vw, 16px);
     color: #8B8B8B;
     margin: 0;
@@ -50,7 +50,7 @@
     padding: 10px 20px;
     background: rgba(74, 93, 58, 0.1);
     border-radius: 24px;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 15px;
     font-weight: 600;
     color: #4A5D3A;
@@ -63,7 +63,7 @@
 .timer-display {
     font-family: 'Courier New', monospace;
     font-size: clamp(48px, 12vw, 80px);
-    font-weight: bold;
+    font-weight: 600;
     color: #4A5D3A;
     margin: 10px 0 20px;
     letter-spacing: 0.05em;
@@ -99,7 +99,7 @@
 }
 
 .cycle-info {
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     color: #8B8B8B;
     margin-bottom: 25px;
@@ -121,7 +121,7 @@
     padding: 14px 28px;
     border: none;
     border-radius: 12px;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
@@ -193,16 +193,16 @@
 }
 
 .stats-label {
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 13px;
     color: #8B8B8B;
     margin-bottom: 2px;
 }
 
 .stats-count {
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 22px;
-    font-weight: bold;
+    font-weight: 600;
     color: #4A5D3A;
 }
 
@@ -210,7 +210,7 @@
     margin-top: 20px;
     padding: 14px 20px;
     border-radius: 12px;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 15px;
     animation: slideDown 0.3s ease;
     word-wrap: break-word;
@@ -243,9 +243,9 @@
 }
 
 .info-title {
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: clamp(20px, 4vw, 22px);
-    font-weight: bold;
+    font-weight: 600;
     color: #4A5D3A;
     margin: 0 0 20px 0;
     text-align: center;
@@ -294,13 +294,13 @@
 }
 
 .info-content strong {
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 17px;
     color: #4A5D3A;
 }
 
 .info-content span {
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
     color: #8B8B8B;
 }

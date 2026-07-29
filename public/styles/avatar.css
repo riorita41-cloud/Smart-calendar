@@ -1,5 +1,5 @@
 .avatar-page {
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
@@ -86,7 +86,7 @@
     cursor: pointer;
     transition: all 0.2s;
     font-size: 14px;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .option-item input[type="radio"]:checked + label {
@@ -133,9 +133,9 @@
     padding: 16px;
     border-radius: 8px;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     transition: background 0.2s;
 }
 

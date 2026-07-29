@@ -13,7 +13,7 @@
     color: var(--color-primary);
     margin-top: 0;
     text-align: center;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .modal input, .modal select {
@@ -24,7 +24,7 @@
     border-radius: 8px;
     background: var(--color-bg-secondary);
     box-sizing: border-box;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 15px;
 }
 
@@ -34,9 +34,9 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
     margin-top: 8px;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 15px;
 }
 
@@ -89,7 +89,7 @@
     font-size: 17px;
     cursor: pointer;
     transition: background 0.2s;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     text-decoration: none;
     text-align: center;
     width: 100%;
@@ -106,7 +106,7 @@
     font-size: 22px;
     margin-bottom: 20px;
     margin-top: 0;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     border-bottom: 2px solid var(--color-primary);
     padding-bottom: 10px;
 }
@@ -134,7 +134,7 @@
 .task-name {
     color: var(--color-text);
     font-size: 15px;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     line-height: 1.4;
 }
 

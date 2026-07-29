@@ -48,7 +48,7 @@ class StudyTaskType extends AbstractType
                     return $exam->getName() . ' (' . $exam->getSubject() . ')';
                 },
                 'required' => false,
-                'placeholder' => '-- Повседневная задача (без экзамена) --',
+                'placeholder' => ' Повседневная задача (без экзамена) ',
                 'query_builder' => function (ExamRepository $er) use ($user) {
                     return $er->createQueryBuilder('e')
                         ->where('e.user = :user')

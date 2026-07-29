@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const errorBox = document.createElement('div');
         errorBox.className = 'validation-error-box';
         errorBox.innerHTML = `
-            <div style="background: #FEE2E2; border-left: 4px solid #DC2626; padding: 20px; border-radius: 10px; margin-bottom: 20px; font-family: Georgia, serif;">
+            <div style="background: #FEE2E2; border-left: 4px solid #DC2626; padding: 20px; border-radius: 10px; margin-bottom: 20px; font-family: 'Inter', sans-serif;">
                 <h3 style="color: #DC2626; margin: 0 0 15px 0; font-size: 18px; display: flex; align-items: center; gap: 8px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     Найдены ошибки в формате вопросов:

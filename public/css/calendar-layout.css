@@ -1,5 +1,5 @@
 .calendar-page {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: 'Inter', sans-serif;
     background: var(--color-bg);
     min-height: 100vh;
     padding: 40px 20px;
@@ -10,7 +10,7 @@
     color: var(--color-primary);
     font-size: 32px;
     margin-bottom: 30px;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .calendar-container {
@@ -63,8 +63,8 @@
     border-radius: 8px;
     cursor: pointer;
     font-size: 18px;
-    font-family: Georgia, serif;
-    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
     transition: all 0.2s;
     position: relative;
 }
@@ -106,7 +106,7 @@
     text-decoration: none;
     border-radius: 6px;
     transition: all 0.2s;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     white-space: nowrap;
 }
 
@@ -118,7 +118,7 @@
 .dropdown-item.active {
     background: var(--color-accent);
     color: var(--color-bg-light);
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .month-nav {
@@ -132,9 +132,10 @@
     transition: all 0.2s;
     text-decoration: none;
     display: inline-block;
-    font-weight: bold;
+    font-weight: 600;
     min-width: 50px;
     text-align: center;
+    font-family: 'Inter', sans-serif;
 }
 
 .month-nav:hover {
@@ -153,10 +154,10 @@
 .weekday {
     text-align: center;
     color: var(--color-text-secondary);
-    font-weight: bold;
+    font-weight: 600;
     font-size: 15px;
     padding: 12px 8px;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .days-grid {
@@ -179,7 +180,7 @@
     color: var(--color-text);
     cursor: pointer;
     transition: all 0.2s;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 500;
 }
 
@@ -192,7 +193,7 @@
 .day-cell.today {
     background: var(--color-primary);
     color: var(--color-bg-light);
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .day-cell.today:hover {
@@ -213,7 +214,7 @@
 .day-cell.exam-day {
     background: var(--color-accent);
     color: var(--color-bg-light);
-    font-weight: bold;
+    font-weight: 600;
     border: 2px solid var(--color-primary);
     flex-direction: column;
     padding: 8px 6px;
@@ -236,7 +237,7 @@
 
 .exam-label {
     font-size: 9px;
-    font-weight: bold;
+    font-weight: 600;
     text-align: center;
     line-height: 1.1;
     margin-top: 2px;
@@ -244,7 +245,7 @@
     overflow: visible;
     max-width: 100%;
     color: var(--color-bg-light);
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     display: block;
     width: 100%;
 }

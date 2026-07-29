@@ -24,9 +24,9 @@
 .questions-page-title {
     font-size: 28px;
     color: var(--color-primary);
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
     margin: 0;
-    font-weight: bold;
+    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -35,7 +35,7 @@
 .materials-list h2 {
     color: var(--color-primary);
     margin-bottom: 20px;
-    font-family: Georgia, serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .flash-messages {
