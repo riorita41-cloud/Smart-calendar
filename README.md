@@ -27,9 +27,8 @@ div align="center">
 *Пример: 100 вопросов за 20 дней = ровно 5 билетов в день без перегрузок.*
 
 <div align="center">
-  <img src=src="https://github.com/user-attachments/assets/e9f5c8ca-c42a-4846-9382-9dbf7f0ead7d" width="800" alt="Главная страница" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea; display: block; margin-bottom: 8px;">
-  <p><i>Интерфейс дашборда: прогресс, задачи на сегодня и статус аватара</i></p>
-</div>
+  <img src="https://github.com/user-attachments/assets/ae5c5839-1d66-41aa-9a84-59b4fcd2b18a" width="800" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea; display: block;">
+  <p><i>Умное расписание: равномерное распределение вопросов до экзамена</i></p>
 
 ### 🏆 Геймификация и XP
 Мгновенная обратная связь за каждое действие:
