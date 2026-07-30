@@ -3,8 +3,8 @@
 > **Интеллектуальный помощник с элементами геймификации, который превращает хаотичную подготовку к экзаменам в понятный, управляемый процесс.**
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Symfony-6.x-green?style=for-the-badge&logo=symfony" alt="Symfony" />
-  <img src="https://img.shields.io/badge/PHP-8.x-blue?style=for-the-badge&logo=php" alt="PHP" />
+  <img src="https://github.com/user-attachments/assets/65f6cf5f-c6d8-4ea3-8cc0-3561a9ee75d0" width="800" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea; display: block;">
+  <p><i>Интерфейс дашборда: прогресс, задачи на сегодня и статус аватара</i></p>
 </div>
 
 <br/>
