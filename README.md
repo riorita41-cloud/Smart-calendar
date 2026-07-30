@@ -65,15 +65,13 @@ div align="center">
 <summary><b> Нажми, чтобы посмотреть структуру папок</b></summary>
 
 ```text
-| Папка | Назначение | Примеры |
-| :--- | :--- | :--- |
-| **`src/Controller/`** | Прием запросов и маршрутизация | `ExamController`, `CalendarController` |
-| **`src/Service/`** | Бизнес-логика и алгоритмы | `ScheduleGenerator`, `XpService` |
-| **`src/Repository/`** | Работа с БД через Doctrine | `UserRepository`, `TaskRepository` |
-| **`src/Entity/`** | Сущности (таблицы БД) | `User`, `Exam`, `StudyTask`, `XpLog` |
-| **`src/Form/`** | Типы форм и валидация | `ExamType`, `RegistrationFormType` |
-| **`src/Security/`** | Аутентификация и авторизация | `AppAuthenticator` |
-| **`templates/`** | Twig-шаблоны (View) | `base.html.twig`, календарь, дашборд |
-| **`public/`** | Точка входа, CSS, JS, Uploads | `index.php`, стили, скрипты |
-| **`config/`** | Настройки приложения | Маршруты, security.yaml, doctrine.yaml |
-| **`migrations/`** | История изменений схемы БД | Версионирование структуры таблиц |
+*   🎮 **`Controller/`** — Принимает HTTP-запросы, управляет потоком данных.
+*   🧠 **`Service/`** — Содержит бизнес-логику (`ScheduleGenerator`, `XpService`).
+*   🗄️ **`Repository/`** — Абстракция над базой данных (Doctrine ORM).
+*   📦 **`Entity/`** — Описание сущностей (`User`, `Exam`, `Task`, `XpLog`).
+*   📝 **`Form/`** — Конфигурация форм и валидация ввода.
+*   🔐 **`Security/`** — Логика входа и защиты路由ов.
+*   🎨 **`templates/`** — Twig-шаблоны для генерации HTML.
+*   🌍 **`public/`** – Публичные файлы (CSS, JS, изображения, uploads).
+*   ⚙️ **`config/`** — Конфигурация фреймворка и бандлов.
+*   🔄 **`migrations/`** — Управление версиями схемы базы данных.
