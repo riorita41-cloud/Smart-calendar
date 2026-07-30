@@ -57,23 +57,19 @@ div align="center">
 
 ---
 
-## 🏗️ Архитектура проекта
+## ️ Архитектура проекта
 
 Проект построен по паттерну **MVC** с четким разделением слоев. Бизнес-логика вынесена в сервисы, что обеспечивает чистоту кода и легкость поддержки.
 
-<details>
-<summary><b>📂 Нажми, чтобы посмотреть структуру папок</b></summary>
-
-```text
-src/
-├── 🎮 Controller/ # Прием запросов и маршрутизация
-── 🧠 Service/ # Бизнес-логика (ScheduleGenerator, XpService)
-├── 💾 Repository/ # Работа с БД через Doctrine ORM
-├── 📦 Entity/ # Сущности (User, Exam, Task, XpLog...)
-├── 📝 Form/ # Конфигурация форм и валидация
-└── 🔐 Security/ # Аутентификация и защита маршрутов
-templates/ # 🎨 Twig-шаблоны (base.html.twig + страницы)
-public/ # 🌍 Точка входа, CSS, JS, Uploads
-config/ # ⚙️ Настройки фреймворка и бандлов
-migrations/ # 🔄 История изменений схемы БД
-</details>
+| Папка | Назначение | Ключевые элементы |
+| :--- | :--- | :--- |
+| **`src/Controller/`** | Прием HTTP-запросов | `ExamController`, `CalendarController` |
+| **`src/Service/`** | Бизнес-логика и алгоритмы | `ScheduleGenerator`, `XpService` |
+| **`src/Repository/`** | Абстракция над БД (Doctrine) | `UserRepository`, `TaskRepository` |
+| **`src/Entity/`** | Описание сущностей | `User`, `Exam`, `StudyTask`, `XpLog` |
+| **`src/Form/`** | Валидация и типы форм | `ExamType`, `RegistrationFormType` |
+| **`src/Security/`** | Аутентификация и защита | `AppAuthenticator` |
+| **`templates/`** | Генерация HTML (Twig) | `base.html.twig`, дашборд, календарь |
+| **`public/`** | Публичные файлы | `index.php`, стили, скрипты, uploads |
+| **`config/`** | Конфигурация приложения | Маршруты, security.yaml, doctrine.yaml |
+| **`migrations/`** | Версии схемы БД | История изменений структуры таблиц |
