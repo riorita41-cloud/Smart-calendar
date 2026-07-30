@@ -57,7 +57,7 @@
 | :--- | :--- |
 | **Backend** | PHP 8.x, Symfony 6, Doctrine ORM |
 | **Frontend** | HTML5, CSS3, JavaScript (ES6+), SVG |
-| **Шаблоны** | Twig (наследование, XSS-защита) |
+| **Шаблоны** | Twig (XSS-защита) |
 | **База данных** | MySQL |
 
 
