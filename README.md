@@ -102,6 +102,27 @@ cp .env .env.local
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 symfony server:start
-''' 
+```
 
-## ⚙️ Установка и запуск
+## ⚙️ Деплой на продакшен
+```bash
+# 1. Обновляем код из репозитория
+git pull origin main
+
+# 2. Устанавливаем зависимости (без dev-пакетов)
+composer install --no-dev --optimize-autoloader
+
+# 3. Очищаем и прогреваем кэш для prod-окружения
+php bin/console cache:clear --env=prod
+
+# 4. Настраиваем права доступа для веб-сервера
+chown -R www-data:www-data var public
+
+# 5. Перезапускаем PHP-FPM и Nginx для применения изменений
+systemctl restart php8.2-fpm nginx
+```
+## 🔒 Безопасность
+
+*   🛡️ **CSRF-токены:** Защита всех форм от подделки запросов.
+*   🔐 **Password Hashing:** Пароли хранятся только в виде bcrypt-хешей.
+*   👁️ **XSS:** Автоматическое экранирование вывода в Twig.
