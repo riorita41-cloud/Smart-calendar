@@ -17,8 +17,7 @@
 3.  **Фокус:** Все инструменты (расписание, таймер Pomodoro, материалы) собраны в одном месте.
 
 <div align="center">
-<img width="1890" height="964" alt="111" src="https://github.com/user-attachments/assets/65f6cf5f-c6d8-4ea3-8cc0-3561a9ee75d0" />
-  <img src="docs/screenshots/dashboard.png" width="800" alt="Главная страница Умного Календаря" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea;"/>
+  <img src="docs/screenshots/dashboard.png" width="800" alt="Главная страница Умного Календаря" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea; display: block; margin-bottom: 8px;">
   <p><i>Интерфейс дашборда: прогресс, задачи на сегодня и статус аватара</i></p>
 </div>
 
