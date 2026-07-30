@@ -33,7 +33,7 @@
 *Пример: 100 вопросов за 20 дней = ровно 5 билетов в день без перегрузок.*
 
 <div align="center">
-  <!-- ВСТАВИТЬ СЮДА СКРИНШОТ КАЛЕНДАРЯ -->
+  <img width="1888" height="966" alt="222" src="https://github.com/user-attachments/assets/e9f5c8ca-c42a-4846-9382-9dbf7f0ead7d" />
   <img src="docs/screenshots/calendar.png" width="800" alt="Календарь подготовки" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea;"/>
 </div>
 
@@ -47,7 +47,7 @@
 Таймер 25/5 интегрирован прямо в интерфейс. Статистика сессий сохраняется и влияет на уровень аватара. Никаких отвлекающих переключений между приложениями.
 
 <div align="center">
-  <!-- ВСТАВИТЬ СЮДА СКРИНШОТ ТАЙМЕРА ИЛИ АВАТАРА -->
+  <img width="1893" height="964" alt="333" src="https://github.com/user-attachments/assets/4d17a791-aa95-4f90-bbef-1080ef02efed" />
   <img src="docs/screenshots/pomodoro-avatar.png" width="800" alt="Таймер и Аватар" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea;"/>
 </div>
 
