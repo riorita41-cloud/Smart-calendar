@@ -73,3 +73,65 @@ div align="center">
 | **`public/`** | Публичные файлы | `index.php`, стили, скрипты, uploads |
 | **`config/`** | Конфигурация приложения | Маршруты, security.yaml, doctrine.yaml |
 | **`migrations/`** | Версии схемы БД | История изменений структуры таблиц |
+
+### 🔑 Ключевые сервисы
+
+| Сервис | Назначение |
+| :--- | :--- |
+| **`ScheduleGenerator`** | Алгоритм распределения вопросов по дням до экзамена |
+| **`XpService`** | Начисление опыта, управление уровнями и разблокировка контента |
+| **`DashboardService`** | Сбор статистики и данных для главной страницы пользователя |
+
+---
+
+## ⚙️ Установка и запуск
+
+### Локальная разработка
+```bash
+git clone https://github.com/your-username/smart-calendar.git
+cd smart-calendar
+composer install
+cp .env .env.local
+# Настройте DATABASE_URL в .env.local
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+symfony server:start
+
+---
+
+## 🔒 Безопасность
+
+*   🛡️ **CSRF-токены:** Защита всех форм от подделки запросов.
+*   🔐 **Password Hashing:** Пароли хранятся только в виде bcrypt-хешей.
+*   👁️ **XSS-Protection:** Автоматическое экранирование вывода в Twig.
+*   🗄️ **DB Isolation:** Выделенный пользователь БД с ограниченными правами (`calendar_user`).
+## ⚙️ Установка и запуск
+
+### Локальная разработка
+```bash
+git clone https://github.com/your-username/smart-calendar.git
+cd smart-calendar
+composer install
+cp .env .env.local
+# Настройте DATABASE_URL в .env.local
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+symfony server:start
+
+###  Деплой на продакшен
+
+```bash
+# 1. Обновляем код из репозитория
+git pull origin main
+
+# 2. Устанавливаем зависимости (без dev-пакетов)
+composer install --no-dev --optimize-autoloader
+
+# 3. Очищаем и прогреваем кэш для prod-окружения
+php bin/console cache:clear --env=prod
+
+# 4. Настраиваем права доступа для веб-сервера
+chown -R www-data:www-data var public
+
+# 5. Перезапускаем PHP-FPM и Nginx для применения изменений
+systemctl restart php8.2-fpm nginx
