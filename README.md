@@ -32,17 +32,17 @@ div align="center">
 
 ### 🏆 Геймификация и XP
 Мгновенная обратная связь за каждое действие:
--   **+30 XP** за выполненный учебный день
--   **+10 XP** за закрытую задачу
--   **+5 XP** за сессию Pomodoro
+   **+30 XP** за выполненный учебный день
+   **+10 XP** за закрытую задачу
+   **+5 XP** за сессию Pomodoro
 
 ### ⏱️ Встроенный Pomodoro
 Таймер 25/5 интегрирован прямо в интерфейс. Статистика сессий сохраняется и влияет на уровень аватара. Никаких отвлекающих переключений между приложениями.
 
 <div align="center">
-  <img width="1893" height="964" alt="333" src="https://github.com/user-attachments/assets/4d17a791-aa95-4f90-bbef-1080ef02efed" />
-  <img src="docs/screenshots/pomodoro-avatar.png" width="800" alt="Таймер и Аватар" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea;"/>
-</div>
+  <img src="https://github.com/user-attachments/assets/90a1a5b2-8fe1-46d6-bd86-95eb3fd6d744" width="800" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea; display: block;">
+  <p><i>Встроенный таймер Pomodoro и система геймификации XP</i></p>
+</div>  
 
 ---
 
