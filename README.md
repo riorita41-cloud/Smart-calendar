@@ -65,15 +65,15 @@ div align="center">
 <summary><b> Нажми, чтобы посмотреть структуру папок</b></summary>
 
 ```text
-src/
-── Controller/      # Прием запросов и маршрутизация
-├── Service/         # Бизнес-логика (ScheduleGenerator, XpService)
-── Repository/      # Работа с БД через Doctrine
-├── Entity/          # Сущности (User, Exam, Task, XpLog...)
-── Form/            # Типы форм и валидация
-└── Security/        # Аутентификация и авторизация
-
-templates/           # Twig-шаблоны (base.html.twig + страницы)
-public/              # Точка входа, CSS, JS, Uploads
-config/              # Маршруты, security.yaml, doctrine.yaml
-migrations/          # История изменений схемы БД
+| Папка | Назначение | Примеры |
+| :--- | :--- | :--- |
+| **`src/Controller/`** | Прием запросов и маршрутизация | `ExamController`, `CalendarController` |
+| **`src/Service/`** | Бизнес-логика и алгоритмы | `ScheduleGenerator`, `XpService` |
+| **`src/Repository/`** | Работа с БД через Doctrine | `UserRepository`, `TaskRepository` |
+| **`src/Entity/`** | Сущности (таблицы БД) | `User`, `Exam`, `StudyTask`, `XpLog` |
+| **`src/Form/`** | Типы форм и валидация | `ExamType`, `RegistrationFormType` |
+| **`src/Security/`** | Аутентификация и авторизация | `AppAuthenticator` |
+| **`templates/`** | Twig-шаблоны (View) | `base.html.twig`, календарь, дашборд |
+| **`public/`** | Точка входа, CSS, JS, Uploads | `index.php`, стили, скрипты |
+| **`config/`** | Настройки приложения | Маршруты, security.yaml, doctrine.yaml |
+| **`migrations/`** | История изменений схемы БД | Версионирование структуры таблиц |
