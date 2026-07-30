@@ -3,9 +3,9 @@
 > **Интеллектуальный помощник с элементами геймификации, который превращает хаотичную подготовку к экзаменам в понятный, управляемый процесс.**
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Symfony-6.x-green?style=for-the-badge&logo=symfony" alt="Symfony" />
-  <img src="https://img.shields.io/badge/PHP-8.x-blue?style=for-the-badge&logo=php" alt="PHP" />
-  <img src="https://img.shields.io/badge/MySQL-8.0-orange?style=for-the-badge&logo=mysql" alt="MySQL" />
+  <img src="https://img.shields.io/badge/Symfony-green?style=for-the-badge&logo=symfony" alt="Symfony" />
+  <img src="https://img.shields.io/badge/PHP-blue?style=for-the-badge&logo=php" alt="PHP" />
+  <img src="https://img.shields.io/badge/MySQL-orange?style=for-the-badge&logo=mysql" alt="MySQL" />
 </div>
 
 <br/>
