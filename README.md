@@ -31,8 +31,8 @@
 *Пример: 100 вопросов за 20 дней = ровно 5 билетов в день без перегрузок.*
 
 <div align="center">
-  <img width="1888" height="966" alt="222" src="https://github.com/user-attachments/assets/e9f5c8ca-c42a-4846-9382-9dbf7f0ead7d" />
-  <img src="docs/screenshots/calendar.png" width="800" alt="Календарь подготовки" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea;"/>
+  <img src=src="https://github.com/user-attachments/assets/e9f5c8ca-c42a-4846-9382-9dbf7f0ead7d" width="800" alt="Главная страница" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); border: 1px solid #eaeaea; display: block; margin-bottom: 8px;">
+  <p><i>Интерфейс дашборда: прогресс, задачи на сегодня и статус аватара</i></p>
 </div>
 
 ### 🏆 Геймификация и XP
@@ -55,11 +55,10 @@
 
 | Компонент | Технологии |
 | :--- | :--- |
-| **Backend** | PHP 8.x, Symfony 6, Doctrine ORM |
-| **Frontend** | HTML5, CSS3, JavaScript (ES6+), SVG |
-| **Шаблоны** | Twig (наследование, XSS-защита) |
-| **База данных** | MariaDB 10.4 |
-| **Сервер** | Nginx, PHP-FPM |
+| **Backend** | PHP , Symfony , Doctrine ORM |
+| **Frontend** | HTML, CSS, JavaScript, SVG |
+| **Шаблоны** | Twig  |
+| **База данных** | MySQL |
 
 ---
 
