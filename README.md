@@ -55,8 +55,8 @@
 
 | Компонент | Технологии |
 | :--- | :--- |
-| **Backend** | PHP 8.x, Symfony 6, Doctrine ORM |
-| **Frontend** | HTML5, CSS3, JavaScript (ES6+), SVG |
+| **Backend** | PHP, Symfony, Doctrine ORM |
+| **Frontend** | HTML, CSS, JavaScript, SVG |
 | **Шаблоны** | Twig (XSS-защита) |
 | **База данных** | MySQL |
 
