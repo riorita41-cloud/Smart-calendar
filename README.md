@@ -5,8 +5,6 @@
 <div align="center">
   <img src="https://img.shields.io/badge/Symfony-6.x-green?style=for-the-badge&logo=symfony" alt="Symfony" />
   <img src="https://img.shields.io/badge/PHP-8.x-blue?style=for-the-badge&logo=php" alt="PHP" />
-  <img src="https://img.shields.io/badge/MariaDB-10.4-orange?style=for-the-badge&logo=mariadb" alt="MariaDB" />
-  <img src="https://img.shields.io/badge/Twig-Templating-black?style=for-the-badge&logo=twig" alt="Twig" />
 </div>
 
 <br/>
