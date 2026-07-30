@@ -88,22 +88,36 @@
     }
     
     .day-cell {
-        min-height: 42px;
-        height: 42px;
-        font-size: 14px;
+        min-height: 56px;
+        height: 56px;
+        font-size: 16px;
         border-radius: 6px;
     }
     
     .day-cell.empty {
-        min-height: 42px;
+        min-height: 56px;
     }
     
     .day-cell.exam-day {
         padding: 4px;
+        height: 56px !important;
+        min-height: 56px !important;
+        max-height: 56px !important;
+        overflow: hidden;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
     
     .exam-label {
-        font-size: 8px;
+        font-size: 9px;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
     }
     
     .weekday {
@@ -234,22 +248,39 @@
     }
     
     .day-cell {
-        min-height: 36px;
-        height: 36px;
-        font-size: 12px;
+        min-height: 50px;
+        height: 50px;
+        font-size: 15px;
         border-radius: 5px;
     }
     
     .day-cell.empty {
-        min-height: 36px;
+        min-height: 50px;
+    }
+    
+    .day-cell.exam-day {
+        height: 50px !important;
+        min-height: 50px !important;
+        max-height: 50px !important;
+        overflow: hidden;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
     
     .exam-label {
-        font-size: 7px;
+        font-size: 8px;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
     }
     
     .day-cell.exam-day .day-number {
-        font-size: 12px;
+        font-size: 13px;
     }
     
     .modal-content {

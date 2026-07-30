@@ -314,18 +314,18 @@
 
 @media (max-width: 768px) {
     .calendar-page {
-        padding: 15px 8px;
+        padding: 10px 4px;
         overflow-x: hidden;
     }
     
     .calendar-title {
-        font-size: 22px;
-        margin-bottom: 16px;
+        font-size: 20px;
+        margin-bottom: 12px;
     }
     
     .calendar-container {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
         max-width: 100%;
     }
     
@@ -340,51 +340,51 @@
     }
     
     .calendar-card {
-        padding: 16px;
-        margin-bottom: 15px;
+        padding: 8px;
+        margin-bottom: 12px;
     }
     
     .month-header {
-        gap: 8px;
-        margin-bottom: 20px;
+        gap: 6px;
+        margin-bottom: 12px;
         flex-wrap: wrap;
     }
     
     .month-year-selector {
-        gap: 8px;
+        gap: 4px;
     }
     
     .selector-btn {
-        padding: 8px 14px;
-        font-size: 14px;
+        padding: 6px 10px;
+        font-size: 13px;
     }
     
     .month-nav {
-        padding: 8px 12px;
-        font-size: 15px;
-        min-width: 38px;
+        padding: 6px 10px;
+        font-size: 14px;
+        min-width: 34px;
     }
     
     .weekday {
         font-size: 11px;
-        padding: 4px 2px;
+        padding: 4px 1px;
     }
     
     .weekdays,
     .days-grid {
         gap: 4px;
-        margin-bottom: 16px;
+        margin-bottom: 10px;
     }
     
     .day-cell {
-        min-height: 42px;
-        height: 42px;
-        font-size: 14px;
+        min-height: 52px;
+        height: 52px;
+        font-size: 16px;
         border-radius: 6px;
     }
     
     .day-cell.empty {
-        min-height: 42px;
+        min-height: 52px;
     }
     
     .day-cell.exam-day {
@@ -392,7 +392,11 @@
     }
     
     .exam-label {
-        font-size: 8px;
+        font-size: 9px;
+    }
+    
+    .day-cell.exam-day .day-number {
+        font-size: 14px;
     }
     
     .day-indicators {
@@ -465,37 +469,37 @@
 
 @media (max-width: 480px) {
     .calendar-page {
-        padding: 10px 4px;
+        padding: 6px 2px;
     }
     
     .calendar-title {
-        font-size: 20px;
-        margin-bottom: 12px;
+        font-size: 18px;
+        margin-bottom: 10px;
     }
     
     .calendar-card {
-        padding: 10px;
+        padding: 6px;
         border-radius: 8px;
     }
     
     .month-header {
-        gap: 5px;
-        margin-bottom: 16px;
+        gap: 4px;
+        margin-bottom: 10px;
     }
     
     .month-year-selector {
-        gap: 5px;
+        gap: 4px;
     }
     
     .selector-btn {
-        padding: 6px 10px;
-        font-size: 13px;
+        padding: 6px 8px;
+        font-size: 12px;
     }
     
     .month-nav {
-        padding: 6px 10px;
-        font-size: 14px;
-        min-width: 34px;
+        padding: 6px 8px;
+        font-size: 13px;
+        min-width: 30px;
     }
     
     .weekday {
@@ -509,22 +513,22 @@
     }
     
     .day-cell {
-        min-height: 36px;
-        height: 36px;
-        font-size: 12px;
+        min-height: 46px;
+        height: 46px;
+        font-size: 15px;
         border-radius: 5px;
     }
     
     .day-cell.empty {
-        min-height: 36px;
+        min-height: 46px;
     }
     
     .exam-label {
-        font-size: 7px;
+        font-size: 8px;
     }
     
     .day-cell.exam-day .day-number {
-        font-size: 12px;
+        font-size: 13px;
     }
     
     .task-dot,
